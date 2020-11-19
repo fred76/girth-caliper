@@ -1,0 +1,84 @@
+<main>
+  <div class="butt">
+    <span fxLayoutAlign="start">
+      <button class="buttonSticky" (click)="save()" mat-raised-button color="primary">Save All</button>
+    </span>
+    <span class="menu"  fxLayoutAlign="space-evenly center"  fxLayoutAlign.xs="end">
+      <mat-form-field class="panel" appearance="legacy">
+        <mat-label>Caliper methods</mat-label>
+        <mat-select placeholder="Filter By BU" [(ngModel)]="selectedCaliperMethod"
+          (ngModelChange)="eventCaliperMethodChange('change', $event)">
+          <mat-option *ngFor="let caliperMethod of caliperMethods" [value]="caliperMethod">
+            {{caliperMethod}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field fxHide.xs class="field"  >
+        <mat-label>Body weight (kg)</mat-label>
+        <input required class="inputlabel" matInput type="number" [(ngModel)]=bodyWeight >
+        <span class="inputlabel" matSuffix>Kg</span>
+      </mat-form-field>
+
+      <mat-form-field  fxHide.xs   class="field" >
+        <mat-label >Age (Years)</mat-label>
+        <input required class="inputlabel" matInput type="number" [(ngModel)]=userAge >
+        <span class="inputlabel" matSuffix>Years</span>
+        <span matPrefix>&nbsp;</span>
+      </mat-form-field>
+    </span>
+      <form fxShow.xs fxHide.gt-xs fxLayout="row" fxLayoutAlign="space-evenly center" >
+        <mat-form-field class="field"  >
+          <mat-label>Body weight (kg)</mat-label>
+          <input required class="inputlabel" matInput type="number" value={{bodyWeight}}>
+          <span class="inputlabel" matSuffix>Kg</span>
+        </mat-form-field>
+
+        <mat-form-field  class="field" >
+          <mat-label >Age (Years)</mat-label>
+          <input required class="inputlabel" matInput type="number" value={{userAge}}>
+          <span class="inputlabel" matSuffix>Years</span>
+          <span matPrefix>&nbsp;</span>
+        </mat-form-field>
+      </form>
+    </div>
+
+
+
+  <div class="contentCaliper" fxLayout="row wrap" fxLayoutGap="16px grid">
+    <div fxFlex="25%" fxFlex.xs="100%" fxFlex.sm="33%" *ngFor="let gTile of caliperTiles , let i = index">
+      <mat-card class="mat-elevation-z8">
+        <mat-card-header>
+          <mat-card-title>{{gTile.title}}</mat-card-title>
+        </mat-card-header>
+        <img mat-card-image src="/assets//caliper/{{caliperTilesDescriptions[i].image}}">
+        <mat-card-content>
+          <p>
+            {{caliperTilesDescriptions[i].text}}
+          </p>
+        </mat-card-content>
+        <div fxLayout="row">
+          <div fxLayout="column" fxLayoutAlign="space-between start">
+            <mat-form-field fxLayout="column" fxLayoutAlign="space-between start" fxLayoutGap="30px">
+              <input matInput type="number" step="0.1" class="form-control" placeholder="Fold number 1 in mm"
+                [(ngModel)]='gTile.value1'>
+            </mat-form-field>
+            <mat-form-field [fxShow]="gTile.value1 != null" fxLayout="column" fxLayoutAlign="space-between start"
+              fxLayoutGap="30px">
+              <input matInput type="number" step="0.1" class="form-control" placeholder="Fold number 2 in mm"
+                [(ngModel)]='gTile.value2'>
+            </mat-form-field>
+            <mat-form-field [fxShow]="gTile.value2 != null" fxLayout="column" fxLayoutAlign="space-between start"
+              fxLayoutGap="30px">
+              <input matInput type="number" step="0.1" class="form-control" placeholder="Fold number 3  in mm"
+                [(ngModel)]='gTile.value3'>
+            </mat-form-field>
+          </div>
+          <div [fxShow]="gTile.value2 != null && gTile.value3 == null" fxLayoutAlign="center center" fxFlex>Average
+            {{(gTile.value1+gTile.value2+gTile.value3)/2}} mm</div>
+          <div [fxShow]="gTile.value3 != null" fxLayoutAlign="center center" fxFlex>Average
+            {{(gTile.value1+gTile.value2+gTile.value3)/3}} mm</div>
+        </div>
+      </mat-card>
+    </div>
+  </div>
+</main>

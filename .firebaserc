@@ -1,0 +1,11 @@
+{
+  "targets": {
+    "girthcaliperweb": {
+      "hosting": {
+        "girths-caliper": [
+          "girthcaliperweb"
+        ]
+      }
+    }
+  }
+}

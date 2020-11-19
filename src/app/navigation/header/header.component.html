@@ -1,0 +1,19 @@
+<mat-toolbar  color="primary">
+  <div>
+    <button mat-icon-button (click)="onToggleSidenav()">
+      <img class="logo" src="/assets/logo.png" alt="image">
+      <span class="nav-caption"  fxHide.xs>Girths & Caliper</span>
+    </button>
+  </div>
+  <span class="flexExpand"></span>
+  <div fxFlex="grow" fxLayour fxLayoutAlign="flex-end">
+    <ul fxLayout fxLayoutGap="10px" class="navigation-items">
+      <li><a routerLink="/signup">Signup</a></li>
+      <li><a routerLink="/login">Login</a></li>
+      <li> <a mat-list-item routerLink="/training">
+          <mat-icon>account_circle</mat-icon>
+          <span class="nav-caption"></span>
+        </a></li>
+    </ul>
+  </div>
+</mat-toolbar>

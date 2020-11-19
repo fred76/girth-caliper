@@ -1,0 +1,35 @@
+/* ::ng-deep */
+ .mat-toolbar {
+  position: fixed;
+  position: -fixed-sticky;
+  top: 0;
+  z-index: 999;
+  height: 70px;
+  background-color: #fd7525;
+}
+
+
+.nav-caption {
+  position: -webkit-sticky;
+  padding: 10px;
+  font-size: 20px;
+}
+
+.navigation-items {
+  list-style: none;
+}
+
+a {
+  text-decoration: none;
+  color: white;
+}
+
+.logo {
+  width: 100%;
+}
+
+a:hover,
+a:active {
+  color: lightgrey;
+}
+

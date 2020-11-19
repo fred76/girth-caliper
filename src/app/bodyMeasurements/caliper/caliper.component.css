@@ -1,0 +1,38 @@
+p {
+  padding: 10px;
+  height: auto !important;
+}
+
+::ng-deep .contentCaliper {
+  top: 10px;
+  padding: 20px;
+  height: auto !important;
+}
+
+.mat-card-content {
+  padding: 10px;
+  padding: 5px !important;
+}
+
+.mat-card-image {
+  height: 100px; /* adjust as needed */
+  object-fit: contain;
+}
+
+.buttonSticky {
+  margin-top: 130px !important;
+  margin: 10px;
+  z-index: 999;
+  position: fixed !important;
+}
+
+.field {
+  margin: 10px;
+  width: 120px;
+}
+.inputlabel {
+  color:white;
+}
+.menu{
+  margin-top: 120px !important;
+}

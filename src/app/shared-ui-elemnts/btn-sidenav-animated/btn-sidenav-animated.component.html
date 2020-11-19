@@ -1,0 +1,53 @@
+  <div>
+  <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+    viewBox="0 0 426 639" style="enable-background:new 0 0 426 639;" xml:space="preserve">
+
+    <defs>
+      <filter id="AI_Ombra_1" name="AI_Ombra_1">
+        <feGaussianBlur result="blur" stdDeviation="2" in="SourceAlpha" />
+        <feOffset result="offsetBlurredAlpha" dx="4" dy="4" in="blur" />
+        <feMerge>
+          <feMergeNode in="offsetBlurredAlpha" />
+          <feMergeNode in="SourceGraphic" />
+        </feMerge>
+      </filter>
+    </defs>
+
+    <path id="btn-background-girths" class="st0" d="M425.6,0.6v213c0-29.4-23.8-53.2-53.1-53.2H79.7c-29.3,0-53.1-23.8-53.1-53.3
+  c0-14.7,5.9-28,15.6-37.7s22.9-15.6,37.6-15.6h292.8c14.7,0,27.9-6,37.6-15.6C419.7,28.6,425.6,15.3,425.6,0.6z" [attr.transform]="yInitialPosition">
+      <animateTransform #bckgAnimation attributeType="xml" attributeName="transform" type="translate" begin="indefinite"
+        dur="0.15s" [attr.values]=yMotion fill="freeze" />
+    </path>
+    <g (click)="onClick('btn-Girth')">
+      <g id="btn-not-pressed-girths" class="st1">
+        <path class="st2" [attr.d]=initialShapeGirth>
+          <animate #btnAnimationGirth attributeName="d" [attr.values]=morphingGirth begin="indefinite" dur="0.3s" fill="freeze">
+          </animate>
+        </path>
+      </g>
+      <text transform="matrix(0.9976 0 0 1 162.3086 119.701)" class="st3 st4 st5">Girths</text>
+</g>
+    <g (click)="onClick('btn-Skinfold')">
+      <g id="btn-pressed-skinfolds" class="st1">
+        <path class="st2" [attr.d]=initialShapeSkinfold>
+          <animate #btnAnimationSkinfold attributeName="d" [attr.values]=morphingSkinfold begin="indefinite" dur="0.3s" fill="freeze">
+          </animate>
+        </path>
+      </g>
+      <text transform="matrix(0.9976 0 0 1 162.3088 332.1019)" class="st3 st4 st5">Skinfolds</text>
+    </g>
+    <g (click)="onClick('btn-Body')">
+      <g id="btn-pressed-bodyRec" class="st1">
+        <path class="st2" [attr.d]=initialShapeBody>
+          <animate #btnAnimationBody attributeName="d" [attr.values]=morphingBody begin="indefinite" dur="0.3s" fill="freeze">
+          </animate>
+        </path>
+      </g>
+      <text id="Body_composition" transform="matrix(0.9976 0 0 1 162.3087 524.2733)">
+        <tspan x="0" y="0" class="st3 st4 st5">Body</tspan>
+        <tspan x="0" y="37.2" class="st3 st4 st5">composition</tspan>
+      </text>
+    </g>
+  </svg>
+
+</div>

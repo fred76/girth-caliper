@@ -1,0 +1,30 @@
+.icon {
+  padding-bottom: 10px;
+  font-size: 48px;
+}
+
+mat-card-footer {
+  padding-bottom: 10px;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.mat-elevation-z8.height {
+  height: 50%;
+  aspect-ratio: 1 !important;
+}
+.button24 {
+  width: 24px;
+  height: 24px;
+}
+.icon24 {
+  font-family: "Material Icons" !important;
+  font-size: 16px;
+  margin-top: -10px;
+}
+.icon24Bis {
+  font-family: "Material Icons" !important;
+  font-size: 16px;
+  margin-top: -10px;
+  margin-left: 3px;
+}

@@ -1,0 +1,52 @@
+.text{
+  font-size: 40px;
+  color: white;
+  display: flex;
+  flex: 1;
+  justify-content: center;
+}
+
+.primary-btn{
+  background-color: blue;
+  color: white;
+  cursor: pointer;
+  display: inline-flex;
+  outline: 0;
+  padding: 10px 20px 10px 20px;
+
+
+}
+.secondary-btn{
+  background-color: green;
+  cursor: pointer;
+  display: inline-flex;
+  outline: 0;
+  padding: 10px 20px 10px 20px;
+}
+.warning-btn{
+  background-color: red;
+  cursor: pointer;
+  display: inline-flex;
+  outline: 0;
+  padding: 10px 20px 10px 20px;
+}
+.cls-1 {
+  fill: #2f2f30;
+}
+
+.cls-2 {
+  filter: url(#AI_Ombra_1)
+}
+
+.cls-3 {
+  fill: #c0215d
+}
+.cls-6 {
+  fill: yellow
+}
+.st0{fill:#272727;}
+	.st1{filter:url(#AI_Ombra_1);}
+	.st2{fill:#C0215D;}
+	.st3{fill:#FFFFFF;}
+	.st4{font-family:'ArialMT';}
+	.st5{font-size:31px;}

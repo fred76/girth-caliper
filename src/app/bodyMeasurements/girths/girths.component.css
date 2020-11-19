@@ -1,0 +1,33 @@
+
+.content {
+  padding: 20px;
+  margin-top: 160px !important;
+  height: auto !important;
+}
+
+.mat-card-content {
+  padding: 5px !important;
+}
+
+.mat-card-image {
+  height: 80px; /* adjust as needed */
+  object-fit: contain;
+}
+
+.container {
+  overflow: hidden;
+}
+
+.buttonSticky {
+  z-index: 999;
+  position: fixed !important;
+  margin-top: 130px !important;
+}
+
+.date-field {
+  border-radius: 5px;
+  background-color: #c2185b;
+  z-index: 999;
+  position: fixed !important;
+  margin: 5px;
+}

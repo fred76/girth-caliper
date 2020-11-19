@@ -1,0 +1,46 @@
+<svg id="bckg-anim" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+  viewBox="0 0 425.2 212.6">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #2f2f30
+      }
+
+      .cls-2 {
+        filter: url(#AI_Ombra_1)
+      }
+
+      .cls-3 {
+        fill: #c0215d
+      }
+    </style>
+    <filter id="AI_Ombra_1" name="AI_Ombra_1">
+      <feGaussianBlur result="blur" stdDeviation="2" in="SourceAlpha" />
+      <feOffset result="offsetBlurredAlpha" dx="4" dy="4" in="blur" />
+      <feMerge>
+        <feMergeNode in="offsetBlurredAlpha" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+  <g  (click)="onClickButton($event)">
+    <path id="btn-background" class="cls-1"
+      d="M425.2,0V212.6a53.15,53.15,0,0,0-53.15-53.15H79.15a53.15,53.15,0,0,1,0-106.3h292.9a53,53,0,0,0,37.58-15.57A53,53,0,0,0,425.2,0Z">
+      <animate attributeName="opacity" dur="1s" values="0;1">
+      </animate>
+    </path>
+    <g id="btn-nto-pressed" class="cls-2">
+      <path class="cls-3"
+        d="M372.05,106.3a53.16,53.16,0,0,1-53.15,53.15H79.15a53.15,53.15,0,0,1,0-106.3H318.9A53.16,53.16,0,0,1,372.05,106.3Z">
+        <animate attributeName="d"
+          from="M372.05,106.3a53.16,53.16,0,0,1-53.15,53.15H79.15a53.15,53.15,0,0,1,0-106.3H318.9A53.16,53.16,0,0,1,372.05,106.3Z"
+          to="M132.3,106.3a53.16,53.16,0,0,1-53.15,53.15h0a53.15,53.15,0,0,1,0-106.3h0A53.16,53.16,0,0,1,132.3,106.3Z"
+          dur="1" fill="freeze">
+        </animate>
+      </path>
+    </g>
+    <text text-anchor="middle" x="230" y="126" class="text">
+      {{text}}
+    </text>
+  </g>
+</svg>

@@ -1,0 +1,13 @@
+nav {
+  margin-top: 70px !important;
+  background-color: black;
+  color:#fff;
+  position: fixed;
+  top:0;
+  left: 0;
+  width: 100vw;
+  z-index: 100;
+}
+
+
+
