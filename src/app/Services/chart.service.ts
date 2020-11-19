@@ -467,7 +467,7 @@ export class ChartService {
   }
 
   barChartType: ChartType = 'bar';
-  barChartLegend = true;
+  barChartLegend = false;
   barChartPlugins = [pluginDataLabels];
 
 
@@ -498,9 +498,6 @@ export class ChartService {
         align: 'end',
 
       }
-    },
-    legend: {
-      display: true
     }
   }
 

@@ -26,14 +26,12 @@
 
         <mat-card class="mat-elevation-z8 height">
           <mat-card-title>
-            <p *ngIf="!isShowNextBodyCompButton" class="mat-body-2">Last skinfold method</p>
-            <p *ngIf="isShowNextBodyCompButton" class="mat-body-2">Skinfold method</p>
+            <p *ngIf="!isShowNextBodyCompButton" class="mat-body-2">Summary data</p>
           </mat-card-title>
           <mat-card-subtitle>
-            <p class="mat-caption">{{method}}</p>
-          </mat-card-subtitle>
-          <mat-card-subtitle>
-            <p class="mat-caption">{{date}}</p>
+            <p class="mat-caption">{{date  | date:'d MMM yyyy'}}</p>
+             <p class="mat-caption">Body weight {{weight }} Kg</p>
+             <p class="mat-caption">Age {{age }} Years</p>
           </mat-card-subtitle>
         </mat-card>
 
@@ -49,8 +47,8 @@
           </mat-card-subtitle>
           <mat-card-content>
             <span fxFlex></span>
-            <mat-icon class="icon" *ngIf="isSumIncreasing" [inline]="true">arrow_upward</mat-icon>
-            <mat-icon class="icon" *ngIf="!isSumIncreasing" [inline]="true">arrow_downward</mat-icon>
+            <mat-icon class="colrWorst" *ngIf="isSumIncreasing" [inline]="true">arrow_upward</mat-icon>
+            <mat-icon class="colrBetter" *ngIf="!isSumIncreasing" [inline]="true">arrow_downward</mat-icon>
             <span fxFlex></span>
           </mat-card-content>
         </mat-card>
@@ -70,8 +68,8 @@
           </mat-card-subtitle>
           <mat-card-content>
             <span fxFlex></span>
-            <mat-icon class="icon" *ngIf="isBodyDensityIncreasing" [inline]="true">arrow_upward</mat-icon>
-            <mat-icon class="icon" *ngIf="!isBodyDensityIncreasing" [inline]="true">arrow_downward</mat-icon>
+            <mat-icon class="colrBetterD" *ngIf="isBodyDensityIncreasing" [inline]="true">arrow_upward</mat-icon>
+            <mat-icon class="colrWorstD" *ngIf="!isBodyDensityIncreasing" [inline]="true">arrow_downward</mat-icon>
             <span fxFlex></span>
           </mat-card-content>
         </mat-card>
@@ -88,8 +86,8 @@
           </mat-card-subtitle>
           <mat-card-content>
             <span fxFlex></span>
-            <mat-icon class="icon" *ngIf="isBodyFatPercentageIncreasing" [inline]="true">arrow_upward</mat-icon>
-            <mat-icon class="icon" *ngIf="!isBodyFatPercentageIncreasing" [inline]="true">arrow_downward</mat-icon>
+            <mat-icon class="colrWorst" *ngIf="isBodyFatPercentageIncreasing" [inline]="true">arrow_upward</mat-icon>
+            <mat-icon class="colrBetter" *ngIf="!isBodyFatPercentageIncreasing" [inline]="true">arrow_downward</mat-icon>
             <span fxFlex></span>
           </mat-card-content>
         </mat-card>
@@ -100,7 +98,9 @@
       <mat-card class="mat-elevation-z8 height">
 
         <!--  button toggle Piechart // Barchart -->
-
+        <mat-card-subtitle>
+          <p class="mat-caption">{{method}}</p>
+        </mat-card-subtitle>
         <span fxLayoutAlign="end center">
           <button mat-mini-fab color="primary" (click)="toggleBodyCompChartButton($event)" class="button24">
             <mat-icon *ngIf="!toggleBodyCompChart" class="icon24">insert_chart</mat-icon>
@@ -155,53 +155,53 @@
       [legend]="lineChartLegend" [chartType]="lineChartType" (chartHover)="chartHovered($event)"
       (chartClick)="chartClicked($event)">
     </canvas>
-    <mat-table *ngIf="isToggleSkinfoldChartList" [dataSource]="dataSource" matSort>
+    <mat-table *ngIf="isToggleSkinfoldChartList" [dataSource]="dataSource"  >
       <ng-container matColumnDef="method">
-        <mat-header-cell *matHeaderCellDef mat-sort-header>Method</mat-header-cell>
+        <mat-header-cell *matHeaderCellDef >Method</mat-header-cell>
         <mat-cell *matCellDef="let element">{{element.metadata.method}}</mat-cell>
       </ng-container>
       <ng-container matColumnDef="age">
-        <mat-header-cell *matHeaderCellDef mat-sort-header>Age</mat-header-cell>
+        <mat-header-cell *matHeaderCellDef >Age</mat-header-cell>
         <mat-cell *matCellDef="let element">{{element.metadata.age}}</mat-cell>
       </ng-container>
       <ng-container matColumnDef="date">
-        <mat-header-cell *matHeaderCellDef mat-sort-header>Date</mat-header-cell>
-        <mat-cell *matCellDef="let element">{{element.metadata.date | date}}</mat-cell>
+        <mat-header-cell *matHeaderCellDef >Date</mat-header-cell>
+        <mat-cell *matCellDef="let element">{{element.metadata.date | date:'d MMM yy'}}</mat-cell>
       </ng-container>
       <ng-container matColumnDef="weight">
-        <mat-header-cell *matHeaderCellDef mat-sort-header>Weight</mat-header-cell>
+        <mat-header-cell *matHeaderCellDef >Weight</mat-header-cell>
         <mat-cell *matCellDef="let element">{{element.metadata.weight}}</mat-cell>
       </ng-container>
       <ng-container matColumnDef="Chest">
-        <mat-header-cell *matHeaderCellDef mat-sort-header>Chest</mat-header-cell>
+        <mat-header-cell *matHeaderCellDef >Chest</mat-header-cell>
         <mat-cell *matCellDef="let element">{{element.fold.Chest}}</mat-cell>
       </ng-container>
       <ng-container matColumnDef="Subscapular">
-        <mat-header-cell *matHeaderCellDef mat-sort-header>Subscapular</mat-header-cell>
+        <mat-header-cell *matHeaderCellDef >Subscapular</mat-header-cell>
         <mat-cell *matCellDef="let element">{{element.fold.Subscapular}}</mat-cell>
       </ng-container>
       <ng-container matColumnDef="Midaxillary">
-        <mat-header-cell *matHeaderCellDef mat-sort-header>Midaxillary</mat-header-cell>
+        <mat-header-cell *matHeaderCellDef >Midaxillary</mat-header-cell>
         <mat-cell *matCellDef="let element">{{element.fold.Midaxillary}}</mat-cell>
       </ng-container>
       <ng-container matColumnDef="Triceps">
-        <mat-header-cell *matHeaderCellDef mat-sort-header>Triceps</mat-header-cell>
+        <mat-header-cell *matHeaderCellDef >Triceps</mat-header-cell>
         <mat-cell *matCellDef="let element">{{element.fold.Triceps}}</mat-cell>
       </ng-container>
       <ng-container matColumnDef="Bicep">
-        <mat-header-cell *matHeaderCellDef mat-sort-header>Bicep</mat-header-cell>
+        <mat-header-cell *matHeaderCellDef  >Bicep</mat-header-cell>
         <mat-cell *matCellDef="let element">{{element.fold.Bicep}}</mat-cell>
       </ng-container>
       <ng-container matColumnDef="Suprailiac">
-        <mat-header-cell *matHeaderCellDef mat-sort-header>Suprailiac</mat-header-cell>
+        <mat-header-cell *matHeaderCellDef  >Suprailiac</mat-header-cell>
         <mat-cell *matCellDef="let element">{{element.fold.Suprailiac}}</mat-cell>
       </ng-container>
       <ng-container matColumnDef="Abdominal">
-        <mat-header-cell *matHeaderCellDef mat-sort-header>Abdominal</mat-header-cell>
+        <mat-header-cell *matHeaderCellDef  >Abdominal</mat-header-cell>
         <mat-cell *matCellDef="let element">{{element.fold.Abdominal}}</mat-cell>
       </ng-container>
       <ng-container matColumnDef="Thigh">
-        <mat-header-cell *matHeaderCellDef mat-sort-header>Thigh</mat-header-cell>
+        <mat-header-cell *matHeaderCellDef  >Thigh</mat-header-cell>
         <mat-cell *matCellDef="let element">{{element.fold.Thigh}}</mat-cell>
       </ng-container>
 

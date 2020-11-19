@@ -280,7 +280,7 @@ export class CaliperService {
     let bodyFatPerc: number = ((4.95 / bodyDensity) - 4.5) * 100
     let fatMass: number = (weight / 100) * bodyFatPerc
     let leanMass = weight - fatMass
-    return { bodyDensity, bodyFatPerc, sum, fatMass, leanMass, foldSkinValueArray, foldSkinTitleArray, weight, method, date }
+    return { bodyDensity, bodyFatPerc, sum, fatMass, leanMass, foldSkinValueArray, foldSkinTitleArray, weight, method, date, age }
   }
 
 

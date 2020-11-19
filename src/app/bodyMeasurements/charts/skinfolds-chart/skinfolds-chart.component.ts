@@ -1,4 +1,4 @@
-import { Subject, Subscription, Observable } from 'rxjs';
+import { Subject } from 'rxjs';
 import { Utility } from './../../../Utility/utility';
 import { ChartService } from '../../../Services/chart.service';
 import { DummyDataService } from '../../../Utility/dummyData.service';
@@ -7,7 +7,6 @@ import { MatTableDataSource } from '@angular/material/table';
 import { Component, OnInit, ViewChild, AfterViewInit, Input } from '@angular/core';
 import { BaseChartDirective } from 'ng2-charts';
 import { CaliperForDB } from 'src/app/interface-model/caliper.model';
-import { MatSort } from '@angular/material/sort';
 
 @Component({
   selector: 'app-skinfolds-chart',
@@ -15,7 +14,7 @@ import { MatSort } from '@angular/material/sort';
 
   styleUrls: ['./skinfolds-chart.component.css']
 })
-export class SkinfoldsChartComponent implements OnInit, AfterViewInit {
+export class SkinfoldsChartComponent implements OnInit  {
 
   showChart: boolean
   constructor(
@@ -36,9 +35,9 @@ export class SkinfoldsChartComponent implements OnInit, AfterViewInit {
   @Input() isShowNextBodyCompButton: boolean = false
   @Input() isToggleSkinfoldChartList: boolean = false
 
-  @ViewChild(MatSort) sort: MatSort
 
   displayedColumns = [ "method", "age", "date", "weight", "Chest", "Subscapular", "Midaxillary", "Triceps", "Bicep", "Suprailiac", "Abdominal", "Thigh" ]
+
   dataSource = new MatTableDataSource<CaliperForDB>()
 
   toggleSkinfoldChartListButton(event: Event) {
@@ -53,9 +52,6 @@ export class SkinfoldsChartComponent implements OnInit, AfterViewInit {
     this.createBodyCompositionTile(this.selectorBodyCompDate)
   }
 
-  ngAfterViewInit() {
-    this.dataSource.sort = this.sort
-  }
 
   previousBodyCompChartButton(event: Event) {
     this.previousBodyCompDateEvent.next(event);
@@ -105,7 +101,9 @@ export class SkinfoldsChartComponent implements OnInit, AfterViewInit {
   pieChartColors: any[]
 
   method: string
-  date: string
+  date: Date
+  weight: number
+  age: number
 
   bodyDensity: number
   bodyFatPercentage: number
@@ -138,7 +136,11 @@ export class SkinfoldsChartComponent implements OnInit, AfterViewInit {
     this.lineChartLegend = this.chartsService.lineChartLegend
     this.lineChartType = this.chartsService.lineChartType
 
-    this.dataSource.data = localDummyArray
+
+    let localDummyArraySorted = [...localDummyArray].sort((d2, d1) => new Date(d1.metadata.date).getTime() - new Date(d2.metadata.date).getTime())
+
+    this.dataSource.data = localDummyArraySorted
+
 
 
 
@@ -156,8 +158,10 @@ export class SkinfoldsChartComponent implements OnInit, AfterViewInit {
     let skinfoldObject = this.caliperService.feedCaliperDataForChart(localDummyArrayLastElement)
 
     this.method = skinfoldObject.method
-    this.date = this.utility.FormattedDate(skinfoldObject.date)
+    this.date = skinfoldObject.date
     this.sum = skinfoldObject.sum
+    this.weight = skinfoldObject.weight
+    this.age = skinfoldObject.age
     this.bodyDensity = this.utility.numberDecimal(skinfoldObject.bodyDensity, 2)
     this.bodyFatPercentage = this.utility.numberDecimal(skinfoldObject.bodyFatPerc, 2)
 
@@ -173,6 +177,7 @@ export class SkinfoldsChartComponent implements OnInit, AfterViewInit {
       this.sum > sumSecondlast ? this.isSumIncreasing = true : this.isSumIncreasing = false
       this.bodyDensity > bodyDensitySecondlast ? this.isBodyDensityIncreasing = true : this.isBodyDensityIncreasing = false
       this.bodyFatPercentage > bodyFatPercentageSecondlast ? this.isBodyFatPercentageIncreasing = true : this.isBodyFatPercentageIncreasing = false
+
     }
 
     if (this.toggleBodyCompChart) {

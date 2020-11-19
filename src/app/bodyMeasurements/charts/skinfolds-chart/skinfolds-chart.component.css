@@ -1,7 +1,4 @@
-.icon {
-  padding-bottom: 10px;
-  font-size: 48px;
-}
+
 
 mat-card-footer {
   padding-bottom: 10px;
@@ -27,4 +24,26 @@ mat-card-footer {
   font-size: 16px;
   margin-top: -10px;
   margin-left: 3px;
+}
+.colrBetter {
+  padding-bottom: 10px;
+  font-size: 48px;
+  color: lightskyblue;
+}
+
+.colrWorst {
+  padding-bottom: 10px;
+  font-size: 48px;
+  color: orangered;
+}
+.colrBetterD {
+  padding-bottom: 10px;
+  font-size: 48px;
+  color: lightskyblue;
+}
+
+.colrWorstD {
+  padding-bottom: 10px;
+  font-size: 48px;
+  color: orangered;
 }
