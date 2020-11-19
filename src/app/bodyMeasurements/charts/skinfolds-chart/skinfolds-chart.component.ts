@@ -4,9 +4,10 @@ import { ChartService } from '../../../Services/chart.service';
 import { DummyDataService } from '../../../Utility/dummyData.service';
 import { CaliperService } from './../../../Services/caliper.service';
 import { MatTableDataSource } from '@angular/material/table';
-import { Component, OnInit, ViewChild, Output, Input } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit, Input } from '@angular/core';
 import { BaseChartDirective } from 'ng2-charts';
 import { CaliperForDB } from 'src/app/interface-model/caliper.model';
+import { MatSort } from '@angular/material/sort';
 
 @Component({
   selector: 'app-skinfolds-chart',
@@ -14,7 +15,7 @@ import { CaliperForDB } from 'src/app/interface-model/caliper.model';
 
   styleUrls: ['./skinfolds-chart.component.css']
 })
-export class SkinfoldsChartComponent implements OnInit {
+export class SkinfoldsChartComponent implements OnInit, AfterViewInit {
 
   showChart: boolean
   constructor(
@@ -35,7 +36,7 @@ export class SkinfoldsChartComponent implements OnInit {
   @Input() isShowNextBodyCompButton: boolean = false
   @Input() isToggleSkinfoldChartList: boolean = false
 
-
+  @ViewChild(MatSort) sort: MatSort
 
   displayedColumns = [ "method", "age", "date", "weight", "Chest", "Subscapular", "Midaxillary", "Triceps", "Bicep", "Suprailiac", "Abdominal", "Thigh" ]
   dataSource = new MatTableDataSource<CaliperForDB>()
@@ -50,6 +51,10 @@ export class SkinfoldsChartComponent implements OnInit {
     this.toggleBoyCompChartEvent.next(event);
     this.toggleBodyCompChart = !this.toggleBodyCompChart
     this.createBodyCompositionTile(this.selectorBodyCompDate)
+  }
+
+  ngAfterViewInit() {
+    this.dataSource.sort = this.sort
   }
 
   previousBodyCompChartButton(event: Event) {
