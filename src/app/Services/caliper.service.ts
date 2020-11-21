@@ -1,9 +1,10 @@
+
 import { DummyDataService } from './../Utility/dummyData.service';
 import { CaliperForDB } from './../interface-model/caliper.model';
 import { Utility } from 'src/app/Utility/utility';
 import { CaliperTile } from '../interface-model/caliper.model';
 import { Injectable } from '@angular/core';
-import { Subject, Subscription } from 'rxjs';
+import { Subject, Subscriber, Subscription } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -13,12 +14,16 @@ export class CaliperService {
   constructor(private utility: Utility, private dummy: DummyDataService) { }
 
   selectedCaliperMethod = new Subject<string>()
+
   selectedCaliperMethod$ = this.selectedCaliperMethod.asObservable()
 
   caliperTiles: CaliperTile[]
+
   caliperTilesDescriptions: CaliperTile[]
 
   selectedCaliperMethodSubscription: Subscription
+
+  caliperObjectForDB: CaliperForDB
 
   caliperMethods = [
     "jackson & Polloc 7 point Man",
@@ -153,6 +158,7 @@ export class CaliperService {
       // this.caliperTilesDescriptions = this.caliperTilesDescriptions.filter(i => !removeCaliperTilesDescriptions.map(j => j.image).includes(i.image));
     })
   }
+
   updateSelectedCaliperMethod(newMethod: string) {
     this.selectedCaliperMethod.next(newMethod)
   }
@@ -161,42 +167,41 @@ export class CaliperService {
     this.selectedCaliperMethodSubscription.unsubscribe()
   }
 
-  skinfoldTransformDataForDB() {
+  createSkinFoldObject(method: string, age: number, weight: number, date?: Date) {
     let c = new CaliperForDB()
     c.fold = {}
+
+    let foldSkinTitleArray: string[] = []
+    let foldSkinValueArray: number[] = []
+    let bodyDensity: number
+    let sum: number = 0
+    let thigh: number = 0
+    let subscapular: number = 0
+    let triceps: number = 0
+    let suprailiac: number = 0
+
     this.caliperTiles.map((item) => {
-      const cal = c.fold
+
       let div = 0
+
       if (item.value1 !== null) { div++ }
       if (item.value2 !== null) { div++ }
       if (item.value3 !== null) { div++ }
+
       let avarage = (item.value1 + item.value2 + item.value3) / div
+
       switch (true) {
-        case item.title == "Chest": c.fold.Chest = avarage; break
-        case item.title == "Subscapular": c.fold.Subscapular = avarage; break
-        case item.title == "Midaxillary": c.fold.Midaxillary = avarage; break
-        case item.title == "Triceps": c.fold.Triceps = avarage; break
-        case item.title == "Suprailiac": c.fold.Suprailiac = avarage; break
-        case item.title == "Abdominal": c.fold.Abdominal = avarage; break
-        case item.title == "Thigh": c.fold.Thigh = avarage; break
-        case item.title == "Bicep": c.fold.Bicep = avarage; break
+        case item.title == "Chest": c.fold.Chest = avarage; foldSkinTitleArray.push("Chest"); foldSkinValueArray.push(avarage); sum += avarage; break
+        case item.title == "Subscapular": c.fold.Subscapular = avarage; foldSkinTitleArray.push("Subscapular"); foldSkinValueArray.push(avarage); sum += avarage; subscapular = avarage; break
+        case item.title == "Midaxillary": c.fold.Midaxillary = avarage; foldSkinTitleArray.push("Midaxillary"); foldSkinValueArray.push(avarage); sum += avarage; break
+        case item.title == "Triceps": c.fold.Triceps = avarage; foldSkinTitleArray.push("Triceps"); foldSkinValueArray.push(avarage); sum += avarage; triceps = avarage; break
+        case item.title == "Suprailiac": c.fold.Suprailiac = avarage; foldSkinTitleArray.push("Suprailiac"); foldSkinValueArray.push(avarage); sum += avarage; suprailiac = avarage; break
+        case item.title == "Abdominal": c.fold.Abdominal = avarage; foldSkinTitleArray.push("Abdominal"); foldSkinValueArray.push(avarage); sum += avarage; break
+        case item.title == "Thigh": c.fold.Thigh = avarage; foldSkinTitleArray.push("Thigh"); foldSkinValueArray.push(avarage); sum += avarage; thigh = avarage; break
+        case item.title == "Bicep": c.fold.Bicep = avarage; foldSkinTitleArray.push("Bicep"); foldSkinValueArray.push(avarage); sum += avarage; break
       }
     })
-    return c
-  }
 
-  feedCalipeCardData(method: string, age: number, weight: number) {
-    let skinfoldObject = this.skinfoldTransformDataForDB()
-
-    let foldSkinTitleArray = Object.keys(skinfoldObject.fold)
-    let foldSkinValueArray = Object.values(skinfoldObject.fold)
-
-
-    let sum: number = foldSkinValueArray.reduce(function (a, b) {
-      return a + b;
-    });
-
-    let bodyDensity: number
     switch (true) {
       case method == "jackson & Polloc 7 point Man": bodyDensity = this.utility.formulaJPMan7(sum, age).bodyDensity
         break
@@ -207,17 +212,9 @@ export class CaliperService {
       case method == "jackson & Polloc 3 point Woman": bodyDensity = this.utility.formulaJPWoman3(sum, age).bodyDensity
         break
       case method == "Sloan - Men 2 point":
-
-        let thigh = skinfoldObject.fold.Thigh
-        let subscapular = skinfoldObject.fold.Subscapular
-
         bodyDensity = this.utility.formulaSloanMan2(thigh, subscapular).bodyDensity
         break
       case method == "Sloan - Woman 2 point":
-
-        let triceps = skinfoldObject.fold.Triceps
-        let suprailiac = skinfoldObject.fold.Thigh
-
         bodyDensity = this.utility.formulaSloanWoman2(suprailiac, triceps).bodyDensity
         break
       case method == "Durnin & Womersley Man": bodyDensity = this.utility.formulaDurninWomersleyMan(sum, age).bodyDensity
@@ -226,73 +223,31 @@ export class CaliperService {
         break
     }
 
-    let bodyFatPerc: number = ((4.95 / bodyDensity) - 4.5) * 100
-    let fatMass: number = (weight / 100) * bodyFatPerc
+    let bodyFatPerc: number = this.utility.numberDecimal((((4.95 / bodyDensity) - 4.5) * 100),2)
+    let fatMass: number = this.utility.numberDecimal(((weight / 100) * bodyFatPerc), 2)
     let leanMass = weight - fatMass
-    return { bodyDensity, bodyFatPerc, sum, fatMass, leanMass, foldSkinValueArray, foldSkinTitleArray, weight }
-  }
-  feedCaliperDataForChart(caliperForDB: CaliperForDB,) {
 
+    c.metadata = { method: method, date: date, weight: weight, age: age }
 
-    let method: string = caliperForDB.metadata.method
-    let age: number = caliperForDB.metadata.age
-    let weight: number = caliperForDB.metadata.weight
-    let date: Date = caliperForDB.metadata.date
-
-    let foldSkinTitleArray = Object.keys(caliperForDB.fold)
-    let foldSkinValueArray = Object.values(caliperForDB.fold)
-
-
-    let sum: number = foldSkinValueArray.reduce(function (a, b) {
-      return a + b;
-    });
-
-    let bodyDensity: number
-    switch (true) {
-      case method == "jackson & Polloc 7 point Man": bodyDensity = this.utility.formulaJPMan7(sum, age).bodyDensity
-        break
-      case method == "jackson & Polloc 7 point Woman": bodyDensity = this.utility.formulaJPWoman7(sum, age).bodyDensity
-        break
-      case method == "jackson & Polloc 3 point Man": bodyDensity = this.utility.formulaJPMan3({ sum, age }).bodyDensity
-        break
-      case method == "jackson & Polloc 3 point Woman": bodyDensity = this.utility.formulaJPWoman3(sum, age).bodyDensity
-        break
-      case method == "Sloan - Men 2 point":
-
-        let thigh = caliperForDB.fold.Thigh
-        let subscapular = caliperForDB.fold.Subscapular
-
-        bodyDensity = this.utility.formulaSloanMan2(thigh, subscapular).bodyDensity
-        break
-      case method == "Sloan - Woman 2 point":
-
-        let triceps = caliperForDB.fold.Triceps
-        let suprailiac = caliperForDB.fold.Thigh
-
-        bodyDensity = this.utility.formulaSloanWoman2(suprailiac, triceps).bodyDensity
-        break
-      case method == "Durnin & Womersley Man": bodyDensity = this.utility.formulaDurninWomersleyMan(sum, age).bodyDensity
-        break
-      case method == "Durnin & Womersley Woman": bodyDensity = this.utility.formulaDurninWomersleyWoman(sum, age).bodyDensity
-        break
+    c.bodyResult = {
+      bodyDensity: bodyDensity,
+      bodyFatPercentage: bodyFatPerc,
+      fatMass: fatMass,
+      leanMass: leanMass,
+      skinfoldsSum: sum
     }
+    this.caliperObjectForDB = c
+    return { c, bodyDensity, bodyFatPerc, sum, fatMass, leanMass, foldSkinValueArray, foldSkinTitleArray, weight, method, date, age }
 
-    let bodyFatPerc: number = ((4.95 / bodyDensity) - 4.5) * 100
-    let fatMass: number = (weight / 100) * bodyFatPerc
-    let leanMass = weight - fatMass
-    return { bodyDensity, bodyFatPerc, sum, fatMass, leanMass, foldSkinValueArray, foldSkinTitleArray, weight, method, date, age }
   }
 
+  saveSkinfoldToDB( ) {
 
-  saveSkinfoldToDB(method: string, date: Date, weight: number, age: number) {
-
-    let skinfoldToDB = this.skinfoldTransformDataForDB()
-    skinfoldToDB.metadata = { method: method, date: date, weight: weight, age: age }
-    console.log(age)
-
-    this.dummy.dummyArrayCaliper.push(skinfoldToDB)
+    this.dummy.dummyArrayCaliper.push(this.caliperObjectForDB)
   }
 
 
 
 }
+
+

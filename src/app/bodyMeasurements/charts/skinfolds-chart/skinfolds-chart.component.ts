@@ -128,21 +128,17 @@ export class SkinfoldsChartComponent implements OnInit  {
 
   createSkinfoldsChart() {
     let localDummyArray = [...this.dummyDataService.dummyArrayCaliper]
-    let maxSkinfold = this.chartsService.createSkinfoldsArrayForCharts(localDummyArray)
 
-    this.lineChartData = this.chartsService.feedSkinfoldsChartData().arrayChartDataSet
-    this.lineChartLabels = this.chartsService.lineChartMultiLabels
-    this.lineChartOptions = this.chartsService.lineChartOption("Skinfold", "Body weight", maxSkinfold)
+    let chartData = this.chartsService.skinfoldLineChartData(localDummyArray)
+    this.lineChartData = chartData.skinfoldChartDataSet
+    this.lineChartLabels = chartData.skinfoldXaxisLabel
+    this.lineChartOptions = this.chartsService.lineChartOption("Skinfold", "Body weight", chartData.maxSkinfold)
     this.lineChartLegend = this.chartsService.lineChartLegend
     this.lineChartType = this.chartsService.lineChartType
-
 
     let localDummyArraySorted = [...localDummyArray].sort((d2, d1) => new Date(d1.metadata.date).getTime() - new Date(d2.metadata.date).getTime())
 
     this.dataSource.data = localDummyArraySorted
-
-
-
 
   }
 
@@ -155,34 +151,33 @@ export class SkinfoldsChartComponent implements OnInit  {
 
     let localDummyArrayLastElement = localDummyArray[localDummyArray.length - n]
 
-    let skinfoldObject = this.caliperService.feedCaliperDataForChart(localDummyArrayLastElement)
-
-    this.method = skinfoldObject.method
-    this.date = skinfoldObject.date
-    this.sum = skinfoldObject.sum
-    this.weight = skinfoldObject.weight
-    this.age = skinfoldObject.age
-    this.bodyDensity = this.utility.numberDecimal(skinfoldObject.bodyDensity, 2)
-    this.bodyFatPercentage = this.utility.numberDecimal(skinfoldObject.bodyFatPerc, 2)
+    this.method = localDummyArrayLastElement.metadata.method
+    this.date = localDummyArrayLastElement.metadata.date
+    this.sum = localDummyArrayLastElement.bodyResult.skinfoldsSum
+    this.weight = localDummyArrayLastElement.metadata.weight
+    this.age = localDummyArrayLastElement.metadata.age
+    this.bodyDensity = localDummyArrayLastElement.bodyResult.bodyDensity
+    this.bodyFatPercentage = localDummyArrayLastElement.bodyResult.bodyFatPercentage
 
     if (this.selectorBodyCompDate < this.dummyDataService.dummyArrayCaliper.length) {
 
       let localDummyArrayLastSecondElement = localDummyArray[localDummyArray.length - n - 1]
-      let skinfoldObjectSecondlast = this.caliperService.feedCaliperDataForChart(localDummyArrayLastSecondElement)
 
-      let sumSecondlast = skinfoldObjectSecondlast.sum
-      let bodyDensitySecondlast = this.utility.numberDecimal(skinfoldObjectSecondlast.bodyDensity, 2)
-      let bodyFatPercentageSecondlast = this.utility.numberDecimal(skinfoldObjectSecondlast.bodyFatPerc, 2)
+      let sumSecondlast = localDummyArrayLastSecondElement.bodyResult.skinfoldsSum
+      let bodyDensitySecondlast = localDummyArrayLastSecondElement.bodyResult.bodyDensity
+      let bodyFatPercentageSecondlast = localDummyArrayLastSecondElement.bodyResult.bodyFatPercentage
 
       this.sum > sumSecondlast ? this.isSumIncreasing = true : this.isSumIncreasing = false
       this.bodyDensity > bodyDensitySecondlast ? this.isBodyDensityIncreasing = true : this.isBodyDensityIncreasing = false
       this.bodyFatPercentage > bodyFatPercentageSecondlast ? this.isBodyFatPercentageIncreasing = true : this.isBodyFatPercentageIncreasing = false
 
     }
+    let foldSkinTitleArray = Object.keys(localDummyArrayLastElement.fold)
+    let foldSkinValueArray = Object.values(localDummyArrayLastElement.fold)
 
     if (this.toggleBodyCompChart) {
-      this.barChartData = this.chartsService.barChartData(skinfoldObject.foldSkinValueArray, '')
-      this.barChartLabels = this.chartsService.barChartLabels(skinfoldObject.foldSkinTitleArray)
+      this.barChartData = this.chartsService.barChartData(foldSkinValueArray, '')
+      this.barChartLabels = this.chartsService.barChartLabels(foldSkinTitleArray)
       this.barChartOptions = this.chartsService.barChartOptions
       this.barChartPlugins = this.chartsService.barChartPlugins
       this.barChartLegend = this.chartsService.barChartLegend
@@ -190,7 +185,7 @@ export class SkinfoldsChartComponent implements OnInit  {
     } else {
       this.pieChartOptions = this.chartsService.pieChartOptions
       this.pieChartLabels = this.chartsService.pieChartLabels
-      this.pieChartData = this.chartsService.pieDataChart(this.utility.numberDecimal(skinfoldObject.fatMass, 2), this.utility.numberDecimal(skinfoldObject.leanMass, 2))
+      this.pieChartData = this.chartsService.pieDataChart(localDummyArrayLastElement.bodyResult.fatMass,localDummyArrayLastElement.bodyResult.leanMass)
       this.pieChartType = this.chartsService.pieChartType
       this.pieChartLegend = this.chartsService.pieChartLegend
       this.pieChartPlugins = this.chartsService.pieChartPlugins

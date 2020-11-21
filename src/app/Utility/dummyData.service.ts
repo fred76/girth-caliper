@@ -150,6 +150,13 @@ export class DummyDataService {
       date: this.dateOfMeasurement(-5.6),
       weight: 88 + this.getRandomInt(-20, 20),
       age: 44
+    },
+    bodyResult: {
+      bodyDensity : 2,
+      bodyFatPercentage : 2,
+      fatMass : 3,
+      leanMass : 2,
+      skinfoldsSum : 58 + this.getRandomInt(-3, 5)
     }
   }
   caliper2: CaliperForDB = {
@@ -163,6 +170,13 @@ export class DummyDataService {
       date: this.dateOfMeasurement(-4.3),
       weight: 88 + this.getRandomInt(-20, 20),
       age: 44
+    },
+    bodyResult: {
+      bodyDensity : 2,
+      bodyFatPercentage : 2,
+      fatMass : 3,
+      leanMass : 2,
+      skinfoldsSum : 32 + this.getRandomInt(-3, 5)
     }
   }
   caliper3: CaliperForDB = {
@@ -175,6 +189,13 @@ export class DummyDataService {
       date: this.dateOfMeasurement(-3.2),
       weight: 88 + this.getRandomInt(-20, 20),
       age: 44
+    },
+    bodyResult: {
+      bodyDensity : 2,
+      bodyFatPercentage : 2,
+      fatMass : 3,
+      leanMass : 2,
+      skinfoldsSum : 15
     }
   }
 
@@ -190,6 +211,13 @@ export class DummyDataService {
       date: this.dateOfMeasurement(-2.5),
       weight: 88 + this.getRandomInt(-20, 20),
       age: 44
+    },
+    bodyResult: {
+      bodyDensity : 2,
+      bodyFatPercentage : 2,
+      fatMass : 3,
+      leanMass : 2,
+      skinfoldsSum : 30 + this.getRandomInt(-3, 5)
     }
   }
   caliper5: CaliperForDB = {
@@ -207,6 +235,13 @@ export class DummyDataService {
       date: this.dateOfMeasurement(-6.6),
       weight: 88 + this.getRandomInt(-20, 20),
       age: 44
+    },
+    bodyResult: {
+      bodyDensity : 2,
+      bodyFatPercentage : 2,
+      fatMass : 3,
+      leanMass : 2,
+      skinfoldsSum : 58 + this.getRandomInt(-3, 5)
     }
   }
   caliper6: CaliperForDB = {
@@ -220,6 +255,13 @@ export class DummyDataService {
       date: this.dateOfMeasurement(-7.3),
       weight: 88 + this.getRandomInt(-20, 20),
       age: 44
+    },
+    bodyResult: {
+      bodyDensity : 2,
+      bodyFatPercentage : 2,
+      fatMass : 3,
+      leanMass : 2,
+      skinfoldsSum : 32 + this.getRandomInt(-3, 5)
     }
   }
   caliper7: CaliperForDB = {
@@ -232,7 +274,15 @@ export class DummyDataService {
       date: this.dateOfMeasurement(-8.2),
       weight: 88 + this.getRandomInt(-20, 20),
       age: 44
+    },
+    bodyResult: {
+      bodyDensity : 2,
+      bodyFatPercentage : 2,
+      fatMass : 3,
+      leanMass : 2,
+      skinfoldsSum : 15 + this.getRandomInt(-3, 5)
     }
+
   }
 
   caliper8: CaliperForDB = {
@@ -247,6 +297,13 @@ export class DummyDataService {
       date: this.dateOfMeasurement(-9.5),
       weight: 88 + this.getRandomInt(-20, 20),
       age: 44
+    },
+    bodyResult: {
+      bodyDensity : 2,
+      bodyFatPercentage : 2,
+      fatMass : 3,
+      leanMass : 2,
+      skinfoldsSum : 30 + this.getRandomInt(-3, 5)
     }
   }
 

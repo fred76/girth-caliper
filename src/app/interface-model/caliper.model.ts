@@ -31,6 +31,13 @@ export interface CaliperForDB {
     date?: Date | any;
     weight: number
     age: number
+  };
+  bodyResult: {
+    bodyDensity : number,
+    bodyFatPercentage : number,
+    fatMass : number,
+    leanMass : number,
+    skinfoldsSum : number
   }
 }
 export class CaliperForDB implements CaliperForDB {
@@ -49,5 +56,12 @@ export class CaliperForDB implements CaliperForDB {
     date?: Date | any;
     weight: number
     age: number
+  };
+  bodyResult: {
+    bodyDensity : number,
+    bodyFatPercentage : number,
+    fatMass : number,
+    leanMass : number,
+    skinfoldsSum : number
   }
 }

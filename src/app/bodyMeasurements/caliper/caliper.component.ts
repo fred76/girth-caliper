@@ -77,12 +77,11 @@ export class CaliperComponent implements OnInit, OnDestroy {
         }
       });
     } else {
-      let foldSkin = this.measurementsService.feedCalipeCardData(this.selectedCaliperMethod, this.userAge, this.bodyWeight)
-
+      let foldSkin = this.measurementsService.createSkinFoldObject(this.selectedCaliperMethod,this.userAge,this.bodyWeight )
       const dialogRef = this.dialog.open(CaliperChartsCardComponent, {
         data: {
           method: this.selectedCaliperMethod,
-          bodyWeight: foldSkin.weight,
+          bodyWeight: this.bodyWeight,
           bodyDensity: this.utility.numberDecimal(foldSkin.bodyDensity, 2),
           bodyFatPercentage: this.utility.numberDecimal(foldSkin.bodyFatPerc, 2),
           sum: this.utility.numberDecimal(foldSkin.sum, 2),
@@ -107,7 +106,8 @@ export class CaliperComponent implements OnInit, OnDestroy {
       dialogRef.afterClosed().subscribe(result => {
         if (result) {
           this.measurementDate = result
-          this.measurementsService.saveSkinfoldToDB(this.selectedCaliperMethod, this.measurementDate, this.bodyWeight, this.userAge)
+          this.measurementsService.caliperObjectForDB.metadata.date = result
+          this.measurementsService.saveSkinfoldToDB()
 
         } else {
           console.log("Non Passa")
