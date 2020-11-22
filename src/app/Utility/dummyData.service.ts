@@ -135,188 +135,54 @@ export class DummyDataService {
     this.girthTiles3
   ]
 
-  caliper1: CaliperForDB = {
-    fold: {
-      Chest: 12 + this.getRandomInt(-3, 5),
-      Subscapular: 5 + this.getRandomInt(-3, 5),
-      Midaxillary: 6 + this.getRandomInt(-3, 5),
-      Triceps: 8 + this.getRandomInt(-3, 5),
-      Suprailiac: 6 + this.getRandomInt(-3, 5),
-      Abdominal: 9 + this.getRandomInt(-3, 5),
-      Thigh: 12 + this.getRandomInt(-3, 5)
-    },
-    metadata: {
-      method: "jackson & Polloc 7 point Man",
-      date: this.dateOfMeasurement(-5.6),
-      weight: 88 + this.getRandomInt(-20, 20),
-      age: 44
-    },
-    bodyResult: {
-      bodyDensity : 2,
-      bodyFatPercentage : 2,
-      fatMass : 3,
-      leanMass : 2,
-      skinfoldsSum : 58 + this.getRandomInt(-3, 5)
-    }
-  }
-  caliper2: CaliperForDB = {
-    fold: {
-      Chest: 15 + this.getRandomInt(-3, 5),
-      Abdominal: 7 + this.getRandomInt(-3, 5),
-      Thigh: 10 + this.getRandomInt(-3, 5)
-    },
-    metadata: {
-      method: "jackson & Polloc 3 point Man",
-      date: this.dateOfMeasurement(-4.3),
-      weight: 88 + this.getRandomInt(-20, 20),
-      age: 44
-    },
-    bodyResult: {
-      bodyDensity : 2,
-      bodyFatPercentage : 2,
-      fatMass : 3,
-      leanMass : 2,
-      skinfoldsSum : 32 + this.getRandomInt(-3, 5)
-    }
-  }
-  caliper3: CaliperForDB = {
-    fold: {
-      Subscapular: 9 + this.getRandomInt(-3, 5),
-      Thigh: 6 + this.getRandomInt(-3, 5)
-    },
-    metadata: {
-      method: "Sloan - Men 2 point",
-      date: this.dateOfMeasurement(-3.2),
-      weight: 88 + this.getRandomInt(-20, 20),
-      age: 44
-    },
-    bodyResult: {
-      bodyDensity : 2,
-      bodyFatPercentage : 2,
-      fatMass : 3,
-      leanMass : 2,
-      skinfoldsSum : 15
+  pippo() {
+    let caliper5: CaliperForDB
+    for (let index = 0; index < 10; index++) {
+      let Chest = 12 + this.getRandomInt(-3, 5)
+      let Subscapular = 5 + this.getRandomInt(-3, 5)
+      let Midaxillary = 6 + this.getRandomInt(-3, 5)
+      let Triceps = 8 + this.getRandomInt(-3, 5)
+      let Suprailiac = 6 + this.getRandomInt(-3, 5)
+      let Abdominal = 9 + this.getRandomInt(-3, 5)
+      let Thigh = 12 + this.getRandomInt(-3, 5)
+      let date = this.dateOfMeasurement(-index)
+      let weight = 90 + this.getRandomInt(-5, 5)
+      let age = 44 - (index * 2)
+      let sum = (Chest + Subscapular + Midaxillary + Triceps + Suprailiac + Abdominal + Thigh)
+      let body = this.utility.formulaJPMan7(sum, age).bodyDensity
+      let bodyRounded = this.utility.numberDecimal(body, 2)
+      let bodyFatPerc: number = this.utility.numberDecimal((((4.95 / body) - 4.5) * 100), 2)
+      let fatMass: number = this.utility.numberDecimal(((weight / 100) * bodyFatPerc), 2)
+      let leanMass = this.utility.numberDecimal((weight - fatMass),2)
+        caliper5  = {
+        fold: {
+          Chest: Chest,
+          Subscapular: Subscapular,
+          Midaxillary: Midaxillary,
+          Triceps: Triceps,
+          Suprailiac: Suprailiac,
+          Abdominal: Abdominal,
+          Thigh: Thigh
+        },
+        metadata: {
+          method: "jackson & Polloc 7 point Man",
+          date: date,
+          weight: weight,
+          age: age
+        },
+        bodyResult: {
+          bodyDensity: bodyRounded,
+          bodyFatPercentage: bodyFatPerc,
+          fatMass: fatMass,
+          leanMass: leanMass,
+          skinfoldsSum: sum
+        }
+      }
+      this.dummyArrayCaliper.push(caliper5)
     }
   }
 
-  caliper4: CaliperForDB = {
-    fold: {
-      Subscapular: 7 + this.getRandomInt(-3, 5),
-      Bicep: 3 + this.getRandomInt(-3, 5),
-      Triceps: 9 + this.getRandomInt(-3, 5),
-      Suprailiac: 11 + this.getRandomInt(-3, 5)
-    },
-    metadata: {
-      method: "Durnin & Womersley Man",
-      date: this.dateOfMeasurement(-2.5),
-      weight: 88 + this.getRandomInt(-20, 20),
-      age: 44
-    },
-    bodyResult: {
-      bodyDensity : 2,
-      bodyFatPercentage : 2,
-      fatMass : 3,
-      leanMass : 2,
-      skinfoldsSum : 30 + this.getRandomInt(-3, 5)
-    }
-  }
-  caliper5: CaliperForDB = {
-    fold: {
-      Chest: 12 + this.getRandomInt(-3, 5),
-      Subscapular: 5 + this.getRandomInt(-3, 5),
-      Midaxillary: 6 + this.getRandomInt(-3, 5),
-      Triceps: 8 + this.getRandomInt(-3, 5),
-      Suprailiac: 6 + this.getRandomInt(-3, 5),
-      Abdominal: 9 + this.getRandomInt(-3, 5),
-      Thigh: 12 + this.getRandomInt(-3, 5)
-    },
-    metadata: {
-      method: "jackson & Polloc 7 point Man",
-      date: this.dateOfMeasurement(-6.6),
-      weight: 88 + this.getRandomInt(-20, 20),
-      age: 44
-    },
-    bodyResult: {
-      bodyDensity : 2,
-      bodyFatPercentage : 2,
-      fatMass : 3,
-      leanMass : 2,
-      skinfoldsSum : 58 + this.getRandomInt(-3, 5)
-    }
-  }
-  caliper6: CaliperForDB = {
-    fold: {
-      Chest: 15 + this.getRandomInt(-3, 5),
-      Abdominal: 7 + this.getRandomInt(-3, 5),
-      Thigh: 10 + this.getRandomInt(-3, 5)
-    },
-    metadata: {
-      method: "jackson & Polloc 3 point Man",
-      date: this.dateOfMeasurement(-7.3),
-      weight: 88 + this.getRandomInt(-20, 20),
-      age: 44
-    },
-    bodyResult: {
-      bodyDensity : 2,
-      bodyFatPercentage : 2,
-      fatMass : 3,
-      leanMass : 2,
-      skinfoldsSum : 32 + this.getRandomInt(-3, 5)
-    }
-  }
-  caliper7: CaliperForDB = {
-    fold: {
-      Subscapular: 9 + this.getRandomInt(-3, 5),
-      Thigh: 6 + this.getRandomInt(-3, 5)
-    },
-    metadata: {
-      method: "Sloan - Men 2 point",
-      date: this.dateOfMeasurement(-8.2),
-      weight: 88 + this.getRandomInt(-20, 20),
-      age: 44
-    },
-    bodyResult: {
-      bodyDensity : 2,
-      bodyFatPercentage : 2,
-      fatMass : 3,
-      leanMass : 2,
-      skinfoldsSum : 15 + this.getRandomInt(-3, 5)
-    }
-
-  }
-
-  caliper8: CaliperForDB = {
-    fold: {
-      Subscapular: 7 + this.getRandomInt(-3, 5),
-      Bicep: 3 + this.getRandomInt(-3, 5),
-      Triceps: 9 + this.getRandomInt(-3, 5),
-      Suprailiac: 11 + this.getRandomInt(-3, 5)
-    },
-    metadata: {
-      method: "Durnin & Womersley Man",
-      date: this.dateOfMeasurement(-9.5),
-      weight: 88 + this.getRandomInt(-20, 20),
-      age: 44
-    },
-    bodyResult: {
-      bodyDensity : 2,
-      bodyFatPercentage : 2,
-      fatMass : 3,
-      leanMass : 2,
-      skinfoldsSum : 30 + this.getRandomInt(-3, 5)
-    }
-  }
-
-  dummyArrayCaliper = [
-    this.caliper1,
-    this.caliper2,
-    this.caliper3,
-    this.caliper4,
-    this.caliper5,
-    this.caliper6,
-    this.caliper7,
-    this.caliper8
-  ]
+  dummyArrayCaliper = [ ]
 
 
 }

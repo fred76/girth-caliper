@@ -9,6 +9,8 @@ import { ChartDataSets, ChartOptions, ChartType, ChartPluginsOptions } from 'cha
 import { Label } from 'ng2-charts';
 
 import * as pluginDataLabels from 'chartjs-plugin-datalabels';
+import { Plugins } from 'protractor/built/plugins';
+import { Options } from 'chartjs-plugin-datalabels/types/options';
 
 
 @Injectable({
@@ -62,41 +64,42 @@ export class ChartService {
     let objectToPushd: ChartDataModelClass
     let arrayChartDataSet: ChartDataSets[] = []
 
-    objectToPushd = new ChartDataModelClass(weight, "Weight", "yAxesKg", false);
+    objectToPushd = new ChartDataModelClass(weight, "Weight", "yAxesKg", false, "line", true);
     arrayChartDataSet.push(objectToPushd)
-    objectToPushd = new ChartDataModelClass(neck, "Neck", "yAxesMm", true)
+    objectToPushd = new ChartDataModelClass(neck, "Neck", "yAxesMm", true, "line", true)
     arrayChartDataSet.push(objectToPushd)
-    objectToPushd = new ChartDataModelClass(chest, "Chest", "yAxesMm", true)
+    objectToPushd = new ChartDataModelClass(chest, "Chest", "yAxesMm", true, "line", true)
     arrayChartDataSet.push(objectToPushd)
-    objectToPushd = new ChartDataModelClass(bicep_L, "Bicep left", "yAxesMm", true)
+    objectToPushd = new ChartDataModelClass(bicep_L, "Bicep left", "yAxesMm", true, "line", true)
     arrayChartDataSet.push(objectToPushd)
-    objectToPushd = new ChartDataModelClass(bicep_R, "bicep right", "yAxesMm", true)
+    objectToPushd = new ChartDataModelClass(bicep_R, "bicep right", "yAxesMm", true, "line", true)
     arrayChartDataSet.push(objectToPushd)
-    objectToPushd = new ChartDataModelClass(bicep_L_Relax, "bicep left relaxed", "yAxesMm", true)
+    objectToPushd = new ChartDataModelClass(bicep_L_Relax, "bicep left relaxed", "yAxesMm", true, "line", true)
     arrayChartDataSet.push(objectToPushd)
-    objectToPushd = new ChartDataModelClass(bicep_R_Relax, "bicep right relaxed", "yAxesMm", true)
+    objectToPushd = new ChartDataModelClass(bicep_R_Relax, "bicep right relaxed", "yAxesMm", true, "line", true)
     arrayChartDataSet.push(objectToPushd)
-    objectToPushd = new ChartDataModelClass(forearm_L, "Forearm left", "yAxesMm", true)
+    objectToPushd = new ChartDataModelClass(forearm_L, "Forearm left", "yAxesMm", true, "line", true)
     arrayChartDataSet.push(objectToPushd)
-    objectToPushd = new ChartDataModelClass(forearm_R, "Forearm right", "yAxesMm", true)
+    objectToPushd = new ChartDataModelClass(forearm_R, "Forearm right", "yAxesMm", true, "line", true)
     arrayChartDataSet.push(objectToPushd)
-    objectToPushd = new ChartDataModelClass(wrist, "Wrist", "yAxesMm", true)
+    objectToPushd = new ChartDataModelClass(wrist, "Wrist", "yAxesMm", true, "line", true)
     arrayChartDataSet.push(objectToPushd)
-    objectToPushd = new ChartDataModelClass(waist, "Waist", "yAxesMm", true)
+    objectToPushd = new ChartDataModelClass(waist, "Waist", "yAxesMm", true, "line", true)
     arrayChartDataSet.push(objectToPushd)
-    objectToPushd = new ChartDataModelClass(hips, "Hips", "yAxesMm", true)
+    objectToPushd = new ChartDataModelClass(hips, "Hips", "yAxesMm", true, "line", true)
     arrayChartDataSet.push(objectToPushd)
-    objectToPushd = new ChartDataModelClass(thigh_L, "Thigh left", "yAxesMm", true)
+    objectToPushd = new ChartDataModelClass(thigh_L, "Thigh left", "yAxesMm", true, "line", true)
     arrayChartDataSet.push(objectToPushd)
-    objectToPushd = new ChartDataModelClass(thigh_R, "thigh right", "yAxesMm", true)
+    objectToPushd = new ChartDataModelClass(thigh_R, "thigh right", "yAxesMm", true, "line", true)
     arrayChartDataSet.push(objectToPushd)
-    objectToPushd = new ChartDataModelClass(calf_L, "calf left", "yAxesMm", true)
+    objectToPushd = new ChartDataModelClass(calf_L, "calf left", "yAxesMm", true, "line", true)
     arrayChartDataSet.push(objectToPushd)
-    objectToPushd = new ChartDataModelClass(calf_R, "calf right", "yAxesMm", true)
+    objectToPushd = new ChartDataModelClass(calf_R, "calf right", "yAxesMm", true, "line", true)
     arrayChartDataSet.push(objectToPushd)
     this.lineChartLabels = date
 
-    return { arrayChartDataSet }
+    let maxWeight = Math.max(...weight) + 20
+    return { arrayChartDataSet, maxWeight }
   }
   //Chart-Object
 
@@ -117,7 +120,7 @@ export class ChartService {
     let skinfoldXaxisLabel = []
     let sum = []
     let fatMass = []
-    let leanMass = [] 
+    let leanMass = []
     let bodtDensity = []
 
 
@@ -152,7 +155,7 @@ export class ChartService {
       sum.push(p.bodyResult.skinfoldsSum)
 
       fatMass.push(p.bodyResult.fatMass)
-      leanMass.push(p.bodyResult.leanMass) 
+      leanMass.push(p.bodyResult.leanMass)
       bodtDensity.push(p.bodyResult.bodyDensity)
 
       let u = []
@@ -176,62 +179,57 @@ export class ChartService {
     })
     let skinfoldToPush: ChartDataModelClass
     let skinfoldChartDataSet: ChartDataSets[] = []
-    
+
     let bodyCompostitionDataSet: ChartDataSets[] = []
     let lineChartToTpush: ChartDataModelClass
-    let barChartToTpush: DualBarChartDataModelClass
- 
 
-    skinfoldToPush = new ChartDataModelClass(weightSkinfold, "Weight", "yAxesKg", false);
+    skinfoldToPush = new ChartDataModelClass(weightSkinfold, "Weight", "yAxesKg", false, "line", true);
     skinfoldChartDataSet.push(skinfoldToPush)
-    skinfoldToPush = new ChartDataModelClass(sum, "Skinfolds sum", "yAxesMm", true)
+    skinfoldToPush = new ChartDataModelClass(sum, "Skinfolds sum", "yAxesMm", true, "line", true)
     skinfoldChartDataSet.push(skinfoldToPush)
-    skinfoldToPush = new ChartDataModelClass(chestSkinfold, "Chest", "yAxesMm", true)
+    skinfoldToPush = new ChartDataModelClass(chestSkinfold, "Chest", "yAxesMm", true, "line", true)
     skinfoldChartDataSet.push(skinfoldToPush)
-    skinfoldToPush = new ChartDataModelClass(subscapularSkinfold, "Subscapular", "yAxesMm", true)
+    skinfoldToPush = new ChartDataModelClass(subscapularSkinfold, "Subscapular", "yAxesMm", true, "line", true)
     skinfoldChartDataSet.push(skinfoldToPush)
-    skinfoldToPush = new ChartDataModelClass(midaxillarySkinfold, "Midaxillary", "yAxesMm", true)
+    skinfoldToPush = new ChartDataModelClass(midaxillarySkinfold, "Midaxillary", "yAxesMm", true, "line", true)
     skinfoldChartDataSet.push(skinfoldToPush)
-    skinfoldToPush = new ChartDataModelClass(tricepsSkinfold, "Tricep", "yAxesMm", true)
+    skinfoldToPush = new ChartDataModelClass(tricepsSkinfold, "Tricep", "yAxesMm", true, "line", true)
     skinfoldChartDataSet.push(skinfoldToPush)
-    skinfoldToPush = new ChartDataModelClass(suprailiacSkinfold, "Suprailiac", "yAxesMm", true)
+    skinfoldToPush = new ChartDataModelClass(suprailiacSkinfold, "Suprailiac", "yAxesMm", true, "line", true)
     skinfoldChartDataSet.push(skinfoldToPush)
-    skinfoldToPush = new ChartDataModelClass(abdominalSkinfold, "Abdominal", "yAxesMm", true)
+    skinfoldToPush = new ChartDataModelClass(abdominalSkinfold, "Abdominal", "yAxesMm", true, "line", true)
     skinfoldChartDataSet.push(skinfoldToPush)
-    skinfoldToPush = new ChartDataModelClass(thighSkinfold, "Thigh", "yAxesMm", true)
+    skinfoldToPush = new ChartDataModelClass(thighSkinfold, "Thigh", "yAxesMm", true, "line", true)
     skinfoldChartDataSet.push(skinfoldToPush)
-    skinfoldToPush = new ChartDataModelClass(bicepSkinfold, "Bicep", "yAxesMm", true)
+    skinfoldToPush = new ChartDataModelClass(bicepSkinfold, "Bicep", "yAxesMm", true, "line", true)
     skinfoldChartDataSet.push(skinfoldToPush)
 
     let maxSkinfold = Math.max(...sum) + 5
+    let maxWeight = Math.max(...weightSkinfold) + 20
+    let maxBodyDensity = Math.max(...bodtDensity) + 0.05
 
-    lineChartToTpush = new ChartDataModelClass(weightSkinfold, "Weight", "yAxesKg", false);
-    bodyCompostitionDataSet.push(skinfoldToPush)
-    lineChartToTpush = new ChartDataModelClass(bodtDensity, "Body Density g/cc", "yAxesGCC", false)
+    lineChartToTpush = new ChartDataModelClassWeight(bodtDensity, "Body Density g/cc", "yAxesGCC", false, "line", false, 3, "red")
     bodyCompostitionDataSet.push(lineChartToTpush)
-    lineChartToTpush = new ChartDataModelClass(leanMass, "Lean mass", "yAxesKg", false)
-    bodyCompostitionDataSet.push(lineChartToTpush)
-    lineChartToTpush = new ChartDataModelClass(fatMass, "Lean mass", "yAxesKg", false)
-    bodyCompostitionDataSet.push(lineChartToTpush) 
-    barChartToTpush = new DualBarChartDataModelClass(sum, "Skinfolds sum", "yAxesMm", false, "bar")
-    bodyCompostitionDataSet.push(barChartToTpush)
+    let chartDataModelClassWeight = new ChartDataModelClassWeight(weightSkinfold, "Weight", "yAxesBodyWeight", false, "line", false, 2, "red");
+    bodyCompostitionDataSet.push(chartDataModelClassWeight)
+    let chartDataModelClassWeight1 = new ChartDataModelClassWeight(leanMass, "Lean mass", "yAxesKg", false, "line", true, 1, "lightskyblue")
+    bodyCompostitionDataSet.push(chartDataModelClassWeight1)
+    let chartDataModelClassWeight2 = new ChartDataModelClassWeight(fatMass, "fat mass", "yAxesKg", false, "line", true, 1, "orangered")
+    bodyCompostitionDataSet.push(chartDataModelClassWeight2)
+    let chartDataModelClassBar = new ChartDataModelClassBar(sum, "Skinfolds sum", "yAxesMM", false, "bar", 20, "palevioletred")
+    bodyCompostitionDataSet.push(chartDataModelClassBar)
 
-console.log(sum)
-    return { skinfoldChartDataSet, skinfoldXaxisLabel, maxSkinfold }
+    return { skinfoldChartDataSet, skinfoldXaxisLabel, maxSkinfold, bodyCompostitionDataSet, maxWeight, maxBodyDensity }
 
   }
 
+  //DUAL CHART
 
+  dualChartOptions: ChartOptions
 
-  //LINE CHART
-
-  lineChartLabels: Label[]
-  lineChartMultiLabels: Label[][]
-  lineChartOptions: ChartOptions
-  lineChartLegend = true
-  lineChartType: ChartType = 'line'
-  lineChartOption(yAxesIdLeft: string, yAxesIdRight: string, yAxesMaxScale: number) {
-    this.lineChartOptions = {
+  dualChartOption(yAxesIdLeftMaas: string, yAxesIdRightBDensity: string, yAxesIdSkinfoldsSum: string, stacked: boolean, sumMax: number, weightScale: number, bodyDensityMax: number) {
+    let stacked1 = true
+    this.dualChartOptions = {
       responsive: true,
       animation: {
         animateRotate: true,
@@ -243,48 +241,90 @@ console.log(sum)
           usePointStyle: true,
         }
       },
+      elements: {
+        line: { tension: 0.2, borderWidth: 1 },
+        point: { pointStyle: 'circle' }
+      },
       plugins: {
         datalabels: {
           display: false
         }
+      },
+      scales: {
+
+        yAxes: [
+          {
+            id: "yAxesMM", display: false, position: "right", type: "linear",
+            scaleLabel: {
+              display: true, labelString: yAxesIdSkinfoldsSum
+            },
+            ticks: { max: sumMax, beginAtZero: true },
+            gridLines: { display: false }
+          },
+          {
+            id: "yAxesBodyWeight", display: false, position: 'left', type: "linear",
+            scaleLabel: { display: false },
+            ticks: { max: weightScale, beginAtZero: true }
+          },
+          {
+            id: "yAxesKg", stacked: stacked1, display: true, position: 'left', type: "linear",
+            scaleLabel: { display: true, labelString: yAxesIdLeftMaas },
+            ticks: { max: weightScale, beginAtZero: true }
+          },
+          {
+            id: "yAxesGCC", display: true, position: "right", type: "linear",
+            scaleLabel: { display: true, labelString: yAxesIdRightBDensity },
+            ticks:
+            {
+              maxTicksLimit: 5,
+              max: bodyDensityMax,
+              stepSize: 0.01,
+              beginAtZero: false
+            },
+            gridLines: { display: false }
+          }
+        ]
+      }
+
+    }
+    return this.dualChartOptions
+  }
+
+  //LINE CHART
+
+  lineChartLabels: Label[]
+  lineChartMultiLabels: Label[][]
+  lineChartOptions: ChartOptions
+  lineChartLegend = true
+  lineChartType: ChartType = 'line'
+  lineChartOption(yAxesIdLeft: string, yAxesIdRight: string, yAxesMaxScale: number) {
+    this.lineChartOptions = {
+      responsive: true,
+      animation: { animateRotate: true, animateScale: true },
+      legend: {
+        display: true,
+        labels: { usePointStyle: true }
+      },
+      plugins: {
+        datalabels: { display: false }
       },
       elements: {
         line: { tension: 0.2, borderWidth: 1 },
         point: { pointStyle: 'circle' }
       },
       scales: {
-
-        yAxes: [{
-          id: "yAxesMm",
-          display: true,
-          position: 'left',
-          type: "linear",
-
-          scaleLabel: {
-            display: true,
-            labelString: yAxesIdLeft
-
+        yAxes: [
+          {
+            id: "yAxesMm", display: true, position: 'left', type: "linear",
+            scaleLabel: { display: true, labelString: yAxesIdLeft },
+            ticks: { max: yAxesMaxScale, beginAtZero: true },
           },
-          ticks: {
-            max: yAxesMaxScale,
-            beginAtZero: true,
-          },
-        }, {
-          id: "yAxesKg",
-          display: true,
-          position: "right",
-          type: "linear",
-          scaleLabel: {
-            display: true,
-            labelString: yAxesIdRight
-          },
-          ticks: {
-            beginAtZero: true,
-          },
-          gridLines: {
-            display: false
-          },
-        }
+          {
+            id: "yAxesKg", display: true, position: "right", type: "linear",
+            scaleLabel: { display: true, labelString: yAxesIdRight },
+            ticks: { beginAtZero: true },
+            gridLines: { display: false },
+          }
         ]
       }
     }
@@ -313,30 +353,15 @@ console.log(sum)
   pieChartOptions: ChartOptions = {
     responsive: true,
     aspectRatio: 1.2,
-    animation: {
-      animateRotate: true,
-      animateScale: true
-    },
-
+    animation: { animateRotate: true, animateScale: true },
     legend: {
-      display: true,
-      position: 'top',
-      labels: {
-        usePointStyle: true,
-        fontColor: 'white'
-      }
+      display: true, position: 'top',
+      labels: { usePointStyle: true, fontColor: 'white' }
     },
-    elements: {
-      point: { pointStyle: 'circle' }
-    },
+    elements: { point: { pointStyle: 'circle' } },
     tooltips: {
-      backgroundColor: 'white',
-      borderWidth: 0,
-      callbacks: {
-        labelTextColor: function (tooltipItem, chart) {
-          return "black";
-        },
-      }
+      backgroundColor: 'white', borderWidth: 0,
+      callbacks: { labelTextColor: function (tooltipItem, chart) { return "black" } }
     },
     plugins: {
       datalabels: {
@@ -365,7 +390,9 @@ console.log(sum)
           "darkseagreen",
           "orange",
           "tomato",
-          "orangered",]
+          "orangered"],
+        type: 'bar'
+
       }
     ]
     return barChartData
@@ -402,9 +429,7 @@ console.log(sum)
         }
       }],
     },
-
     plugins: {
-
       datalabels: {
         anchor: 'end',
         align: 'end',
@@ -423,36 +448,69 @@ export class ChartDataModelClass implements ChartDataSets {
   label: string
   yAxisID: string
   hidden: boolean
+  type: string
+  fill: boolean
 
-  constructor(data: any[], label: string, yAxisID: string, hidden: boolean) {
+  constructor(data: any[], label: string, yAxisID: string, hidden: boolean, type: string, fill: boolean) {
     this.data = data
     this.label = label
-    this.yAxisID = yAxisID,
+    this.yAxisID = yAxisID
     this.hidden = hidden
+    this.type = type
+    this.fill = fill
+
   }
 }
-export class BarChartDataModelClass implements ChartDataSets {
+
+export class ChartDataModelClassBar implements ChartDataSets {
   data: any[]
   label: string
+  yAxisID: string
+  hidden: boolean
+  type: string
+  barThickness: number
+  datalabels: Options
+  backgroundColor: string
 
-  constructor(data: any[], label: string) {
+  constructor(data: any[], label: string, yAxisID: string, hidden: boolean, type: string, barThickness: number, backgroundColor: string) {
     this.data = data
     this.label = label
-  }
-}
-
-export class DualBarChartDataModelClass implements ChartDataSets {
-  dataBar: any[]
-  labelBar: string
-  yAxisBarID: string
-  hiddenBar: boolean
-  type : string
-
-  constructor(dataBar: any[],labelBar: string,yAxisBarID: string,hiddenBar: boolean, type : string) {
-    this.dataBar = dataBar,
-    this.labelBar = labelBar,
-    this.yAxisBarID = yAxisBarID,
-    this.hiddenBar = hiddenBar
+    this.yAxisID = yAxisID
+    this.hidden = hidden
     this.type = type
+    this.barThickness = barThickness
+    this.backgroundColor = backgroundColor
+    this.datalabels = {
+      align: 'center',
+      anchor: 'center',
+      display: true,
+    }
   }
 }
+
+export class ChartDataModelClassWeight implements ChartDataSets {
+  data: any[]
+  label: string
+  yAxisID: string
+  hidden: boolean
+  type: string
+  fill: boolean
+  borderWidth: number
+  backgroundColor: string
+
+  constructor(data: any[], label: string, yAxisID: string, hidden: boolean, type: string, fill: boolean, borderWidth: number, backgroundColor: string) {
+    this.data = data
+    this.label = label
+    this.yAxisID = yAxisID
+    this.hidden = hidden
+    this.type = type
+    this.fill = fill
+    this.borderWidth = borderWidth
+    this.backgroundColor = backgroundColor
+
+  }
+
+
+}
+
+

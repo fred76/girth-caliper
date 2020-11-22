@@ -4,6 +4,8 @@ import { Injectable } from '@angular/core';
 
 export class Utility {
 
+
+
   numberDecimal(value, exp) {
 
     if (typeof exp === 'undefined' || +exp === 0)

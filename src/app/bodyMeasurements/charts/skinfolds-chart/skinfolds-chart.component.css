@@ -47,3 +47,16 @@ mat-card-footer {
   font-size: 48px;
   color: orangered;
 }
+mat-button-toggle-group {
+  height: 24px;
+  margin-bottom: 15px;
+}
+:host .mat-button-toggle-group{
+  border-radius: 12px !important;
+}
+.mat-button-toggle-checked{
+  background-color: #c0215e;
+}
+.h5 {
+  margin-bottom: 15px;
+}

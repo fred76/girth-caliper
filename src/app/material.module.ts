@@ -16,6 +16,7 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatDividerModule } from '@angular/material/divider'
 import { MatTableModule } from '@angular/material/table';
 import { MatSortModule } from '@angular/material/sort';
+import {MatButtonToggleModule} from '@angular/material/button-toggle';
 // import { MatChipsModule } from '@angular/material/chips';
 // import { MatSelectModule } from '@angular/material/select';
 // import { MatChipsModule } from '@angular/material/chips';
@@ -44,7 +45,8 @@ let p: any[] = [
   MatNativeDateModule,
   MatDividerModule,
   MatTableModule,
-  MatSortModule
+  MatSortModule,
+  MatButtonToggleModule
   // MatSelectModule,
   // MatChipsModule,
   // MatChipsModule,

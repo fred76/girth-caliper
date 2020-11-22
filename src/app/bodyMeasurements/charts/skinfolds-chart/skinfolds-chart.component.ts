@@ -1,12 +1,11 @@
 import { Subject } from 'rxjs';
-import { Utility } from './../../../Utility/utility';
 import { ChartService } from '../../../Services/chart.service';
 import { DummyDataService } from '../../../Utility/dummyData.service';
-import { CaliperService } from './../../../Services/caliper.service';
 import { MatTableDataSource } from '@angular/material/table';
 import { Component, OnInit, ViewChild, AfterViewInit, Input } from '@angular/core';
 import { BaseChartDirective } from 'ng2-charts';
 import { CaliperForDB } from 'src/app/interface-model/caliper.model';
+import { MatButtonToggleChange } from '@angular/material/button-toggle';
 
 @Component({
   selector: 'app-skinfolds-chart',
@@ -14,31 +13,41 @@ import { CaliperForDB } from 'src/app/interface-model/caliper.model';
 
   styleUrls: ['./skinfolds-chart.component.css']
 })
-export class SkinfoldsChartComponent implements OnInit  {
+export class SkinfoldsChartComponent implements OnInit {
 
   showChart: boolean
   constructor(
     private dummyDataService: DummyDataService,
-    private chartsService: ChartService,
-    private caliperService: CaliperService,
-    private utility: Utility) { }
+    private chartsService: ChartService) { }
+
+
+
 
 
   private toggleBoyCompChartEvent = new Subject<Event>();
   private nextBodyCompDateEvent = new Subject<Event>();
   private previousBodyCompDateEvent = new Subject<Event>();
   private toggleSkinfoldChartListEvent = new Subject<Event>();
-
+  private toggleSkinfoldBodyCompeEvent = new Subject<Event>();
 
   @Input() toggleBodyCompChart: boolean = false
   @Input() selectorBodyCompDate: number = 1
   @Input() isShowNextBodyCompButton: boolean = false
   @Input() isToggleSkinfoldChartList: boolean = false
+  @Input() toggleSkinfoldBodyComp: boolean = true;
 
-
-  displayedColumns = [ "method", "age", "date", "weight", "Chest", "Subscapular", "Midaxillary", "Triceps", "Bicep", "Suprailiac", "Abdominal", "Thigh" ]
+  displayedColumns = ["method", "age", "date", "weight", "Chest", "Subscapular", "Midaxillary", "Triceps", "Bicep", "Suprailiac", "Abdominal", "Thigh"]
+  displayedColumnsBody = ["method", "age", "date", "weight", "Skinfolds sum", "Body Density", "Fat Percentage", "Lean Mass", "Fat Mass"]
 
   dataSource = new MatTableDataSource<CaliperForDB>()
+
+
+
+  toggleSkinfoldBodyCompButton(event: Event){
+    this.toggleSkinfoldBodyCompeEvent.next(event)
+    this.toggleSkinfoldBodyComp = !this.toggleSkinfoldBodyComp
+    this.createSkinfoldsChart()
+}
 
   toggleSkinfoldChartListButton(event: Event) {
     this.toggleSkinfoldChartListEvent.next(event);
@@ -130,12 +139,19 @@ export class SkinfoldsChartComponent implements OnInit  {
     let localDummyArray = [...this.dummyDataService.dummyArrayCaliper]
 
     let chartData = this.chartsService.skinfoldLineChartData(localDummyArray)
-    this.lineChartData = chartData.skinfoldChartDataSet
-    this.lineChartLabels = chartData.skinfoldXaxisLabel
-    this.lineChartOptions = this.chartsService.lineChartOption("Skinfold", "Body weight", chartData.maxSkinfold)
-    this.lineChartLegend = this.chartsService.lineChartLegend
-    this.lineChartType = this.chartsService.lineChartType
-
+    if (this.toggleSkinfoldBodyComp) {
+      this.lineChartData = chartData.skinfoldChartDataSet
+      this.lineChartLabels = chartData.skinfoldXaxisLabel
+      this.lineChartOptions = this.chartsService.lineChartOption("Skinfold", "Body weight", chartData.maxSkinfold)
+      this.lineChartLegend = this.chartsService.lineChartLegend
+      this.lineChartType = this.chartsService.lineChartType
+    } else {
+      this.lineChartData = chartData.bodyCompostitionDataSet
+      this.lineChartLabels = chartData.skinfoldXaxisLabel
+      this.lineChartOptions = this.chartsService.dualChartOption("Kg ( Weight, Lean mass, fat maas )", "g/cc ( Body density )", "mm ( Skinfolds sum )", true, chartData.maxSkinfold + 10, chartData.maxWeight, chartData.maxBodyDensity)
+      this.lineChartLegend = this.chartsService.lineChartLegend
+      this.lineChartType = this.chartsService.lineChartType
+    }
     let localDummyArraySorted = [...localDummyArray].sort((d2, d1) => new Date(d1.metadata.date).getTime() - new Date(d2.metadata.date).getTime())
 
     this.dataSource.data = localDummyArraySorted
@@ -185,7 +201,7 @@ export class SkinfoldsChartComponent implements OnInit  {
     } else {
       this.pieChartOptions = this.chartsService.pieChartOptions
       this.pieChartLabels = this.chartsService.pieChartLabels
-      this.pieChartData = this.chartsService.pieDataChart(localDummyArrayLastElement.bodyResult.fatMass,localDummyArrayLastElement.bodyResult.leanMass)
+      this.pieChartData = this.chartsService.pieDataChart(localDummyArrayLastElement.bodyResult.fatMass, localDummyArrayLastElement.bodyResult.leanMass)
       this.pieChartType = this.chartsService.pieChartType
       this.pieChartLegend = this.chartsService.pieChartLegend
       this.pieChartPlugins = this.chartsService.pieChartPlugins
@@ -198,7 +214,10 @@ export class SkinfoldsChartComponent implements OnInit  {
   @ViewChild(BaseChartDirective, { static: true }) chart: BaseChartDirective;
 
   ngOnInit(): void {
+    if (this.dummyDataService.dummyArrayCaliper.length == 0) {
 
+      this.dummyDataService.pippo()
+    }
     this.createSkinfoldsChart()
 
     this.createBodyCompositionTile(1)
