@@ -25,8 +25,8 @@ export class ImportExportService {
     FileSaver.saveAs(data, fileName + '_export_' + new Date().getTime() + EXCEL_EXTENSION);
   }
 
-  flatCaliperForDB() {
-    let i = this.dummyDataService.dummyArrayCaliper
+  flatSkinfoldsForDB() {
+    let i = this.dummyDataService.dummyArraySkinfolds
 
     let localSkinfoldObject = [...i].sort((d1, d2) => new Date(d1.metadata.date).getTime() - new Date(d2.metadata.date).getTime())
     let e: any[] = []

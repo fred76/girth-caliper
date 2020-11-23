@@ -1,31 +1,31 @@
 
 import { DummyDataService } from './../Utility/dummyData.service';
-import { CaliperForDB } from './../interface-model/caliper.model';
+import { SkinfoldsForDB } from '../interface-model/skinfold.model';
 import { Utility } from 'src/app/Utility/utility';
-import { CaliperTile } from '../interface-model/caliper.model';
+import { SkinfoldsTile } from '../interface-model/skinfold.model';
 import { Injectable } from '@angular/core';
 import { Subject, Subscriber, Subscription } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
-export class CaliperService {
+export class SkinfoldsService {
 
   constructor(private utility: Utility, private dummy: DummyDataService) { }
 
-  selectedCaliperMethod = new Subject<string>()
+  selectedSkinfoldsMethod = new Subject<string>()
 
-  selectedCaliperMethod$ = this.selectedCaliperMethod.asObservable()
+  selectedSkinfoldsMethod$ = this.selectedSkinfoldsMethod.asObservable()
 
-  caliperTiles: CaliperTile[]
+  skinfoldsTiles: SkinfoldsTile[]
 
-  caliperTilesDescriptions: CaliperTile[]
+  skinfoldsTilesDescriptions: SkinfoldsTile[]
 
-  selectedCaliperMethodSubscription: Subscription
+  selectedSkinfoldsMethodSubscription: Subscription
 
-  caliperObjectForDB: CaliperForDB
+  skinfoldsObjectForDB: SkinfoldsForDB
 
-  caliperMethods = [
+  skinfoldsMethods = [
     "jackson & Polloc 7 point Man",
     "jackson & Polloc 7 point Woman",
     "jackson & Polloc 3 point Man",
@@ -36,13 +36,13 @@ export class CaliperService {
     "Durnin & Womersley Woman"
   ]
 
-  selectedCaliperMethodSubs() {
-    this.selectedCaliperMethodSubscription = this.selectedCaliperMethod$.subscribe(data => {
-      this.caliperTiles = []
-      this.caliperTilesDescriptions = []
+  selectedSkinfoldsMethodSubs() {
+    this.selectedSkinfoldsMethodSubscription = this.selectedSkinfoldsMethod$.subscribe(data => {
+      this.skinfoldsTiles = []
+      this.skinfoldsTilesDescriptions = []
       switch (true) {
         case data == "jackson & Polloc 7 point Man":
-          this.caliperTiles = [
+          this.skinfoldsTiles = [
             { title: "Chest", value1: null, value2: null, value3: null },
             { title: "Subscapular", value1: null, value2: null, value3: null },
             { title: "Midaxillary", value1: null, value2: null, value3: null },
@@ -51,7 +51,7 @@ export class CaliperService {
             { title: "Abdominal", value1: null, value2: null, value3: null },
             { title: "Thigh", value1: null, value2: null, value3: null }
           ]
-          this.caliperTilesDescriptions = [
+          this.skinfoldsTilesDescriptions = [
             { image: "petto.png", text: "Diagonal fold Men: one-half the distance between the anterior axillary line (crease of the underarm) and the nipple Women: one-third of the distance between the anterior axillary line and the nipple." },
             { image: "sottoscapola.png", text: "Diagonal fold 1 to 2 cm below the inferior angle of the scapula." },
             { image: "ascella.png", text: "Vertical or Horizontal fold Midaxillary line at the level of the xiphoid process of the sternum" },
@@ -62,7 +62,7 @@ export class CaliperService {
           ]
           break
         case data == "jackson & Polloc 7 point Woman":
-          this.caliperTiles = [
+          this.skinfoldsTiles = [
             { title: "Chest", value1: null, value2: null, value3: null },
             { title: "Subscapular", value1: null, value2: null, value3: null },
             { title: "Midaxillary", value1: null, value2: null, value3: null },
@@ -71,7 +71,7 @@ export class CaliperService {
             { title: "Abdominal", value1: null, value2: null, value3: null },
             { title: "Thigh", value1: null, value2: null, value3: null }
           ]
-          this.caliperTilesDescriptions = [
+          this.skinfoldsTilesDescriptions = [
             { image: "petto.png", text: "Diagonal fold Men: one-half the distance between the anterior axillary line (crease of the underarm) and the nipple Women: one-third of the distance between the anterior axillary line and the nipple." },
             { image: "sottoscapola.png", text: "Diagonal fold 1 to 2 cm below the inferior angle of the scapula." },
             { image: "ascella.png", text: "Vertical or Horizontal fold Midaxillary line at the level of the xiphoid process of the sternum" },
@@ -82,57 +82,57 @@ export class CaliperService {
           ]
           break
         case data == "jackson & Polloc 3 point Man":
-          this.caliperTiles = [
+          this.skinfoldsTiles = [
             { title: "Chest", value1: null, value2: null, value3: null },
             { title: "Abdominal", value1: null, value2: null, value3: null },
             { title: "Thigh", value1: null, value2: null, value3: null }
           ]
-          this.caliperTilesDescriptions = [
+          this.skinfoldsTilesDescriptions = [
             { image: "petto.png", text: "Diagonal fold Men: one-half the distance between the anterior axillary line (crease of the underarm) and the nipple Women: one-third of the distance between the anterior axillary line and the nipple." },
             { image: "addome.png", text: "Vertical (modern technique) 2 cm or 1 inch to the right side of the umbilicus  Horizontal fold (traditional) 2 cm to the right side of the umbilicus." },
             { image: "coscia.png", text: "Vertical fold Anterior midline of the thigh Midway between the proximal border of the patella (upper knee) and the inguinal crease (hip)." }
           ]
           break
         case data == "jackson & Polloc 3 point Woman":
-          this.caliperTiles = [
+          this.skinfoldsTiles = [
             { title: "Triceps", value1: null, value2: null, value3: null },
             { title: "Suprailiac", value1: null, value2: null, value3: null },
             { title: "Abdominal", value1: null, value2: null, value3: null }
           ]
-          this.caliperTilesDescriptions = [
+          this.skinfoldsTilesDescriptions = [
             { image: "tricipite.png", text: "Vertical fold Posterior midline of the upper arm Halfway between the acromion (shoulder) and olecranon processes (elbow) Arm held freely to the side of the body." },
             { image: "soprailliaca.png", text: "Diagonal fold Anterior axillary line (modern technique) immediately superior to the iliac crest in line with the natural angle of the iliac crest taken Mid-axillary line (traditional Superior to the iliac crest." },
             { image: "addome.png", text: "Vertical (modern technique) 2 cm or 1 inch to the right side of the umbilicus  Horizontal fold (traditional) 2 cm to the right side of the umbilicus." }
           ]
           break
         case data == "Sloan - Men 2 point":
-          this.caliperTiles = [
+          this.skinfoldsTiles = [
             { title: "Subscapular", value1: null, value2: null, value3: null },
             { title: "Thigh", value1: null, value2: null, value3: null }
           ]
-          this.caliperTilesDescriptions = [
+          this.skinfoldsTilesDescriptions = [
             { image: "sottoscapola.png", text: "Diagonal fold 1 to 2 cm below the inferior angle of the scapula." },
             { image: "coscia.png", text: "Vertical fold Anterior midline of the thigh Midway between the proximal border of the patella (upper knee) and the inguinal crease (hip)." }
           ]
           break
         case data == "Sloan - Woman 2 point":
-          this.caliperTiles = [
+          this.skinfoldsTiles = [
             { title: "Triceps", value1: null, value2: null, value3: null },
             { title: "Suprailiac", value1: null, value2: null, value3: null }
           ]
-          this.caliperTilesDescriptions = [
+          this.skinfoldsTilesDescriptions = [
             { image: "tricipite.png", text: "Vertical fold Posterior midline of the upper arm Halfway between the acromion (shoulder) and olecranon processes (elbow) Arm held freely to the side of the body." },
             { image: "soprailliaca.png", text: "Diagonal fold Anterior axillary line (modern technique) immediately superior to the iliac crest in line with the natural angle of the iliac crest taken Mid-axillary line (traditional Superior to the iliac crest." }
           ]
           break
         case data == "Durnin & Womersley Man":
-          this.caliperTiles = [
+          this.skinfoldsTiles = [
             { title: "Subscapular", value1: null, value2: null, value3: null },
             { title: "Bicep", value1: null, value2: null, value3: null },
             { title: "Triceps", value1: null, value2: null, value3: null },
             { title: "Suprailiac", value1: null, value2: null, value3: null }
           ]
-          this.caliperTilesDescriptions = [
+          this.skinfoldsTilesDescriptions = [
             { image: "sottoscapola.png", text: "Diagonal fold 1 to 2 cm below the inferior angle of the scapula." },
             { image: "bicipite.png", text: "Vertical fold Anterior aspect of the arm over the belly of the biceps muscle 1 cm above the level used to mark the triceps site." },
             { image: "tricipite.png", text: "Vertical fold Posterior midline of the upper arm Halfway between the acromion (shoulder) and olecranon processes (elbow) Arm held freely to the side of the body." },
@@ -140,13 +140,13 @@ export class CaliperService {
           ]
           break
         case data == "Durnin & Womersley Woman":
-          this.caliperTiles = [
+          this.skinfoldsTiles = [
             { title: "Subscapular", value1: null, value2: null, value3: null },
             { title: "Bicep", value1: null, value2: null, value3: null },
             { title: "Triceps", value1: null, value2: null, value3: null },
             { title: "Suprailiac", value1: null, value2: null, value3: null }
           ]
-          this.caliperTilesDescriptions = [
+          this.skinfoldsTilesDescriptions = [
             { image: "sottoscapola.png", text: "Diagonal fold 1 to 2 cm below the inferior angle of the scapula." },
             { image: "bicipite.png", text: "Vertical fold Anterior aspect of the arm over the belly of the biceps muscle 1 cm above the level used to mark the triceps site." },
             { image: "tricipite.png", text: "Vertical fold Posterior midline of the upper arm Halfway between the acromion (shoulder) and olecranon processes (elbow) Arm held freely to the side of the body." },
@@ -154,21 +154,19 @@ export class CaliperService {
           ]
           break
       }
-      // this.caliperTiles = this.caliperTiles.filter(i => !removeCaliperTiles.map(j => j.title).includes(i.title));
-      // this.caliperTilesDescriptions = this.caliperTilesDescriptions.filter(i => !removeCaliperTilesDescriptions.map(j => j.image).includes(i.image));
     })
   }
 
-  updateSelectedCaliperMethod(newMethod: string) {
-    this.selectedCaliperMethod.next(newMethod)
+  updateSelectedSkinfoldsrMethod(newMethod: string) {
+    this.selectedSkinfoldsMethod.next(newMethod)
   }
 
-  selectedCaliperMethodUnsubscribe() {
-    this.selectedCaliperMethodSubscription.unsubscribe()
+  selectedSkinfoldsMethodUnsubscribe() {
+    this.selectedSkinfoldsMethodSubscription.unsubscribe()
   }
 
   createSkinFoldObject(method: string, age: number, weight: number, date?: Date) {
-    let c = new CaliperForDB()
+    let c: SkinfoldsForDB
     c.fold = {}
 
     let foldSkinTitleArray: string[] = []
@@ -180,7 +178,7 @@ export class CaliperService {
     let triceps: number = 0
     let suprailiac: number = 0
 
-    this.caliperTiles.map((item) => {
+    this.skinfoldsTiles.map((item) => {
 
       let div = 0
 
@@ -236,14 +234,14 @@ export class CaliperService {
       leanMass: leanMass,
       skinfoldsSum: sum
     }
-    this.caliperObjectForDB = c
+    this.skinfoldsObjectForDB = c
     return { c, bodyDensity, bodyFatPerc, sum, fatMass, leanMass, foldSkinValueArray, foldSkinTitleArray, weight, method, date, age }
 
   }
 
   saveSkinfoldToDB() {
 
-    this.dummy.dummyArrayCaliper.push(this.caliperObjectForDB)
+    this.dummy.dummyArraySkinfolds.push(this.skinfoldsObjectForDB)
   }
 
 

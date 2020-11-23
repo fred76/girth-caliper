@@ -2,7 +2,7 @@ import { BodyChartComponent } from './bodyMeasurements/charts/body-chart/body-ch
 import { SkinfoldsChartComponent } from './bodyMeasurements/charts/skinfolds-chart/skinfolds-chart.component';
 import { ChartContainerComponent } from './bodyMeasurements/charts/chart-container.component';
 import { HistoryComponent } from './bodyMeasurements/history/history.component';
-import { CaliperComponent } from './bodyMeasurements/caliper/caliper.component';
+import { SkinfoldComponent } from './bodyMeasurements/skinfold/skinfold.component';
 import { GirthsComponent } from './bodyMeasurements/girths/girths.component';
 
 import { GirthsChartComponent } from './bodyMeasurements/charts/girths-chart/girths-chart.component';
@@ -15,7 +15,7 @@ const routes: Routes = [
   { path: '', redirectTo: '/Body&Measurements', pathMatch: 'full' },
   {
     path: 'Body&Measurements', component: BodyMeasurementsComponent, children: [
-      { path: 'skinfoldTab', component: CaliperComponent },
+      { path: 'skinfoldTab', component: SkinfoldComponent },
       { path: 'girthTab', component: GirthsComponent },
       { path: 'photoTab', component: HistoryComponent },
       {

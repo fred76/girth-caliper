@@ -20,17 +20,17 @@ import { SignupUserComponent } from './auth/signup-user/signup-user.component';
 import { LoginUserComponent } from './auth/login-user/login-user.component';
 import { WelcomeComponent } from './welcome/welcome.component';
 import { GirthsComponent } from './bodyMeasurements/girths/girths.component';
-import { CaliperComponent } from './bodyMeasurements/caliper/caliper.component';
+import { SkinfoldComponent } from './bodyMeasurements/skinfold/skinfold.component';
 import { HistoryComponent } from './bodyMeasurements/history/history.component';
 
 import { ChartContainerComponent } from './bodyMeasurements/charts/chart-container.component';
 import { BtnSidenavAnimatedComponent } from './shared-ui-elemnts/btn-sidenav-animated/btn-sidenav-animated.component';
 
 import { GirthsChartComponent } from './bodyMeasurements/charts/girths-chart/girths-chart.component';
-import { CaliperChartsCardComponent } from './bodyMeasurements/caliper/CaliperChartsCard';
+import { CaliperChartsCardComponent } from './bodyMeasurements/skinfold/CaliperChartsCard';
 import { BodyChartComponent } from './bodyMeasurements/charts/body-chart/body-chart.component';
 
-import { ConfirmCaliperComponent } from './bodyMeasurements/caliper/confirmCaliper';
+import { ConfirmSkinfoldComponent } from './bodyMeasurements/skinfold/confirmSkinfolds';
 import { ConfirmGirthsComponent } from './bodyMeasurements/girths/confirmGirths';
 
 import { Utility } from './Utility/utility';
@@ -46,12 +46,12 @@ import { Utility } from './Utility/utility';
     SignupUserComponent,
     LoginUserComponent,
     GirthsComponent,
-    CaliperComponent,
+    SkinfoldComponent,
     HistoryComponent,
     GirthsChartComponent,
     BodyMeasurementsComponent,
     ConfirmGirthsComponent,
-    ConfirmCaliperComponent,
+    ConfirmSkinfoldComponent,
     CaliperChartsCardComponent,
     BtnSidenavAnimatedComponent,
     ChartContainerComponent,

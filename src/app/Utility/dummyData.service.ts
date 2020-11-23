@@ -1,4 +1,4 @@
-import { CaliperForDB } from './../interface-model/caliper.model';
+import { SkinfoldsForDB as SkinfoldsForDB } from '../interface-model/skinfold.model';
 import { Girths } from './../interface-model/girths.model';
 import { Utility } from 'src/app/Utility/utility';
 import { Injectable } from '@angular/core';
@@ -68,7 +68,7 @@ export class DummyDataService {
   }
 
   createSkinfold() {
-    let caliper5: CaliperForDB
+    let skinfolds: SkinfoldsForDB
     for (let index = 0; index < 10; index++) {
       let Chest = 12 + this.getRandomInt(-3, 5)
       let Subscapular = 5 + this.getRandomInt(-3, 5)
@@ -86,7 +86,7 @@ export class DummyDataService {
       let bodyFatPerc: number = this.utility.numberDecimal((((4.95 / body) - 4.5) * 100), 2)
       let fatMass: number = this.utility.numberDecimal(((weight / 100) * bodyFatPerc), 2)
       let leanMass = this.utility.numberDecimal((weight - fatMass), 2)
-      caliper5 = {
+      skinfolds = {
         fold: {
           Chest: Chest,
           Subscapular: Subscapular,
@@ -110,7 +110,7 @@ export class DummyDataService {
           skinfoldsSum: sum
         }
       }
-      this.dummyArrayCaliper.push(caliper5)
+      this.dummyArraySkinfolds.push(skinfolds)
     }
   }
 
@@ -122,7 +122,7 @@ export class DummyDataService {
 
   dummyArray = []
 
-  dummyArrayCaliper = []
+  dummyArraySkinfolds = []
 
 
 }

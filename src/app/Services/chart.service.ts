@@ -1,6 +1,6 @@
 import { element } from 'protractor';
 
-import { CaliperForDB } from './../interface-model/caliper.model';
+import { SkinfoldsForDB } from '../interface-model/skinfold.model';
 import { Girths } from './../interface-model/girths.model';
 import { Utility } from './../Utility/utility';
 import { Injectable } from '@angular/core';
@@ -105,7 +105,7 @@ export class ChartService {
 
 
 
-  skinfoldLineChartData(arraOfskinfold: CaliperForDB[]) {
+  skinfoldLineChartData(arraOfskinfold: SkinfoldsForDB[]) {
 
     let localSkinfoldObject = [...arraOfskinfold].sort((d1, d2) => new Date(d1.metadata.date).getTime() - new Date(d2.metadata.date).getTime())
     let chestSkinfold = []

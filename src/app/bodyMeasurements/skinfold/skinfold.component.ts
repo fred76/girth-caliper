@@ -1,9 +1,9 @@
-import { ChartService } from './../../Services/chart.service';
+import { ChartService } from '../../Services/chart.service';
 
 import { CaliperChartsCardComponent } from './CaliperChartsCard';
 
-import { ConfirmCaliperComponent } from './confirmCaliper';
-import { CaliperService } from '../../Services/caliper.service';
+import { ConfirmSkinfoldComponent } from './confirmSkinfolds';
+import { SkinfoldsService } from '../../Services/caliper.service';
 import { Component, OnDestroy, OnInit, Output } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog'
 
@@ -11,31 +11,31 @@ import { Utility } from 'src/app/Utility/utility';
 
 @Component({
   selector: 'app-caliper',
-  templateUrl: './caliper.component.html',
-  styleUrls: ['./caliper.component.css']
+  templateUrl: './skinfold.component.html',
+  styleUrls: ['./skinfold.component.css']
 })
-export class CaliperComponent implements OnInit, OnDestroy {
+export class SkinfoldComponent implements OnInit, OnDestroy {
 
   constructor(
     private dialog: MatDialog,
-    private measurementsService: CaliperService,
+    private skinfoldsService: SkinfoldsService,
     private utility: Utility,
     private chartService: ChartService) { }
 
-  caliperTiles = []
-  caliperTilesDescriptions = []
-  caliperMethods = this.measurementsService.caliperMethods
-  selectedCaliperMethod: string
+  skinfoldsTiles = []
+  skinfoldsTilesDescriptions = []
+  skinfoldsMethods = this.skinfoldsService.skinfoldsMethods
+  selectedSkinfoldsMethod: string
   measurementDate: Date
   bodyWeight: number = 90
   userAge: number = 44
 
   ngOnInit(): void {
-    this.measurementsService.selectedCaliperMethodSubs()
+    this.skinfoldsService.selectedSkinfoldsMethodSubs()
   }
 
   ngOnDestroy() {
-    this.measurementsService.selectedCaliperMethodUnsubscribe()
+    this.skinfoldsService.selectedSkinfoldsMethodUnsubscribe()
   }
 
   // events
@@ -49,9 +49,9 @@ export class CaliperComponent implements OnInit, OnDestroy {
 
 
   eventCaliperMethodChange(s, event) {
-    this.measurementsService.updateSelectedCaliperMethod(this.selectedCaliperMethod)
-    this.caliperTiles = this.measurementsService.caliperTiles
-    this.caliperTilesDescriptions = this.measurementsService.caliperTilesDescriptions
+    this.skinfoldsService.updateSelectedSkinfoldsrMethod(this.selectedSkinfoldsMethod)
+    this.skinfoldsTiles = this.skinfoldsService.skinfoldsTiles
+    this.skinfoldsTilesDescriptions = this.skinfoldsService.skinfoldsTilesDescriptions
   }
 
 
@@ -59,7 +59,7 @@ export class CaliperComponent implements OnInit, OnDestroy {
     let isAllSet: boolean = false
     const zeroMeasure = []
     let listOfZeroFolds = ""
-    this.caliperTiles.map(fold => {
+    this.skinfoldsTiles.map(fold => {
       if (fold.value1 === null) {
         zeroMeasure.push(fold.title)
         isAllSet = false
@@ -69,7 +69,7 @@ export class CaliperComponent implements OnInit, OnDestroy {
     })
     if (!isAllSet) {
       listOfZeroFolds = zeroMeasure.join("; ")
-      const dialogRef = this.dialog.open(ConfirmCaliperComponent, {
+      const dialogRef = this.dialog.open(ConfirmSkinfoldComponent, {
         data: {
           isAllSet: isAllSet,
           list: listOfZeroFolds,
@@ -77,10 +77,10 @@ export class CaliperComponent implements OnInit, OnDestroy {
         }
       });
     } else {
-      let foldSkin = this.measurementsService.createSkinFoldObject(this.selectedCaliperMethod, this.userAge, this.bodyWeight)
+      let foldSkin = this.skinfoldsService.createSkinFoldObject(this.selectedSkinfoldsMethod, this.userAge, this.bodyWeight)
       const dialogRef = this.dialog.open(CaliperChartsCardComponent, {
         data: {
-          method: this.selectedCaliperMethod,
+          method: this.selectedSkinfoldsMethod,
           bodyWeight: this.bodyWeight,
           bodyDensity: this.utility.numberDecimal(foldSkin.bodyDensity, 2),
           bodyFatPercentage: this.utility.numberDecimal(foldSkin.bodyFatPerc, 2),
@@ -106,8 +106,8 @@ export class CaliperComponent implements OnInit, OnDestroy {
       dialogRef.afterClosed().subscribe(result => {
         if (result) {
           this.measurementDate = result
-          this.measurementsService.caliperObjectForDB.metadata.date = result
-          this.measurementsService.saveSkinfoldToDB()
+          this.skinfoldsService.skinfoldsObjectForDB.metadata.date = result
+          this.skinfoldsService.saveSkinfoldToDB()
 
         } else {
           console.log("Non Passa")

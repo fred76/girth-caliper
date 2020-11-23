@@ -6,9 +6,9 @@
     <span class="menu"  fxLayoutAlign="space-evenly center"  fxLayoutAlign.xs="end">
       <mat-form-field class="panel" appearance="legacy">
         <mat-label>Caliper methods</mat-label>
-        <mat-select placeholder="Filter By BU" [(ngModel)]="selectedCaliperMethod"
+        <mat-select placeholder="Filter By BU" [(ngModel)]="selectedSkinfoldsMethod"
           (ngModelChange)="eventCaliperMethodChange('change', $event)">
-          <mat-option *ngFor="let caliperMethod of caliperMethods" [value]="caliperMethod">
+          <mat-option *ngFor="let caliperMethod of skinfoldsMethods" [value]="caliperMethod">
             {{caliperMethod}}
           </mat-option>
         </mat-select>
@@ -45,15 +45,15 @@
 
 
   <div class="contentCaliper" fxLayout="row wrap" fxLayoutGap="16px grid">
-    <div fxFlex="25%" fxFlex.xs="100%" fxFlex.sm="33%" *ngFor="let gTile of caliperTiles , let i = index">
+    <div fxFlex="25%" fxFlex.xs="100%" fxFlex.sm="33%" *ngFor="let gTile of skinfoldsTiles , let i = index">
       <mat-card class="mat-elevation-z8">
         <mat-card-header>
           <mat-card-title>{{gTile.title}}</mat-card-title>
         </mat-card-header>
-        <img mat-card-image src="/assets//caliper/{{caliperTilesDescriptions[i].image}}">
+        <img mat-card-image src="/assets//caliper/{{skinfoldsTilesDescriptions[i].image}}">
         <mat-card-content>
           <p>
-            {{caliperTilesDescriptions[i].text}}
+            {{skinfoldsTilesDescriptions[i].text}}
           </p>
         </mat-card-content>
         <div fxLayout="row">

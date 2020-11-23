@@ -2,7 +2,7 @@ import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
-  selector: 'app-CaliperChartsCard',
+  selector: 'app-SkinfoldChartsCard',
   styles: [`.cont{height: 400px}`],
   template: `<h1 mat-dialog-title>Skin Folds: {{passedData.method}}</h1>
   <h5>Body weight: {{passedData.bodyWeight}} Kg</h5>
