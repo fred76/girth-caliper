@@ -49,7 +49,6 @@ mat-card-footer {
 }
 mat-button-toggle-group {
   height: 24px;
-  margin-bottom: 15px;
 }
 :host .mat-button-toggle-group{
   border-radius: 12px !important;

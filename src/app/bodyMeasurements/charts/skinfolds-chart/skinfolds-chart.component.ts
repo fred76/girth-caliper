@@ -1,3 +1,5 @@
+import { ImportExportService } from './../../../Services/import-export.service';
+
 import { Subject } from 'rxjs';
 import { ChartService } from '../../../Services/chart.service';
 import { DummyDataService } from '../../../Utility/dummyData.service';
@@ -5,7 +7,6 @@ import { MatTableDataSource } from '@angular/material/table';
 import { Component, OnInit, ViewChild, AfterViewInit, Input } from '@angular/core';
 import { BaseChartDirective } from 'ng2-charts';
 import { CaliperForDB } from 'src/app/interface-model/caliper.model';
-import { MatButtonToggleChange } from '@angular/material/button-toggle';
 
 @Component({
   selector: 'app-skinfolds-chart',
@@ -18,10 +19,8 @@ export class SkinfoldsChartComponent implements OnInit {
   showChart: boolean
   constructor(
     private dummyDataService: DummyDataService,
-    private chartsService: ChartService) { }
-
-
-
+    private chartsService: ChartService,
+    private importExportService: ImportExportService) { }
 
 
   private toggleBoyCompChartEvent = new Subject<Event>();
@@ -41,13 +40,15 @@ export class SkinfoldsChartComponent implements OnInit {
 
   dataSource = new MatTableDataSource<CaliperForDB>()
 
+  clickExportSkinfolds() {
+    this.importExportService.flatCaliperForDB()
+  }
 
-
-  toggleSkinfoldBodyCompButton(event: Event){
+  toggleSkinfoldBodyCompButton(event: Event) {
     this.toggleSkinfoldBodyCompeEvent.next(event)
     this.toggleSkinfoldBodyComp = !this.toggleSkinfoldBodyComp
     this.createSkinfoldsChart()
-}
+  }
 
   toggleSkinfoldChartListButton(event: Event) {
     this.toggleSkinfoldChartListEvent.next(event);

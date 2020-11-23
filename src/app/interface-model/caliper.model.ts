@@ -33,11 +33,11 @@ export interface CaliperForDB {
     age: number
   };
   bodyResult: {
-    bodyDensity : number,
-    bodyFatPercentage : number,
-    fatMass : number,
-    leanMass : number,
-    skinfoldsSum : number
+    bodyDensity: number,
+    bodyFatPercentage: number,
+    fatMass: number,
+    leanMass: number,
+    skinfoldsSum: number
   }
 }
 export class CaliperForDB implements CaliperForDB {
@@ -58,10 +58,10 @@ export class CaliperForDB implements CaliperForDB {
     age: number
   };
   bodyResult: {
-    bodyDensity : number,
-    bodyFatPercentage : number,
-    fatMass : number,
-    leanMass : number,
-    skinfoldsSum : number
+    bodyDensity: number,
+    bodyFatPercentage: number,
+    fatMass: number,
+    leanMass: number,
+    skinfoldsSum: number
   }
 }

@@ -153,8 +153,8 @@ export class DummyDataService {
       let bodyRounded = this.utility.numberDecimal(body, 2)
       let bodyFatPerc: number = this.utility.numberDecimal((((4.95 / body) - 4.5) * 100), 2)
       let fatMass: number = this.utility.numberDecimal(((weight / 100) * bodyFatPerc), 2)
-      let leanMass = this.utility.numberDecimal((weight - fatMass),2)
-        caliper5  = {
+      let leanMass = this.utility.numberDecimal((weight - fatMass), 2)
+      caliper5 = {
         fold: {
           Chest: Chest,
           Subscapular: Subscapular,
@@ -182,7 +182,7 @@ export class DummyDataService {
     }
   }
 
-  dummyArrayCaliper = [ ]
+  dummyArrayCaliper = []
 
 
 }

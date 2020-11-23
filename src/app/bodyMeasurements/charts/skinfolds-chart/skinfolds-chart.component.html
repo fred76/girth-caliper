@@ -98,15 +98,16 @@
     <mat-card class="mat-elevation-z8 height">
 
       <!--  button toggle Piechart // Barchart -->
+
       <mat-card-subtitle>
-        <p class="mat-caption">{{method}}</p>
+        <div fxLayout="row" fxLayout="row" fxLayout.lt-sm="column" fxLayoutAlign="space-between center">
+          <p class="mat-caption">{{method}}</p>
+          <button mat-mini-fab color="primary" (click)="toggleBodyCompChartButton($event)" class="button24">
+            <mat-icon *ngIf="!toggleBodyCompChart" class="icon24">insert_chart</mat-icon>
+            <mat-icon *ngIf="toggleBodyCompChart" class="icon24">pie_chart</mat-icon>
+          </button>
+        </div>
       </mat-card-subtitle>
-      <span fxLayoutAlign="end center">
-        <button mat-mini-fab color="primary" (click)="toggleBodyCompChartButton($event)" class="button24">
-          <mat-icon *ngIf="!toggleBodyCompChart" class="icon24">insert_chart</mat-icon>
-          <mat-icon *ngIf="toggleBodyCompChart" class="icon24">pie_chart</mat-icon>
-        </button>
-      </span>
       <mat-card-content>
         <div *ngIf="!toggleBodyCompChart">
           <canvas baseChart [data]="pieChartData" [chartType]="pieChartType" [labels]="pieChartLabels"
@@ -139,25 +140,31 @@
 
 <mat-card class="mat-elevation-z8">
   <mat-card-title>
-    <div fxLayout="row" fxLayoutAlign="space-between center">
+    <div fxLayout="row" fxLayout="row" fxLayout.lt-sm="column" fxLayoutAlign="space-between center">
       <p class="mat-body-2">Skinfolds trend over the body weight</p>
+      <div fxLayout="row" fxLayout.lt-sm="column" fxLayoutGap="16px">
+        <mat-button-toggle-group name="fontStyle" aria-label="Font Style" [value]="toggleSkinfoldBodyComp"
+          (change)="toggleSkinfoldBodyCompButton($event)">
+          <mat-button-toggle value="bold" [value]="true">
+            <h5 class="h5">Skinfolds</h5>
+          </mat-button-toggle>
+          <mat-button-toggle value="italic" [value]="false">
+            <h5 class="h5">Body Composition</h5>
+          </mat-button-toggle>
+        </mat-button-toggle-group>
 
-      <mat-button-toggle-group name="fontStyle" aria-label="Font Style" [value]="toggleSkinfoldBodyComp"
-        (change)="toggleSkinfoldBodyCompButton($event)">
-        <mat-button-toggle value="bold" [value]="true">
-          <h5 class="h5">Skinfolds</h5>
-        </mat-button-toggle>
-        <mat-button-toggle value="italic" [value]="false">
-          <h5 class="h5">Body Composition</h5>
-        </mat-button-toggle>
-      </mat-button-toggle-group>
+        <div fxLayout.lt-sm="row" fxLayoutGap="16px">
+          <button mat-mini-fab color="primary" (click)="toggleSkinfoldChartListButton($event)" class="button24">
+            <mat-icon *ngIf="!isToggleSkinfoldChartList" class="icon24Bis">reorder_black</mat-icon>
+            <mat-icon *ngIf="isToggleSkinfoldChartList" class="icon24Bis">timeline_black</mat-icon>
+          </button>
 
-      <button mat-mini-fab color="primary" (click)="toggleSkinfoldChartListButton($event)" class="button24">
-        <mat-icon *ngIf="!isToggleSkinfoldChartList" class="icon24Bis">reorder_black</mat-icon>
-        <mat-icon *ngIf="isToggleSkinfoldChartList" class="icon24Bis">timeline_black</mat-icon>
-      </button>
-
-
+          <button mat-mini-fab color="primary" (click)="clickExportSkinfolds()" class="button24"
+            matTooltip="Download xlsx file">
+            <mat-icon class="icon24Bis">save_alt</mat-icon>
+          </button>
+        </div>
+      </div>
     </div>
   </mat-card-title>
   <mat-card-content>

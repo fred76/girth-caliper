@@ -77,7 +77,7 @@ export class CaliperComponent implements OnInit, OnDestroy {
         }
       });
     } else {
-      let foldSkin = this.measurementsService.createSkinFoldObject(this.selectedCaliperMethod,this.userAge,this.bodyWeight )
+      let foldSkin = this.measurementsService.createSkinFoldObject(this.selectedCaliperMethod, this.userAge, this.bodyWeight)
       const dialogRef = this.dialog.open(CaliperChartsCardComponent, {
         data: {
           method: this.selectedCaliperMethod,

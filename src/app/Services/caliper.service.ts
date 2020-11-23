@@ -223,7 +223,7 @@ export class CaliperService {
         break
     }
 
-    let bodyFatPerc: number = this.utility.numberDecimal((((4.95 / bodyDensity) - 4.5) * 100),2)
+    let bodyFatPerc: number = this.utility.numberDecimal((((4.95 / bodyDensity) - 4.5) * 100), 2)
     let fatMass: number = this.utility.numberDecimal(((weight / 100) * bodyFatPerc), 2)
     let leanMass = weight - fatMass
 
@@ -241,7 +241,7 @@ export class CaliperService {
 
   }
 
-  saveSkinfoldToDB( ) {
+  saveSkinfoldToDB() {
 
     this.dummy.dummyArrayCaliper.push(this.caliperObjectForDB)
   }

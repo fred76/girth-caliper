@@ -40,7 +40,7 @@ export class Utility {
   }
 
 
-   betweenRange(x, min, max) {
+  betweenRange(x, min, max) {
     return x >= min && x <= max;
   }
 
