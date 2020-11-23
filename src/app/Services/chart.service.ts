@@ -123,7 +123,6 @@ export class ChartService {
     let leanMass = []
     let bodtDensity = []
 
-
     localSkinfoldObject.map(p => {
 
       weightSkinfold.push(p.metadata.weight)

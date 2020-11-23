@@ -11,131 +11,63 @@ export class DummyDataService {
 
   constructor(private utility: Utility) { }
 
-
-
-  weight = 78
-  neck = 38
-  chest = 100
-  bicep_R = 32
-  bicep_L = 32
-  bicep_R_Relax = 28
-  bicep_L_Relax = 28
-  forearm_R = 25
-  forearm_L = 25
-  wrist = 18
-  waist = 88
-  hips = 105
-  thigh_R = 55
-  thigh_L = 55
-  calf_L = 38
-  calf_R = 38
-
-
   getRandomInt(min, max) {
     min = Math.ceil(min);
     max = Math.floor(max);
     return Math.floor(Math.random() * (max - min + 1)) + min;
 
   }
-  girthTiles0: Girths = {
-    weight: this.weight + this.getRandomInt(-20, 20),
-    neck: this.neck + this.getRandomInt(-2, 4),
-    chest: this.chest + this.getRandomInt(-3, 10),
-    bicep_R: this.bicep_R + this.getRandomInt(-5, 6),
-    bicep_L: this.bicep_L + this.getRandomInt(-5, 6),
-    bicep_R_Relax: this.bicep_R_Relax + this.getRandomInt(-3, 6),
-    bicep_L_Relax: this.bicep_L_Relax + this.getRandomInt(-3, 6),
-    forearm_R: this.forearm_R + this.getRandomInt(-3, 5),
-    forearm_L: this.forearm_L + this.getRandomInt(-3, 5),
-    wrist: this.wrist + this.getRandomInt(1, 2),
-    waist: this.waist + this.getRandomInt(-5, 10),
-    hips: this.hips + this.getRandomInt(-11, 16),
-    thigh_R: this.thigh_R + this.getRandomInt(-4, 6),
-    thigh_L: this.thigh_L + this.getRandomInt(-4, 6),
-    calf_L: this.calf_L + this.getRandomInt(-3, 6),
-    calf_R: this.calf_R + this.getRandomInt(-3, 6),
-    date: this.dateOfMeasurement(-5.6)
 
+  createGirth() {
+
+    let g: Girths
+
+    for (let index = 0; index < 10; index++) {
+      let weight = 78 + + this.getRandomInt(-3, 5)
+      let neck = 38 + + this.getRandomInt(-3, 5)
+      let chest = 100 + + this.getRandomInt(-3, 5)
+      let bicep_R = 32 + + this.getRandomInt(-3, 5)
+      let bicep_L = 32 + + this.getRandomInt(-3, 5)
+      let bicep_R_Relax = 28 + + this.getRandomInt(-3, 5)
+      let bicep_L_Relax = 28
+      let forearm_R = 25 + + this.getRandomInt(-3, 5)
+      let forearm_L = 25 + + this.getRandomInt(-3, 5)
+      let wrist = 18 + + this.getRandomInt(-3, 5)
+      let waist = 88 + + this.getRandomInt(-3, 5)
+      let hips = 105 + + this.getRandomInt(-3, 5)
+      let thigh_R = 55 + + this.getRandomInt(-3, 5)
+      let thigh_L = 55 + + this.getRandomInt(-3, 5)
+      let calf_L = 38 + + this.getRandomInt(-3, 5)
+      let calf_R = 38 + + this.getRandomInt(-3, 5)
+
+      g = {
+        neck: neck,
+        chest: chest,
+        bicep_R: bicep_R,
+        bicep_L: bicep_L,
+        bicep_R_Relax: bicep_R_Relax,
+        bicep_L_Relax: bicep_L_Relax,
+        forearm_R: forearm_R,
+        forearm_L: forearm_L,
+        wrist: wrist,
+        waist: waist,
+        hips: hips,
+        thigh_R: thigh_R,
+        thigh_L: thigh_L,
+        calf_R: calf_R,
+        calf_L: calf_L,
+        weight: weight,
+        date: this.dateOfMeasurement(-index)
+
+      }
+
+
+      this.dummyArray.push(g)
+
+    }
   }
 
-
-  girthTiles1: Girths =
-    {
-      weight: this.weight + this.getRandomInt(-20, 20),
-      neck: this.neck + this.getRandomInt(-2, 4),
-      chest: this.chest + this.getRandomInt(-3, 10),
-      bicep_R: this.bicep_R + this.getRandomInt(-5, 6),
-      bicep_L: this.bicep_L + this.getRandomInt(-5, 6),
-      bicep_R_Relax: this.bicep_R_Relax + this.getRandomInt(-3, 6),
-      bicep_L_Relax: this.bicep_L_Relax + this.getRandomInt(-3, 6),
-      forearm_R: this.forearm_R + this.getRandomInt(-3, 5),
-      forearm_L: this.forearm_L + this.getRandomInt(-3, 5),
-      wrist: this.wrist + this.getRandomInt(1, 2),
-      waist: this.waist + this.getRandomInt(-5, 10),
-      hips: this.hips + this.getRandomInt(-11, 16),
-      thigh_R: this.thigh_R + this.getRandomInt(-4, 6),
-      thigh_L: this.thigh_L + this.getRandomInt(-4, 6),
-      calf_L: this.calf_L + this.getRandomInt(-3, 6),
-      calf_R: this.calf_R + this.getRandomInt(-3, 6),
-      date: this.dateOfMeasurement(-4.3)
-    }
-  girthTiles2: Girths =
-    {
-      weight: this.weight + this.getRandomInt(-20, 20),
-      neck: this.neck + this.getRandomInt(-2, 4),
-      chest: this.chest + this.getRandomInt(-3, 10),
-      bicep_R: this.bicep_R + this.getRandomInt(-5, 6),
-      bicep_L: this.bicep_L + this.getRandomInt(-5, 6),
-      bicep_R_Relax: this.bicep_R_Relax + this.getRandomInt(-3, 6),
-      bicep_L_Relax: this.bicep_L_Relax + this.getRandomInt(-3, 6),
-      forearm_R: this.forearm_R + this.getRandomInt(-3, 5),
-      forearm_L: this.forearm_L + this.getRandomInt(-3, 5),
-      wrist: this.wrist + this.getRandomInt(1, 2),
-      waist: this.waist + this.getRandomInt(-5, 10),
-      hips: this.hips + this.getRandomInt(-11, 16),
-      thigh_R: this.thigh_R + this.getRandomInt(-4, 6),
-      thigh_L: this.thigh_L + this.getRandomInt(-4, 6),
-      calf_L: this.calf_L + this.getRandomInt(-3, 6),
-      calf_R: this.calf_R + this.getRandomInt(-3, 6),
-      date: this.dateOfMeasurement(-3.2)
-    }
-
-  girthTiles3: Girths =
-    {
-      weight: this.weight + this.getRandomInt(-20, 20),
-      neck: this.neck + this.getRandomInt(-2, 4),
-      chest: this.chest + this.getRandomInt(-3, 10),
-      bicep_R: this.bicep_R + this.getRandomInt(-5, 6),
-      bicep_L: this.bicep_L + this.getRandomInt(-5, 6),
-      bicep_R_Relax: this.bicep_R_Relax + this.getRandomInt(-3, 6),
-      bicep_L_Relax: this.bicep_L_Relax + this.getRandomInt(-3, 6),
-      forearm_R: this.forearm_R + this.getRandomInt(-3, 5),
-      forearm_L: this.forearm_L + this.getRandomInt(-3, 5),
-      wrist: this.wrist + this.getRandomInt(1, 2),
-      waist: this.waist + this.getRandomInt(-5, 10),
-      hips: this.hips + this.getRandomInt(-11, 16),
-      thigh_R: this.thigh_R + this.getRandomInt(-4, 6),
-      thigh_L: this.thigh_L + this.getRandomInt(-4, 6),
-      calf_L: this.calf_L + this.getRandomInt(-3, 6),
-      calf_R: this.calf_R + this.getRandomInt(-3, 6),
-      date: this.dateOfMeasurement(-2.5)
-    }
-
-
-
-  dateOfMeasurement(x) {
-    let dateDummy = new Date()
-    dateDummy.setMonth(dateDummy.getMonth() + x)
-    return dateDummy
-  }
-  dummyArray = [
-    this.girthTiles0,
-    this.girthTiles1,
-    this.girthTiles2,
-    this.girthTiles3
-  ]
-
-  pippo() {
+  createSkinfold() {
     let caliper5: CaliperForDB
     for (let index = 0; index < 10; index++) {
       let Chest = 12 + this.getRandomInt(-3, 5)
@@ -181,6 +113,14 @@ export class DummyDataService {
       this.dummyArrayCaliper.push(caliper5)
     }
   }
+
+  dateOfMeasurement(x) {
+    let dateDummy = new Date()
+    dateDummy.setMonth(dateDummy.getMonth() + x)
+    return dateDummy
+  }
+
+  dummyArray = []
 
   dummyArrayCaliper = []
 

@@ -138,7 +138,6 @@ export class SkinfoldsChartComponent implements OnInit {
 
   createSkinfoldsChart() {
     let localDummyArray = [...this.dummyDataService.dummyArrayCaliper]
-
     let chartData = this.chartsService.skinfoldLineChartData(localDummyArray)
     if (this.toggleSkinfoldBodyComp) {
       this.lineChartData = chartData.skinfoldChartDataSet
@@ -154,9 +153,7 @@ export class SkinfoldsChartComponent implements OnInit {
       this.lineChartType = this.chartsService.lineChartType
     }
     let localDummyArraySorted = [...localDummyArray].sort((d2, d1) => new Date(d1.metadata.date).getTime() - new Date(d2.metadata.date).getTime())
-
     this.dataSource.data = localDummyArraySorted
-
   }
 
   createBodyCompositionTile(n: number) {
@@ -164,7 +161,6 @@ export class SkinfoldsChartComponent implements OnInit {
     let localDummyArray = [...this.dummyDataService.dummyArrayCaliper]
 
     localDummyArray = [...localDummyArray].sort((d1, d2) => new Date(d1.metadata.date).getTime() - new Date(d2.metadata.date).getTime())
-
 
     let localDummyArrayLastElement = localDummyArray[localDummyArray.length - n]
 
@@ -177,18 +173,15 @@ export class SkinfoldsChartComponent implements OnInit {
     this.bodyFatPercentage = localDummyArrayLastElement.bodyResult.bodyFatPercentage
 
     if (this.selectorBodyCompDate < this.dummyDataService.dummyArrayCaliper.length) {
-
       let localDummyArrayLastSecondElement = localDummyArray[localDummyArray.length - n - 1]
-
       let sumSecondlast = localDummyArrayLastSecondElement.bodyResult.skinfoldsSum
       let bodyDensitySecondlast = localDummyArrayLastSecondElement.bodyResult.bodyDensity
       let bodyFatPercentageSecondlast = localDummyArrayLastSecondElement.bodyResult.bodyFatPercentage
-
       this.sum > sumSecondlast ? this.isSumIncreasing = true : this.isSumIncreasing = false
       this.bodyDensity > bodyDensitySecondlast ? this.isBodyDensityIncreasing = true : this.isBodyDensityIncreasing = false
       this.bodyFatPercentage > bodyFatPercentageSecondlast ? this.isBodyFatPercentageIncreasing = true : this.isBodyFatPercentageIncreasing = false
-
     }
+
     let foldSkinTitleArray = Object.keys(localDummyArrayLastElement.fold)
     let foldSkinValueArray = Object.values(localDummyArrayLastElement.fold)
 
@@ -208,21 +201,15 @@ export class SkinfoldsChartComponent implements OnInit {
       this.pieChartPlugins = this.chartsService.pieChartPlugins
       this.pieChartColors = this.chartsService.pieChartColors
     }
-
   }
 
 
   @ViewChild(BaseChartDirective, { static: true }) chart: BaseChartDirective;
 
   ngOnInit(): void {
-    if (this.dummyDataService.dummyArrayCaliper.length == 0) {
-
-      this.dummyDataService.pippo()
-    }
+    if (this.dummyDataService.dummyArrayCaliper.length == 0) { this.dummyDataService.createSkinfold() }
     this.createSkinfoldsChart()
-
     this.createBodyCompositionTile(1)
-
   }
 
 }

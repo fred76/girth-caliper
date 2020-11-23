@@ -1,11 +1,8 @@
 import { ChartService } from '../../../Services/chart.service';
-
-import { Utility } from 'src/app/Utility/utility';
 import { DummyDataService } from '../../../Utility/dummyData.service';
 
 import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
-import { ChartDataSets, ChartOptions, ChartType } from 'chart.js';
-import { Color, BaseChartDirective, Label } from 'ng2-charts';
+import { BaseChartDirective } from 'ng2-charts';
 
 @Component({
   selector: 'app-girths-chart',
@@ -32,7 +29,6 @@ export class GirthsChartComponent implements OnInit {
   showChart: boolean
   constructor(
     private dummyDataService: DummyDataService,
-    private utility: Utility,
     private chartsService: ChartService) { }
 
   lineChartData: any[]
@@ -55,6 +51,10 @@ export class GirthsChartComponent implements OnInit {
 
   ngOnInit(): void {
 
+
+    if (this.dummyDataService.dummyArray.length == 0) {
+      this.dummyDataService.createGirth()
+    }
 
     let localDummyArray = [...this.dummyDataService.dummyArray]
 
