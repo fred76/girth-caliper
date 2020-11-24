@@ -1,47 +1,28 @@
-<main>
-  <div class="butt">
-    <span fxLayoutAlign="start">
-      <button class="buttonSticky" (click)="save()" mat-raised-button color="primary">Save All</button>
-    </span>
-    <span class="menu"  fxLayoutAlign="space-evenly center"  fxLayoutAlign.xs="end">
-      <mat-form-field class="panel" appearance="legacy">
-        <mat-label>Caliper methods</mat-label>
-        <mat-select placeholder="Filter By BU" [(ngModel)]="selectedSkinfoldsMethod"
-          (ngModelChange)="eventCaliperMethodChange('change', $event)">
-          <mat-option *ngFor="let caliperMethod of skinfoldsMethods" [value]="caliperMethod">
-            {{caliperMethod}}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-      <mat-form-field fxHide.xs class="field"  >
-        <mat-label>Body weight (kg)</mat-label>
-        <input required class="inputlabel" matInput type="number" [(ngModel)]=bodyWeight >
-        <span class="inputlabel" matSuffix>Kg</span>
-      </mat-form-field>
+<button class="buttonSticky" (click)="save()" mat-raised-button color="primary">Save All</button>
+  <div class="menu" fxLayout="row" fxLayout.xs="column"  fxLayoutAlign="space-evenly center" >
 
-      <mat-form-field  fxHide.xs   class="field" >
-        <mat-label >Age (Years)</mat-label>
-        <input required class="inputlabel" matInput type="number" [(ngModel)]=userAge >
-        <span class="inputlabel" matSuffix>Years</span>
-        <span matPrefix>&nbsp;</span>
-      </mat-form-field>
-    </span>
-      <form fxShow.xs fxHide.gt-xs fxLayout="row" fxLayoutAlign="space-evenly center" >
-        <mat-form-field class="field"  >
-          <mat-label>Body weight (kg)</mat-label>
-          <input required class="inputlabel" matInput type="number" value={{bodyWeight}}>
-          <span class="inputlabel" matSuffix>Kg</span>
-        </mat-form-field>
+    <mat-form-field class="panel" appearance="legacy" >
+      <mat-label>Caliper methods</mat-label>
+      <mat-select placeholder="Filter By BU" [(ngModel)]="selectedSkinfoldsMethod"
+        (ngModelChange)="eventCaliperMethodChange('change', $event)">
+        <mat-option *ngFor="let caliperMethod of skinfoldsMethods" [value]="caliperMethod">
+          {{caliperMethod}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
 
-        <mat-form-field  class="field" >
-          <mat-label >Age (Years)</mat-label>
-          <input required class="inputlabel" matInput type="number" value={{userAge}}>
-          <span class="inputlabel" matSuffix>Years</span>
-          <span matPrefix>&nbsp;</span>
-        </mat-form-field>
-      </form>
-    </div>
-
+    <mat-form-field class="field">
+      <mat-label>Body weight (kg)</mat-label>
+      <input required class="inputlabel" matInput type="number" [(ngModel)]=bodyWeight>
+      <span class="inputlabel" matSuffix>Kg</span>
+    </mat-form-field>
+    <mat-form-field class="field">
+      <mat-label>Age (Years)</mat-label>
+      <input required class="inputlabel" matInput type="number" [(ngModel)]=userAge>
+      <span class="inputlabel" matSuffix>Years</span>
+      <span matPrefix>&nbsp;</span>
+    </mat-form-field>
+  </div>
 
 
   <div class="contentCaliper" fxLayout="row wrap" fxLayoutGap="16px grid">
@@ -81,4 +62,3 @@
       </mat-card>
     </div>
   </div>
-</main>

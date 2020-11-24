@@ -39,6 +39,6 @@ export class ImportExportService {
   flatGirthsForDB() {
     let i = this.dummyDataService.dummyArray
 
-    this.exportAsExcelFile(i, 'SkinFolds')
+    this.exportAsExcelFile(i, 'Girths')
   }
 }

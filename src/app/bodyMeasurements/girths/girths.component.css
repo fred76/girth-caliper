@@ -21,6 +21,7 @@
 .buttonSticky {
   z-index: 999;
   position: fixed !important;
+  margin: 10px;
   margin-top: 130px !important;
 }
 

@@ -245,29 +245,33 @@ export class ChartService {
         }
       },
       scales: {
-
+        xAxes: [
+          {
+            gridLines: { color: 'rgba(255, 255, 255, 0.1)' }
+          }
+        ],
         yAxes: [
           {
             id: "yAxesMM", display: false, position: "right", type: "linear",
-            scaleLabel: {
-              display: true, labelString: yAxesIdSkinfoldsSum
-            },
+            scaleLabel: { display: true, labelString: yAxesIdSkinfoldsSum, fontColor: 'rgba(255, 255, 255, 0.5)' },
             ticks: { max: sumMax, beginAtZero: true },
             gridLines: { display: false }
           },
           {
             id: "yAxesBodyWeight", display: false, position: 'left', type: "linear",
-            scaleLabel: { display: false },
-            ticks: { max: weightScale, beginAtZero: true }
+            scaleLabel: { display: false, fontColor: 'rgba(255, 255, 255, 0.5)' },
+            ticks: { max: weightScale, beginAtZero: true },
+            gridLines: { color: 'rgba(255, 255, 255, 0.1)' }
           },
           {
             id: "yAxesKg", stacked: stacked1, display: true, position: 'left', type: "linear",
-            scaleLabel: { display: true, labelString: yAxesIdLeftMaas },
-            ticks: { max: weightScale, beginAtZero: true }
+            scaleLabel: { display: true, labelString: yAxesIdLeftMaas, fontColor: 'rgba(255, 255, 255, 0.5)' },
+            ticks: { max: weightScale, beginAtZero: true },
+            gridLines: { color: 'rgba(255, 255, 255, 0.1)' }
           },
           {
             id: "yAxesGCC", display: true, position: "right", type: "linear",
-            scaleLabel: { display: true, labelString: yAxesIdRightBDensity },
+            scaleLabel: { display: true, labelString: yAxesIdRightBDensity, fontColor: 'rgba(255, 255, 255, 0.5)' },
             ticks:
             {
               maxTicksLimit: 5,
@@ -307,17 +311,24 @@ export class ChartService {
         point: { pointStyle: 'circle' }
       },
       scales: {
+        xAxes: [
+          {
+            gridLines: { color: 'rgba(255, 255, 255, 0.1)' }
+          }
+        ],
         yAxes: [
           {
             id: "yAxesMm", display: true, position: 'left', type: "linear",
-            scaleLabel: { display: true, labelString: yAxesIdLeft },
+            scaleLabel: { display: true, labelString: yAxesIdLeft, fontColor: 'rgba(255, 255, 255, 0.5)' },
             ticks: { max: yAxesMaxScale, beginAtZero: true },
+            gridLines: { color: 'rgba(255, 255, 255, 0.1)' }
+
           },
           {
             id: "yAxesKg", display: true, position: "right", type: "linear",
-            scaleLabel: { display: true, labelString: yAxesIdRight },
+            scaleLabel: { display: true, labelString: yAxesIdRight, fontColor: 'rgba(255, 255, 255, 0.5)' },
             ticks: { beginAtZero: true },
-            gridLines: { display: false },
+            gridLines: { display: false, color: 'rgba(255, 255, 255, 0.1)' },
           }
         ]
       }
@@ -332,7 +343,7 @@ export class ChartService {
     return pieDataChart
   }
 
-  pieChartLabels: Label[] = [['Fat', 'Maas'], ['Lean', 'Mass']]
+  pieChartLabels: Label[] = [['Fat maas (Kg)'], ['Lean mass (Kg)']]
   pieChartType: ChartType = 'pie'
   pieChartLegend: boolean = true
   pieChartPlugins: ChartPluginsOptions = [pluginDataLabels];
@@ -412,20 +423,25 @@ export class ChartService {
       animateScale: true
     },
     scales: {
-      xAxes: [{}],
+      xAxes: [
+        {
+          gridLines: { color: 'rgba(255, 255, 255, 0.1)' }
+        }
+      ],
       yAxes: [{
         ticks: {
           beginAtZero: true
         },
         scaleLabel: {
           display: true,
-          labelString: "mm"
-        }
+          labelString: "Skinfolds ( mm )"
+        },
+        gridLines: { color: 'rgba(255, 255, 255, 0.1)' }
       }],
     },
     plugins: {
       datalabels: {
-        anchor: 'end',
+        anchor: 'center',
         align: 'end',
 
       }

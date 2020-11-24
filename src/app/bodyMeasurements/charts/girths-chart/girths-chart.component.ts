@@ -168,7 +168,7 @@ export class GirthsChartComponent implements OnInit {
     let girthsCharLineData = this.chartsService.girthLineChartData(localDummyArray)
     this.lineChartData = girthsCharLineData.arrayChartDataSet
     this.lineChartLabels = this.chartsService.lineChartLabels
-    this.lineChartOptions = this.chartsService.lineChartOption("Girths", "Body weight", girthsCharLineData.maxWeight)
+    this.lineChartOptions = this.chartsService.lineChartOption("Girths ( mm )", "Body weight ( Kg )", girthsCharLineData.maxWeight)
     this.lineChartLegend = this.chartsService.lineChartLegend
     this.lineChartType = this.chartsService.lineChartType
     this.dataSource.data = localDummyArray

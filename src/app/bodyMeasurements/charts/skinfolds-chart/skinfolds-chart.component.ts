@@ -154,13 +154,13 @@ export class SkinfoldsChartComponent implements OnInit {
 
     this.lineChartData = chartData.skinfoldChartDataSet
     this.lineChartLabels = chartData.skinfoldXaxisLabel
-    this.lineChartOptions = this.chartsService.lineChartOption("Skinfold", "Body weight", chartData.maxSkinfold)
+    this.lineChartOptions = this.chartsService.lineChartOption("Skinfold ( mm )", "Body weight ( Kg )", chartData.maxSkinfold)
     this.lineChartLegend = this.chartsService.lineChartLegend
     this.lineChartType = this.chartsService.lineChartType
 
     this.lineDualChartData = chartData.bodyCompostitionDataSet
     this.lineDualChartLabels = chartData.skinfoldXaxisLabel
-    this.lineDualChartOptions = this.chartsService.dualChartOption("Kg ( Weight, Lean mass, fat maas )", "g/cc ( Body density )", "mm ( Skinfolds sum )", true, chartData.maxSkinfold + 10, chartData.maxWeight, chartData.maxBodyDensity)
+    this.lineDualChartOptions = this.chartsService.dualChartOption("Weight, Lean mass, Fat maas ( Kg )", "Body density ( g/cc )", "Skinfolds sum ( mm )", true, chartData.maxSkinfold + 10, chartData.maxWeight, chartData.maxBodyDensity)
     this.lineDualChartLegend = this.chartsService.lineChartLegend
     this.lineDualChartType = this.chartsService.lineChartType
 
