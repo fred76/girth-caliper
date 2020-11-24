@@ -77,4 +77,4 @@ import { LoadMoreSkinfoldComponent } from './bodyMeasurements/charts/skinfolds-c
   providers: [Utility],
   bootstrap: [AppComponent]
 })
-export class AppModule {}
+export class AppModule { }

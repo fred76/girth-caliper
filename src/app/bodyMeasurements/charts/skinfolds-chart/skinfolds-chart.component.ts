@@ -77,7 +77,7 @@ export class SkinfoldsChartComponent implements OnInit {
         data: { measurementDate: this.loadSkinfoldsSince }
       })
       dialogRef.afterClosed().subscribe(result => {
-        console.log(result );
+        console.log(result);
       })
     }
     this.createBodyCompositionTile(this.selectorBodyCompDate)
@@ -90,7 +90,6 @@ export class SkinfoldsChartComponent implements OnInit {
       this.createBodyCompositionTile(this.selectorBodyCompDate)
     } else {
       this.isShowNextBodyCompButton = false
-      new alert("Finito")
     }
   }
 
@@ -99,9 +98,15 @@ export class SkinfoldsChartComponent implements OnInit {
   lineChartData: any[]
   lineChartLabels: any[][]
   lineChartOptions: any
-  lineChartColors: any[]
   lineChartLegend: boolean
   lineChartType: any
+
+  lineDualChartData: any[]
+  lineDualChartLabels: any[][]
+  lineDualChartOptions: any
+  lineDualChartLegend: boolean
+  lineDualChartType: any
+
 
   barChartData: any[]
   barChartLabels: any[]
@@ -146,20 +151,20 @@ export class SkinfoldsChartComponent implements OnInit {
 
   createSkinfoldsChart() {
     let chartData = this.chartsService.skinfoldLineChartData(this.localDummyArray)
-    if (this.toggleSkinfoldBodyComp) {
-      this.lineChartData = chartData.skinfoldChartDataSet
-      this.lineChartLabels = chartData.skinfoldXaxisLabel
-      this.lineChartOptions = this.chartsService.lineChartOption("Skinfold", "Body weight", chartData.maxSkinfold)
-      this.lineChartLegend = this.chartsService.lineChartLegend
-      this.lineChartType = this.chartsService.lineChartType
-    } else {
-      this.lineChartData = chartData.bodyCompostitionDataSet
-      this.lineChartLabels = chartData.skinfoldXaxisLabel
-      this.lineChartOptions = this.chartsService.dualChartOption("Kg ( Weight, Lean mass, fat maas )", "g/cc ( Body density )", "mm ( Skinfolds sum )", true, chartData.maxSkinfold + 10, chartData.maxWeight, chartData.maxBodyDensity)
-      this.lineChartLegend = this.chartsService.lineChartLegend
-      this.lineChartType = this.chartsService.lineChartType
-    }
-     this.dataSource.data = this.localDummyArray
+
+    this.lineChartData = chartData.skinfoldChartDataSet
+    this.lineChartLabels = chartData.skinfoldXaxisLabel
+    this.lineChartOptions = this.chartsService.lineChartOption("Skinfold", "Body weight", chartData.maxSkinfold)
+    this.lineChartLegend = this.chartsService.lineChartLegend
+    this.lineChartType = this.chartsService.lineChartType
+
+    this.lineDualChartData = chartData.bodyCompostitionDataSet
+    this.lineDualChartLabels = chartData.skinfoldXaxisLabel
+    this.lineDualChartOptions = this.chartsService.dualChartOption("Kg ( Weight, Lean mass, fat maas )", "g/cc ( Body density )", "mm ( Skinfolds sum )", true, chartData.maxSkinfold + 10, chartData.maxWeight, chartData.maxBodyDensity)
+    this.lineDualChartLegend = this.chartsService.lineChartLegend
+    this.lineDualChartType = this.chartsService.lineChartType
+
+    this.dataSource.data = this.localDummyArray
   }
 
   createBodyCompositionTile(n: number) {
@@ -186,22 +191,21 @@ export class SkinfoldsChartComponent implements OnInit {
     let foldSkinTitleArray = Object.keys(localDummyArrayLastElement.fold)
     let foldSkinValueArray = Object.values(localDummyArrayLastElement.fold)
 
-    if (this.toggleBodyCompChart) {
-      this.barChartData = this.chartsService.barChartData(foldSkinValueArray, '')
-      this.barChartLabels = this.chartsService.barChartLabels(foldSkinTitleArray)
-      this.barChartOptions = this.chartsService.barChartOptions
-      this.barChartPlugins = this.chartsService.barChartPlugins
-      this.barChartLegend = this.chartsService.barChartLegend
-      this.barChartType = this.chartsService.barChartType
-    } else {
-      this.pieChartOptions = this.chartsService.pieChartOptions
-      this.pieChartLabels = this.chartsService.pieChartLabels
-      this.pieChartData = this.chartsService.pieDataChart(localDummyArrayLastElement.bodyResult.fatMass, localDummyArrayLastElement.bodyResult.leanMass)
-      this.pieChartType = this.chartsService.pieChartType
-      this.pieChartLegend = this.chartsService.pieChartLegend
-      this.pieChartPlugins = this.chartsService.pieChartPlugins
-      this.pieChartColors = this.chartsService.pieChartColors
-    }
+    this.barChartData = this.chartsService.barChartData(foldSkinValueArray, '')
+    this.barChartLabels = this.chartsService.barChartLabels(foldSkinTitleArray)
+    this.barChartOptions = this.chartsService.barChartOptions
+    this.barChartPlugins = this.chartsService.barChartPlugins
+    this.barChartLegend = this.chartsService.barChartLegend
+    this.barChartType = this.chartsService.barChartType
+
+    this.pieChartOptions = this.chartsService.pieChartOptions
+    this.pieChartLabels = this.chartsService.pieChartLabels
+    this.pieChartData = this.chartsService.pieDataChart(localDummyArrayLastElement.bodyResult.fatMass, localDummyArrayLastElement.bodyResult.leanMass)
+    this.pieChartType = this.chartsService.pieChartType
+    this.pieChartLegend = this.chartsService.pieChartLegend
+    this.pieChartPlugins = this.chartsService.pieChartPlugins
+    this.pieChartColors = this.chartsService.pieChartColors
+
   }
 
   @ViewChild(BaseChartDirective, { static: true }) chart: BaseChartDirective;
@@ -215,6 +219,5 @@ export class SkinfoldsChartComponent implements OnInit {
     this.createSkinfoldsChart()
     this.createBodyCompositionTile(1)
   }
-
 }
 

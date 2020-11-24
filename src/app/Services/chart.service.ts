@@ -6,9 +6,7 @@ import { Injectable } from '@angular/core';
 
 import { ChartDataSets, ChartOptions, ChartType, ChartPluginsOptions } from 'chart.js';
 import { Label } from 'ng2-charts';
-
 import * as pluginDataLabels from 'chartjs-plugin-datalabels';
-import { Plugins } from 'protractor/built/plugins';
 import { Options } from 'chartjs-plugin-datalabels/types/options';
 
 

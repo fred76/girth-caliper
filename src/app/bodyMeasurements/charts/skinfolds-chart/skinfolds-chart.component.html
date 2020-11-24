@@ -168,10 +168,16 @@
     </div>
   </mat-card-title>
   <mat-card-content>
-    <canvas *ngIf="!isToggleSkinfoldChartList" baseChart [datasets]="lineChartData" [labels]="lineChartLabels"
+    <div *ngIf="!isToggleSkinfoldChartList">
+    <canvas *ngIf="toggleSkinfoldBodyComp" baseChart [datasets]="lineChartData" [labels]="lineChartLabels"
       [options]="lineChartOptions" [legend]="lineChartLegend" [chartType]="lineChartType"
       (chartHover)="chartHovered($event)" (chartClick)="chartClicked($event)">
     </canvas>
+    <canvas *ngIf="!toggleSkinfoldBodyComp" baseChart [datasets]="lineDualChartData" [labels]="lineDualChartLabels"
+      [options]="lineDualChartOptions" [legend]="lineDualChartLegend" [chartType]="lineDualChartType"
+      (chartHover)="chartHovered($event)" (chartClick)="chartClicked($event)">
+    </canvas>
+  </div>
     <div *ngIf="toggleSkinfoldBodyComp">
       <mat-table *ngIf="isToggleSkinfoldChartList" [dataSource]="dataSource">
         <ng-container matColumnDef="method">
@@ -222,7 +228,6 @@
           <mat-header-cell *matHeaderCellDef>Thigh</mat-header-cell>
           <mat-cell *matCellDef="let element">{{element.fold.Thigh}}</mat-cell>
         </ng-container>
-
         <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
         <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
       </mat-table>

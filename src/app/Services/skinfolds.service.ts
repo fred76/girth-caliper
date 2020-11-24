@@ -4,7 +4,7 @@ import { SkinfoldsForDB } from '../interface-model/skinfold.model';
 import { Utility } from 'src/app/Utility/utility';
 import { SkinfoldsTile } from '../interface-model/skinfold.model';
 import { Injectable } from '@angular/core';
-import { Subject, Subscriber, Subscription } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'

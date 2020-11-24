@@ -36,4 +36,9 @@ export class ImportExportService {
     });
     this.exportAsExcelFile(e, 'SkinFolds')
   }
+  flatGirthsForDB() {
+    let i = this.dummyDataService.dummyArray
+
+    this.exportAsExcelFile(i, 'SkinFolds')
+  }
 }
