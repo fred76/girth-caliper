@@ -7,8 +7,26 @@ import { BaseChartDirective } from 'ng2-charts';
 @Component({
   selector: 'app-girths-chart',
   template: `
-  <mat-card class="mat-elevation-z4"><mat-card-header class="mat-headline">Girths over the time</mat-card-header></mat-card>
-  <mat-card class="mat-elevation-z8" >
+  <mat-card class="mat-elevation-z8" > <mat-card-title>
+    <div fxLayout="row" fxLayout="row" fxLayout.lt-sm="column" fxLayoutAlign="space-between center">
+      <p class="mat-subheading-2">Skinfolds trend over the body weight</p>
+      <div fxLayout="row" fxLayout.lt-sm="column" fxLayoutGap="16px">
+
+
+        <div fxLayout.lt-sm="row" fxLayoutGap="16px">
+          <button mat-mini-fab color="primary" class="button24">
+            <mat-icon  class="icon24Bis">reorder_black</mat-icon>
+            <mat-icon  class="icon24Bis">timeline_black</mat-icon>
+          </button>
+
+          <button mat-mini-fab color="primary"  class="button24"
+            matTooltip="Download xlsx file">
+            <mat-icon class="icon24Bis">save_alt</mat-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+  </mat-card-title>
   <canvas baseChart
   [datasets]="lineChartData"
   [labels]="lineChartLabels"
@@ -21,7 +39,9 @@ import { BaseChartDirective } from 'ng2-charts';
 </mat-card>  `,
 
   styles: [`
-   .mat-elevation-z8 { margin: 10px; padding: 10px; }  .mat-elevation-z4 { margin: 10px; padding: 10px; }`],
+   .mat-elevation-z8 { margin: 10px; padding: 10px; }  .mat-elevation-z4 { margin: 10px; padding: 10px; }
+   .icon24Bis { font-family: "Material Icons" !important; font-size: 16px; margin-top: -10px; margin-left: 3px;}
+   .button24 { width: 24px;  height: 24px;}`],
   encapsulation: ViewEncapsulation.None
 })
 

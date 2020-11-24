@@ -1,5 +1,5 @@
 
-import { DummyDataService } from './../Utility/dummyData.service';
+import { DummyDataService } from '../Utility/dummyData.service';
 import { SkinfoldsForDB } from '../interface-model/skinfold.model';
 import { Utility } from 'src/app/Utility/utility';
 import { SkinfoldsTile } from '../interface-model/skinfold.model';
@@ -166,9 +166,8 @@ export class SkinfoldsService {
   }
 
   createSkinFoldObject(method: string, age: number, weight: number, date?: Date) {
-    let c: SkinfoldsForDB
+    let c = new SkinfoldsForDB()
     c.fold = {}
-
     let foldSkinTitleArray: string[] = []
     let foldSkinValueArray: number[] = []
     let bodyDensity: number
@@ -234,6 +233,7 @@ export class SkinfoldsService {
       leanMass: leanMass,
       skinfoldsSum: sum
     }
+
     this.skinfoldsObjectForDB = c
     return { c, bodyDensity, bodyFatPerc, sum, fatMass, leanMass, foldSkinValueArray, foldSkinTitleArray, weight, method, date, age }
 

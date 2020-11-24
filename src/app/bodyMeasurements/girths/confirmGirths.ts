@@ -5,7 +5,7 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-ConfirmGirths',
-  template: `<h1 mat-dialog-title>Girths!</h1>
+  template: `<p class="mat-subheading-2" mat-dialog-title>Girths!</p>
  <mat-dialog-content>
               <p *ngIf="!passedData.isAllSet">Some Girths are not set</p>
               <p *ngIf="passedData.isAllSet">Great job! You take all measures</p>

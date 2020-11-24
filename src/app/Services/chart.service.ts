@@ -1,4 +1,3 @@
-import { element } from 'protractor';
 
 import { SkinfoldsForDB } from '../interface-model/skinfold.model';
 import { Girths } from './../interface-model/girths.model';
@@ -102,8 +101,6 @@ export class ChartService {
     return { arrayChartDataSet, maxWeight }
   }
   //Chart-Object
-
-
 
   skinfoldLineChartData(arraOfskinfold: SkinfoldsForDB[]) {
 
@@ -508,8 +505,6 @@ export class ChartDataModelClassWeight implements ChartDataSets {
     this.backgroundColor = backgroundColor
 
   }
-
-
 }
 
 

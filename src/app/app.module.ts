@@ -1,76 +1,80 @@
-import { SkinfoldsChartComponent } from './bodyMeasurements/charts/skinfolds-chart/skinfolds-chart.component';
-
-
 import { AppComponent } from './app.component';
-import { AppRoutingModule } from './app-routing.module';
-import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms'
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { NgxMatStepLazyLoadModule } from 'ngx-mat-step-lazy-load';
 
+import { NgModule } from '@angular/core';
+import { AppRoutingModule } from './app-routing.module';
+
+import { FormsModule } from '@angular/forms'
+import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MaterialModule } from './material.module';
 import { ChartsModule } from 'ng2-charts'
 
-import { HeaderComponent } from './navigation/header/header.component';
-
-import { BodyMeasurementsComponent } from './bodyMeasurements/body-measurements.component';
-import { SignupUserComponent } from './auth/signup-user/signup-user.component';
-import { LoginUserComponent } from './auth/login-user/login-user.component';
-import { WelcomeComponent } from './welcome/welcome.component';
-import { GirthsComponent } from './bodyMeasurements/girths/girths.component';
-import { SkinfoldComponent } from './bodyMeasurements/skinfold/skinfold.component';
-import { HistoryComponent } from './bodyMeasurements/history/history.component';
-
-import { ChartContainerComponent } from './bodyMeasurements/charts/chart-container.component';
-import { BtnSidenavAnimatedComponent } from './shared-ui-elemnts/btn-sidenav-animated/btn-sidenav-animated.component';
-
-import { GirthsChartComponent } from './bodyMeasurements/charts/girths-chart/girths-chart.component';
-import { CaliperChartsCardComponent } from './bodyMeasurements/skinfold/CaliperChartsCard';
-import { BodyChartComponent } from './bodyMeasurements/charts/body-chart/body-chart.component';
-
-import { ConfirmSkinfoldComponent } from './bodyMeasurements/skinfold/confirmSkinfolds';
-import { ConfirmGirthsComponent } from './bodyMeasurements/girths/confirmGirths';
+import { NgxMatStepLazyLoadModule } from 'ngx-mat-step-lazy-load';
 
 import { Utility } from './Utility/utility';
 
+import { HeaderComponent } from './navigation/header/header.component';
+
+import { BodyMeasurementsComponent } from './bodyMeasurements/body-measurements.component';
+import { WelcomeComponent } from './welcome/welcome.component';
+import { SignupUserComponent } from './auth/signup-user/signup-user.component';
+import { LoginUserComponent } from './auth/login-user/login-user.component';
+
+import { GirthsComponent } from './bodyMeasurements/girths/girths.component';
+import { ConfirmGirthsComponent } from './bodyMeasurements/girths/confirmGirths';
+
+import { SkinfoldComponent } from './bodyMeasurements/skinfold/skinfold.component';
+import { SkinfoldsChartsCardComponent } from './bodyMeasurements/skinfold/SkinfoldsChartsCard';
+import { ConfirmSkinfoldComponent } from './bodyMeasurements/skinfold/confirmSkinfolds';
+
+import { HistoryComponent } from './bodyMeasurements/history/history.component';
+
+import { BtnSidenavAnimatedComponent } from './shared-ui-elemnts/btn-sidenav-animated/btn-sidenav-animated.component';
+import { SkinfoldsChartComponent } from './bodyMeasurements/charts/skinfolds-chart/skinfolds-chart.component';
 
 
+import { ChartContainerComponent } from './bodyMeasurements/charts/chart-container.component';
+import { GirthsChartComponent } from './bodyMeasurements/charts/girths-chart/girths-chart.component';
+import { BodyChartComponent } from './bodyMeasurements/charts/body-chart/body-chart.component';
+import { LoadMoreSkinfoldComponent } from './bodyMeasurements/charts/skinfolds-chart/loadMoreSkinfold';
 
 @NgModule({
   declarations: [
     AppComponent,
     HeaderComponent,
+    BodyMeasurementsComponent,
     WelcomeComponent,
     SignupUserComponent,
     LoginUserComponent,
     GirthsComponent,
-    SkinfoldComponent,
-    HistoryComponent,
-    GirthsChartComponent,
-    BodyMeasurementsComponent,
     ConfirmGirthsComponent,
+    SkinfoldComponent,
+    SkinfoldsChartsCardComponent,
     ConfirmSkinfoldComponent,
-    CaliperChartsCardComponent,
+    HistoryComponent,
     BtnSidenavAnimatedComponent,
     ChartContainerComponent,
+    SkinfoldsChartComponent,
+    GirthsChartComponent,
     BodyChartComponent,
-    SkinfoldsChartComponent
+    LoadMoreSkinfoldComponent,
 
 
   ],
+
   imports: [
-    BrowserModule,
     AppRoutingModule,
-    BrowserAnimationsModule,
-    MaterialModule,
-    FlexLayoutModule,
     FormsModule,
+    BrowserModule,
+    BrowserAnimationsModule,
+    FlexLayoutModule,
+    MaterialModule,
     ChartsModule,
     NgxMatStepLazyLoadModule
   ],
+
   providers: [Utility],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {}

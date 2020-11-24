@@ -1,16 +1,15 @@
 import { ChartService } from '../../Services/chart.service';
 
-import { CaliperChartsCardComponent } from './CaliperChartsCard';
-
+import { SkinfoldsChartsCardComponent } from './SkinfoldsChartsCard';
 import { ConfirmSkinfoldComponent } from './confirmSkinfolds';
-import { SkinfoldsService } from '../../Services/caliper.service';
+import { SkinfoldsService } from '../../Services/skinfolds.service';
 import { Component, OnDestroy, OnInit, Output } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog'
 
 import { Utility } from 'src/app/Utility/utility';
 
 @Component({
-  selector: 'app-caliper',
+  selector: 'app-skinfold',
   templateUrl: './skinfold.component.html',
   styleUrls: ['./skinfold.component.css']
 })
@@ -47,13 +46,11 @@ export class SkinfoldComponent implements OnInit, OnDestroy {
     // console.log(event, active);
   }
 
-
   eventCaliperMethodChange(s, event) {
     this.skinfoldsService.updateSelectedSkinfoldsrMethod(this.selectedSkinfoldsMethod)
     this.skinfoldsTiles = this.skinfoldsService.skinfoldsTiles
     this.skinfoldsTilesDescriptions = this.skinfoldsService.skinfoldsTilesDescriptions
   }
-
 
   save() {
     let isAllSet: boolean = false
@@ -78,7 +75,7 @@ export class SkinfoldComponent implements OnInit, OnDestroy {
       });
     } else {
       let foldSkin = this.skinfoldsService.createSkinFoldObject(this.selectedSkinfoldsMethod, this.userAge, this.bodyWeight)
-      const dialogRef = this.dialog.open(CaliperChartsCardComponent, {
+      const dialogRef = this.dialog.open(SkinfoldsChartsCardComponent, {
         data: {
           method: this.selectedSkinfoldsMethod,
           bodyWeight: this.bodyWeight,
@@ -108,7 +105,6 @@ export class SkinfoldComponent implements OnInit, OnDestroy {
           this.measurementDate = result
           this.skinfoldsService.skinfoldsObjectForDB.metadata.date = result
           this.skinfoldsService.saveSkinfoldToDB()
-
         } else {
           console.log("Non Passa")
         }

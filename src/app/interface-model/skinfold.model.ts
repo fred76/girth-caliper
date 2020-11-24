@@ -35,28 +35,28 @@ export interface SkinfoldsForDB {
     skinfoldsSum: number
   }
 }
-// export class CaliperForDB implements CaliperForDB {
-//   fold: {
-//     Chest?: number,
-//     Subscapular?: number,
-//     Midaxillary?: number,
-//     Triceps?: number,
-//     Suprailiac?: number,
-//     Abdominal?: number,
-//     Thigh?: number,
-//     Bicep?: number,
-//   };
-//   metadata: {
-//     method: string
-//     date?: Date | any;
-//     weight: number
-//     age: number
-//   };
-//   bodyResult: {
-//     bodyDensity: number,
-//     bodyFatPercentage: number,
-//     fatMass: number,
-//     leanMass: number,
-//     skinfoldsSum: number
-//   }
-// }
+export class SkinfoldsForDB implements SkinfoldsForDB {
+  fold: {
+    Chest?: number,
+    Subscapular?: number,
+    Midaxillary?: number,
+    Triceps?: number,
+    Suprailiac?: number,
+    Abdominal?: number,
+    Thigh?: number,
+    Bicep?: number,
+  };
+  metadata: {
+    method: string
+    date?: Date | any;
+    weight: number
+    age: number
+  };
+  bodyResult: {
+    bodyDensity: number,
+    bodyFatPercentage: number,
+    fatMass: number,
+    leanMass: number,
+    skinfoldsSum: number
+  }
+}

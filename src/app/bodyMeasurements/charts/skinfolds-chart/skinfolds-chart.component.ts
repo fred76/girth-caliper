@@ -1,5 +1,6 @@
+import { LoadMoreSkinfoldComponent } from './loadMoreSkinfold';
+import { MatDialog } from '@angular/material/dialog';
 import { ImportExportService } from './../../../Services/import-export.service';
-
 import { Subject } from 'rxjs';
 import { ChartService } from '../../../Services/chart.service';
 import { DummyDataService } from '../../../Utility/dummyData.service';
@@ -20,7 +21,8 @@ export class SkinfoldsChartComponent implements OnInit {
   constructor(
     private dummyDataService: DummyDataService,
     private chartsService: ChartService,
-    private importExportService: ImportExportService) { }
+    private importExportService: ImportExportService,
+    public dialog: MatDialog) { }
 
 
   private toggleBoyCompChartEvent = new Subject<Event>();
@@ -39,6 +41,8 @@ export class SkinfoldsChartComponent implements OnInit {
   displayedColumnsBody = ["method", "age", "date", "weight", "Skinfolds sum", "Body Density", "Fat Percentage", "Lean Mass", "Fat Mass"]
 
   dataSource = new MatTableDataSource<SkinfoldsForDB>()
+
+  loadSkinfoldsSince: Date
 
   clickExportSkinfolds() {
     this.importExportService.flatSkinfoldsForDB()
@@ -62,7 +66,6 @@ export class SkinfoldsChartComponent implements OnInit {
     this.createBodyCompositionTile(this.selectorBodyCompDate)
   }
 
-
   previousBodyCompChartButton(event: Event) {
     this.previousBodyCompDateEvent.next(event);
     if (this.selectorBodyCompDate < this.dummyDataService.dummyArraySkinfolds.length) {
@@ -70,7 +73,12 @@ export class SkinfoldsChartComponent implements OnInit {
       this.createBodyCompositionTile(this.selectorBodyCompDate)
       this.isShowNextBodyCompButton = true
     } else {
-      new alert("Load more content")
+      const dialogRef = this.dialog.open(LoadMoreSkinfoldComponent, {
+        data: { measurementDate: this.loadSkinfoldsSince }
+      })
+      dialogRef.afterClosed().subscribe(result => {
+        console.log(result );
+      })
     }
     this.createBodyCompositionTile(this.selectorBodyCompDate)
   }
@@ -137,8 +145,7 @@ export class SkinfoldsChartComponent implements OnInit {
   }
 
   createSkinfoldsChart() {
-    let localDummyArray = [...this.dummyDataService.dummyArraySkinfolds]
-    let chartData = this.chartsService.skinfoldLineChartData(localDummyArray)
+    let chartData = this.chartsService.skinfoldLineChartData(this.localDummyArray)
     if (this.toggleSkinfoldBodyComp) {
       this.lineChartData = chartData.skinfoldChartDataSet
       this.lineChartLabels = chartData.skinfoldXaxisLabel
@@ -152,18 +159,12 @@ export class SkinfoldsChartComponent implements OnInit {
       this.lineChartLegend = this.chartsService.lineChartLegend
       this.lineChartType = this.chartsService.lineChartType
     }
-    let localDummyArraySorted = [...localDummyArray].sort((d2, d1) => new Date(d1.metadata.date).getTime() - new Date(d2.metadata.date).getTime())
-    this.dataSource.data = localDummyArraySorted
+     this.dataSource.data = this.localDummyArray
   }
 
   createBodyCompositionTile(n: number) {
 
-    let localDummyArray = [...this.dummyDataService.dummyArraySkinfolds]
-
-    localDummyArray = [...localDummyArray].sort((d1, d2) => new Date(d1.metadata.date).getTime() - new Date(d2.metadata.date).getTime())
-
-    let localDummyArrayLastElement = localDummyArray[localDummyArray.length - n]
-
+    let localDummyArrayLastElement = this.localDummyArray[this.localDummyArray.length - n]
     this.method = localDummyArrayLastElement.metadata.method
     this.date = localDummyArrayLastElement.metadata.date
     this.sum = localDummyArrayLastElement.bodyResult.skinfoldsSum
@@ -173,7 +174,7 @@ export class SkinfoldsChartComponent implements OnInit {
     this.bodyFatPercentage = localDummyArrayLastElement.bodyResult.bodyFatPercentage
 
     if (this.selectorBodyCompDate < this.dummyDataService.dummyArraySkinfolds.length) {
-      let localDummyArrayLastSecondElement = localDummyArray[localDummyArray.length - n - 1]
+      let localDummyArrayLastSecondElement = this.localDummyArray[this.localDummyArray.length - n - 1]
       let sumSecondlast = localDummyArrayLastSecondElement.bodyResult.skinfoldsSum
       let bodyDensitySecondlast = localDummyArrayLastSecondElement.bodyResult.bodyDensity
       let bodyFatPercentageSecondlast = localDummyArrayLastSecondElement.bodyResult.bodyFatPercentage
@@ -203,11 +204,14 @@ export class SkinfoldsChartComponent implements OnInit {
     }
   }
 
-
   @ViewChild(BaseChartDirective, { static: true }) chart: BaseChartDirective;
 
   ngOnInit(): void {
+
     if (this.dummyDataService.dummyArraySkinfolds.length == 0) { this.dummyDataService.createSkinfold() }
+    let localDummyArray = [...this.dummyDataService.dummyArraySkinfolds]
+    let localDummyArrayLoc = [...localDummyArray].sort((d1, d2) => new Date(d1.metadata.date).getTime() - new Date(d2.metadata.date).getTime())
+    this.localDummyArray = localDummyArrayLoc
     this.createSkinfoldsChart()
     this.createBodyCompositionTile(1)
   }

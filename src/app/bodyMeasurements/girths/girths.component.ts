@@ -1,6 +1,6 @@
 import { ConfirmGirthsComponent } from './confirmGirths';
 import { Component, OnInit } from '@angular/core';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { GirthsService } from 'src/app/Services/girths.service';
 
 
