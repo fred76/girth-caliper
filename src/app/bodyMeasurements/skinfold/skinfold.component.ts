@@ -83,7 +83,7 @@ export class SkinfoldComponent implements OnInit, OnDestroy {
           bodyFatPercentage: this.utility.numberDecimal(foldSkin.bodyFatPerc, 2),
           sum: this.utility.numberDecimal(foldSkin.sum, 2),
 
-          barChartData: this.chartService.barChartData(foldSkin.foldSkinValueArray, ''),
+          barChartData: this.chartService.barChartData(foldSkin.foldSkinValueArray),
           barChartLabels: this.chartService.barChartLabels(foldSkin.foldSkinTitleArray),
           barChartOptions: this.chartService.barChartOptions,
           barChartPlugins: this.chartService.barChartPlugins,
@@ -103,6 +103,7 @@ export class SkinfoldComponent implements OnInit, OnDestroy {
       dialogRef.afterClosed().subscribe(result => {
         if (result) {
           this.measurementDate = result
+          console.log(result)
           this.skinfoldsService.skinfoldsObjectForDB.metadata.date = result
           this.skinfoldsService.saveSkinfoldToDB()
         } else {

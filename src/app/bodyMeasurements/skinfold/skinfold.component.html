@@ -10,7 +10,7 @@
         </mat-option>
       </mat-select>
     </mat-form-field>
-
+    <div  fxLayout.xs="row"  >
     <mat-form-field class="field">
       <mat-label>Body weight (kg)</mat-label>
       <input required class="inputlabel" matInput type="number" [(ngModel)]=bodyWeight>
@@ -23,8 +23,7 @@
       <span matPrefix>&nbsp;</span>
     </mat-form-field>
   </div>
-
-
+  </div>
   <div class="contentCaliper" fxLayout="row wrap" fxLayoutGap="16px grid">
     <div fxFlex="25%" fxFlex.xs="100%" fxFlex.sm="33%" *ngFor="let gTile of skinfoldsTiles , let i = index">
       <mat-card class="mat-elevation-z8">

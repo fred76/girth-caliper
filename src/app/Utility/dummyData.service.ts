@@ -1,3 +1,4 @@
+import { FireDatabaseService } from './../Services/fire-database.service';
 import { SkinfoldsForDB as SkinfoldsForDB } from '../interface-model/skinfold.model';
 import { Girths } from './../interface-model/girths.model';
 import { Utility } from 'src/app/Utility/utility';
@@ -9,7 +10,7 @@ import { Injectable } from '@angular/core';
 
 export class DummyDataService {
 
-  constructor(private utility: Utility) { }
+  constructor(private utility: Utility, private fir: FireDatabaseService) { }
 
   getRandomInt(min, max) {
     min = Math.ceil(min);
@@ -22,14 +23,14 @@ export class DummyDataService {
 
     let g: Girths
 
-    for (let index = 0; index < 10; index++) {
+    for (let index = 0; index < 15; index++) {
       let weight = 78 + + this.getRandomInt(-3, 5)
       let neck = 38 + + this.getRandomInt(-3, 5)
       let chest = 100 + + this.getRandomInt(-3, 5)
       let bicep_R = 32 + + this.getRandomInt(-3, 5)
       let bicep_L = 32 + + this.getRandomInt(-3, 5)
-      let bicep_R_Relax = 28 + + this.getRandomInt(-3, 5)
-      let bicep_L_Relax = 28
+      let bicep_R_Relax = 28 + this.getRandomInt(-3, 5)
+      let bicep_L_Relax = 29 + this.getRandomInt(-3, 5)
       let forearm_R = 25 + + this.getRandomInt(-3, 5)
       let forearm_L = 25 + + this.getRandomInt(-3, 5)
       let wrist = 18 + + this.getRandomInt(-3, 5)
@@ -57,12 +58,12 @@ export class DummyDataService {
         calf_R: calf_R,
         calf_L: calf_L,
         weight: weight,
-        date: this.dateOfMeasurement(-index)
+        date: this.dateOfMeasurement(- index, - index)
 
       }
 
 
-      this.dummyArray.push(g)
+      this.fir.dummyGirthsToDB(g)
 
     }
   }
@@ -77,7 +78,7 @@ export class DummyDataService {
       let Suprailiac = 6 + this.getRandomInt(-3, 5)
       let Abdominal = 9 + this.getRandomInt(-3, 5)
       let Thigh = 12 + this.getRandomInt(-3, 5)
-      let date = this.dateOfMeasurement(-index)
+      let date = this.dateOfMeasurement(-index, 0)
       let weight = 90 + this.getRandomInt(-5, 5)
       let age = 44 - (index * 2)
       let sum = (Chest + Subscapular + Midaxillary + Triceps + Suprailiac + Abdominal + Thigh)
@@ -110,13 +111,14 @@ export class DummyDataService {
           skinfoldsSum: sum
         }
       }
-      this.dummyArraySkinfolds.push(skinfolds)
+      this.fir.addSkinfoldsToDB(skinfolds)
     }
   }
 
-  dateOfMeasurement(x) {
+  dateOfMeasurement(m, d) {
     let dateDummy = new Date()
-    dateDummy.setMonth(dateDummy.getMonth() + x)
+    dateDummy.setMonth(dateDummy.getMonth() + m)
+    dateDummy.setDate(dateDummy.getDate() + d)
     return dateDummy
   }
 

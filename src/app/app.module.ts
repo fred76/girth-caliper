@@ -1,3 +1,5 @@
+import { environment } from './../environments/environment';
+
 import { AppComponent } from './app.component';
 
 import { NgModule } from '@angular/core';
@@ -39,6 +41,9 @@ import { GirthsChartComponent } from './bodyMeasurements/charts/girths-chart/gir
 import { BodyChartComponent } from './bodyMeasurements/charts/body-chart/body-chart.component';
 import { LoadMoreSkinfoldComponent } from './bodyMeasurements/charts/skinfolds-chart/loadMoreSkinfold';
 
+
+import { AngularFireModule } from '@angular/fire';
+import { AngularFirestoreModule } from '@angular/fire/firestore';
 @NgModule({
   declarations: [
     AppComponent,
@@ -58,8 +63,7 @@ import { LoadMoreSkinfoldComponent } from './bodyMeasurements/charts/skinfolds-c
     SkinfoldsChartComponent,
     GirthsChartComponent,
     BodyChartComponent,
-    LoadMoreSkinfoldComponent,
-
+    LoadMoreSkinfoldComponent
 
   ],
 
@@ -71,7 +75,9 @@ import { LoadMoreSkinfoldComponent } from './bodyMeasurements/charts/skinfolds-c
     FlexLayoutModule,
     MaterialModule,
     ChartsModule,
-    NgxMatStepLazyLoadModule
+    NgxMatStepLazyLoadModule,
+    AngularFireModule.initializeApp(environment.firebase),
+    AngularFirestoreModule
   ],
 
   providers: [Utility],

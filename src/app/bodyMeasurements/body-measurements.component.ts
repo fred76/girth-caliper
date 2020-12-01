@@ -1,3 +1,4 @@
+import { FireDatabaseService } from './../Services/fire-database.service';
 
 import { Component, OnInit } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
@@ -25,7 +26,7 @@ export class BodyMeasurementsComponent implements OnInit {
 
   navLinks: any[]
   activeLink = 0
-  constructor(private router: Router) {
+  constructor(private router: Router, private fireDatabaseService: FireDatabaseService) {
 
     this.navLinks = [
       { label: 'Girths', link: './girthTab', index: 0 },
@@ -37,7 +38,6 @@ export class BodyMeasurementsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
     this.router.events.subscribe((res) => {
       this.activeLink = this.navLinks.indexOf(
         this.navLinks.find(tab => tab.link === '.' + this.router.url))

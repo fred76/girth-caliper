@@ -108,20 +108,22 @@
           </button>
         </div>
       </mat-card-subtitle>
-      <mat-card-content>
+      <mat-card-content *ngIf="!show">
         <div *ngIf="!toggleBodyCompChart">
           <canvas baseChart [data]="pieChartData" [chartType]="pieChartType" [labels]="pieChartLabels"
-            [options]="pieChartOptions" [plugins]="pieChartPlugins" [colors]="pieChartColors" [legend]="pieChartLegend">
+            [options]="pieChartOptions" [plugins]="pieChartPlugins" [colors]="pieChartColors" >
           </canvas></div>
         <div *ngIf="toggleBodyCompChart">
           <span fxFlex></span>
           <canvas baseChart [datasets]="barChartData" [chartType]="barChartType" [labels]="barChartLabels"
-            [options]="barChartOptions" [plugins]="barChartPlugins" [legend]="barChartLegend">
+            [options]="barChartOptions" [plugins]="barChartPlugins" >
           </canvas>
           <span fxFlex></span>
         </div>
       </mat-card-content>
     </mat-card>
+
+
     <!--  Button "Date Next" -->
 
     <span fxFlex></span>
@@ -168,14 +170,9 @@
     </div>
   </mat-card-title>
   <mat-card-content>
-    <div *ngIf="!isToggleSkinfoldChartList">
-    <canvas *ngIf="toggleSkinfoldBodyComp" baseChart [datasets]="lineChartData" [labels]="lineChartLabels"
-      [options]="lineChartOptions" [legend]="lineChartLegend" [chartType]="lineChartType"
-      (chartHover)="chartHovered($event)" (chartClick)="chartClicked($event)">
-    </canvas>
-    <canvas *ngIf="!toggleSkinfoldBodyComp" baseChart [datasets]="lineDualChartData" [labels]="lineDualChartLabels"
-      [options]="lineDualChartOptions" [legend]="lineDualChartLegend" [chartType]="lineDualChartType"
-      (chartHover)="chartHovered($event)" (chartClick)="chartClicked($event)">
+
+    <div [hidden]="isToggleSkinfoldChartList">
+    <canvas  id="canvas">{{ lineChartSkinfoldsBodyComposition }}
     </canvas>
   </div>
     <div *ngIf="toggleSkinfoldBodyComp">
@@ -245,6 +242,7 @@
         <ng-container matColumnDef="date">
           <mat-header-cell *matHeaderCellDef>Date</mat-header-cell>
           <mat-cell *matCellDef="let element">{{element.metadata.date | date:'d MMM yy'}}</mat-cell>
+          <!--  | date:'d MMM yy' -->
         </ng-container>
         <ng-container matColumnDef="weight">
           <mat-header-cell *matHeaderCellDef>Weight</mat-header-cell>

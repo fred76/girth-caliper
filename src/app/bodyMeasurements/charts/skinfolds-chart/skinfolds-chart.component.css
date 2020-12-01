@@ -10,6 +10,7 @@ mat-card-footer {
   height: 50%;
   aspect-ratio: 1 !important;
 }
+
 .button24 {
   width: 24px;
   height: 24px;
@@ -59,3 +60,8 @@ mat-button-toggle-group {
 .h5 {
   margin-bottom: 15px;
 }
+.small-chart{
+  width: 150;
+  height: 150;
+}
+

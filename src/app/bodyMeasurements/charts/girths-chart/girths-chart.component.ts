@@ -1,11 +1,12 @@
+import { FireDatabaseService } from './../../../Services/fire-database.service';
 import { ImportExportService } from './../../../Services/import-export.service';
 import { Girths } from './../../../interface-model/girths.model';
-import { Subject } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
 import { ChartService } from '../../../Services/chart.service';
 import { DummyDataService } from '../../../Utility/dummyData.service';
 
 import { MatTableDataSource } from '@angular/material/table';
-import { Component, Input, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, Input, OnInit, ViewChild, ViewEncapsulation, OnDestroy } from '@angular/core';
 import { BaseChartDirective } from 'ng2-charts';
 
 @Component({
@@ -30,16 +31,11 @@ import { BaseChartDirective } from 'ng2-charts';
       </div>
     </div>
   </mat-card-title>
-  <canvas *ngIf="!isToggleSkinfoldChartList" baseChart
-  [datasets]="lineChartData"
-  [labels]="lineChartLabels"
-  [options]="lineChartOptions"
-  [legend]="lineChartLegend"
-  [chartType]="lineChartType"
-  (chartHover)="chartHovered($event)"
-  (chartClick)="chartClicked($event)">
-  </canvas>
 
+  <div [hidden]="isToggleSkinfoldChartList">
+    <canvas  id="LineChartGirths">{{ lineChartGirths }}
+    </canvas>
+</div>
   <div *ngIf="isToggleSkinfoldChartList">
       <mat-table  [dataSource]="dataSource">
         <ng-container matColumnDef="Date">
@@ -114,7 +110,7 @@ import { BaseChartDirective } from 'ng2-charts';
         <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
       </mat-table>
     </div>
-</mat-card>  `,
+</mat-card>`,
 
   styles: [`
    .mat-elevation-z8 { margin: 10px; padding: 10px; }  .mat-elevation-z4 { margin: 10px; padding: 10px; }
@@ -123,30 +119,28 @@ import { BaseChartDirective } from 'ng2-charts';
   encapsulation: ViewEncapsulation.None
 })
 
-export class GirthsChartComponent implements OnInit {
+export class GirthsChartComponent implements OnInit, OnDestroy {
   showChart: boolean
   constructor(
-    private dummyDataService: DummyDataService,
+    private dum: DummyDataService,
     private chartsService: ChartService,
-    private importExportService: ImportExportService) { }
-
-  lineChartData: any[]
-  lineChartLabels: any[]
-  lineChartOptions: any
-  lineChartColors: any[]
-  lineChartLegend: boolean
-  lineChartType: any
+    private importExportService: ImportExportService,
+    private fireDatabaseService: FireDatabaseService) { }
 
   private toggleSkinfoldChartListEvent = new Subject<Event>();
   @Input() isToggleSkinfoldChartList: boolean = false
   dataSource = new MatTableDataSource<Girths>()
-
   displayedColumns = ["Date", "Body weight", "Neck", "Chest", "Bicep Rigth", "Bicep Left", "Bicep Relaxed Rigth", "Bicep Relaxed Left", "Forearm Rigth", "Forearm Left", "Wrist", "Waist", "Hips", "Thigt Rigth", "Thigt Left", "Calf Rigth", "Calf Left"]
 
   toggleSkinfoldChartListButton(event: Event) {
     this.toggleSkinfoldChartListEvent.next(event);
     this.isToggleSkinfoldChartList = !this.isToggleSkinfoldChartList
+
   }
+
+  @ViewChild(BaseChartDirective, { static: true }) chart: BaseChartDirective;
+  private exchangeSubscription: Subscription
+  lineChartGirths: any
 
   clickExportSkinfolds() {
     this.importExportService.flatGirthsForDB()
@@ -160,18 +154,24 @@ export class GirthsChartComponent implements OnInit {
     // console.log(event, active);
   }
 
-  @ViewChild(BaseChartDirective, { static: true }) chart: BaseChartDirective;
 
   ngOnInit(): void {
-    if (this.dummyDataService.dummyArray.length == 0) { this.dummyDataService.createGirth() }
-    let localDummyArray = [...this.dummyDataService.dummyArray]
-    let girthsCharLineData = this.chartsService.girthLineChartData(localDummyArray)
-    this.lineChartData = girthsCharLineData.arrayChartDataSet
-    this.lineChartLabels = this.chartsService.lineChartLabels
-    this.lineChartOptions = this.chartsService.lineChartOption("Girths ( mm )", "Body weight ( Kg )", girthsCharLineData.maxWeight)
-    this.lineChartLegend = this.chartsService.lineChartLegend
-    this.lineChartType = this.chartsService.lineChartType
-    this.dataSource.data = localDummyArray
+    this.dum.createGirth()
+    this.exchangeSubscription = this.fireDatabaseService.girthsSubj.subscribe((girths: Girths[]) => {
+      this.dataSource.data = girths
+      this.lineChartGirths = this.chartsService.lineChartGirths(girths)
+    })
+    this.fireDatabaseService.fetchAvailableGirths()
   }
+
+  ngOnDestroy(): void {
+    if (this.exchangeSubscription) {
+      this.exchangeSubscription.unsubscribe()
+    }
+  }
+
+
+
+
 }
 

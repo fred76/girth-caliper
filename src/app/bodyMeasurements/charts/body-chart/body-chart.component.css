@@ -1,0 +1,17 @@
+.mat-chip.mat-standard-chip {
+  background: transparent;
+  border: 1px solid #B7B8BB;
+  border-radius: 16px;
+  font-family: Roboto-Regular;
+  margin-right: 8px;
+  padding: 7px 16px;
+  text-align: center;
+  text-transform: lowercase;
+  outline: none;
+  font-size: 12px;
+  height: 24px;
+}
+
+.canvas-div{
+  margin-top: 16px;
+}

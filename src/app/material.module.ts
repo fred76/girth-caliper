@@ -18,7 +18,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatSortModule } from '@angular/material/sort';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatTooltipModule } from '@angular/material/tooltip';
-// import { MatChipsModule } from '@angular/material/chips';
+import { MatChipsModule } from '@angular/material/chips';
 // import { MatSelectModule } from '@angular/material/select';
 // import { MatChipsModule } from '@angular/material/chips';
 // import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -48,9 +48,9 @@ let p: any[] = [
   MatTableModule,
   MatSortModule,
   MatButtonToggleModule,
-  MatTooltipModule
+  MatTooltipModule,
   // MatSelectModule,
-  // MatChipsModule,
+  MatChipsModule,
   // MatChipsModule,
   // MatCheckboxModule,
   // MatSidenavModule,
