@@ -1,5 +1,3 @@
-import { FireDatabaseService } from './../Services/fire-database.service';
-
 import { Component, OnInit } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 
@@ -26,7 +24,7 @@ export class BodyMeasurementsComponent implements OnInit {
 
   navLinks: any[]
   activeLink = 0
-  constructor(private router: Router, private fireDatabaseService: FireDatabaseService) {
+  constructor(private router: Router ) {
 
     this.navLinks = [
       { label: 'Girths', link: './girthTab', index: 0 },

@@ -1,3 +1,4 @@
+import { SignupUserComponent } from './auth/signup-user/signup-user.component';
 import { BodyChartComponent } from './bodyMeasurements/charts/body-chart/body-chart.component';
 import { SkinfoldsChartComponent } from './bodyMeasurements/charts/skinfolds-chart/skinfolds-chart.component';
 import { ChartContainerComponent } from './bodyMeasurements/charts/chart-container.component';
@@ -10,8 +11,11 @@ import { BodyMeasurementsComponent } from './bodyMeasurements/body-measurements.
 import { WelcomeComponent } from './welcome/welcome.component';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import { LoginUserComponent } from './auth/login-user/login-user.component';
 
 const routes: Routes = [
+  { path: 'Login', component: LoginUserComponent },
+  { path: 'Signup', component: SignupUserComponent },
   { path: '', redirectTo: '/Body&Measurements', pathMatch: 'full' },
   {
     path: 'Body&Measurements', component: BodyMeasurementsComponent, children: [

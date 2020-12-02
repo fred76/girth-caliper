@@ -58,9 +58,7 @@ export class BodyChartComponent implements OnInit {
       case girth_skinfold.id == 5: a = this.data.armDataSet; max = this.data.maxCalf; break
 
     }
-
     this.chartsService.UpdateLineChartGirthsOverSkinfolds(this.lineChartGirthsOverSkinfolds, a, max)
-
   }
 }
 
