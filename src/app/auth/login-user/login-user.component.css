@@ -1,5 +1,85 @@
-.mainDiv{margin-top: 70px !important; }
+.mainDiv {
+  margin-top: 70px !important;
+}
 
-.login-box{
+.login-box {
   margin-top: 5%;
+}
+
+.login-button {
+  display: flex;
+  justify-content: flex-start;
+  padding: 4px;
+  font-size: 9px;
+  width: 220px;
+  color: whitesmoke;
+}
+
+.click {
+  cursor: pointer;
+  color: green;
+}
+
+.provider-icon {
+  margin-left: 16px;
+  width: 24px !important;
+  aspect-ratio: 1;
+}
+
+.span-text {
+  font-size: 12px !important;
+  padding-left: 16px;
+}
+
+.div-margin {
+  margin-top: 16px;
+}
+
+.font {
+  font-size: 10px;
+}
+
+.clear-icon{
+  font-size: 14px;
+}
+
+.login-btn{
+  height: 44px;
+  background-color: black;
+    color: #fff;
+}
+
+.tp-wrapper {
+  margin-top: 10%;
+  -webkit-perspective: 100%;
+  perspective: 100%;
+}
+
+.tp-box {
+  position: relative;
+  margin: 3rem auto;
+  -webkit-transform-style: preserve-3d;
+  transform-style: preserve-3d;
+  -webkit-transform: transform 1s;
+  -ms-transform: transform 1s;
+  transform: transform 1s;
+}
+.tp-box__side {
+  position: absolute;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+.tp-box__front {
+  -webkit-transform: rotateY(0deg);
+  -ms-transform: rotateY(0deg);
+  transform: rotateY(0deg);
+}
+.tp-box__back {
+  -webkit-transform: rotateY(-180deg);
+  -ms-transform: rotateY(-180deg);
+  transform: rotateY(-180deg);
 }

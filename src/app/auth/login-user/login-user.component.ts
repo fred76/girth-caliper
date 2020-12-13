@@ -1,24 +1,83 @@
+import { AuthService } from './../../Services/auth.service';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
+import { DomSanitizer } from "@angular/platform-browser";
+import { MatIconRegistry } from '@angular/material/icon';
+import { trigger, state, style, transition, animate } from '@angular/animations';
+
+
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login-user',
   templateUrl: './login-user.component.html',
-  styleUrls: ['./login-user.component.css']
+  styleUrls: ['./login-user.component.css'],
+  animations: [
+    trigger('flipState', [
+      state('active', style({
+        transform: 'rotateY(179deg)'
+      })),
+      state('inactive', style({
+        transform: 'rotateY(0)'
+      })),
+      transition('active => inactive', animate('500ms ease-out')),
+      transition('inactive => active', animate('500ms ease-in'))
+    ])
+  ]
 })
 export class LoginUserComponent implements OnInit {
 
-  constructor() { }
-
-  ngOnInit(): void {
+  constructor(
+    private router: Router,
+    public authService: AuthService,
+    private matIconRegistry: MatIconRegistry,
+    private domSanitizer: DomSanitizer) {
+    this.matIconRegistry.addSvgIcon(
+      "appleL",
+      this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/accessory/appleL.svg")
+    );
+    this.matIconRegistry.addSvgIcon(
+      "googleL",
+      this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/accessory/googleL.svg")
+    );
+    this.matIconRegistry.addSvgIcon(
+      "facebookL",
+      this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/accessory/facebookL.svg")
+    );
+    this.matIconRegistry.addSvgIcon(
+      "email",
+      this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/accessory/email.svg")
+    );
   }
-  email = new FormControl('', [Validators.required, Validators.email]);
+
+  flip: string = 'inactive';
+
+  toggleFlip() {
+    this.flip = (this.flip == 'inactive') ? 'active' : 'inactive';
+  }
+
+  isSignInWithEmail: boolean = false
+  isSignUpWithEmail: boolean = false
+
+  isSignInWithEmailAction() {
+    this.isSignInWithEmail = !this.isSignInWithEmail
+  }
+  isSignUpWithEmailAction() {
+    this.isSignUpWithEmail = !this.isSignUpWithEmail
+  }
+  url: string
+  ngOnInit() {
+    this.url = this.router.url;
+  }
+
+  emailF = new FormControl('', [Validators.required, Validators.email]);
   hide = true;
   getErrorMessage() {
-    if (this.email.hasError('required')) {
+    if (this.emailF.hasError('required')) {
       return 'You must enter a value';
     }
-
-    return this.email.hasError('email') ? 'Not a valid email' : '';
+    return this.emailF.hasError('email') ? 'Not a valid email' : '';
   }
+
+
 }

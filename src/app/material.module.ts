@@ -19,13 +19,14 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatChipsModule } from '@angular/material/chips';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatMenuModule } from '@angular/material/menu';
 // import { MatSelectModule } from '@angular/material/select';
 // import { MatChipsModule } from '@angular/material/chips';
 // import { MatCheckboxModule } from '@angular/material/checkbox';
 // import { MatSidenavModule } from '@angular/material/sidenav';
 // import { MatListModule } from '@angular/material/list';
 // import { MatCardModule } from '@angular/material/card';
-// import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 // import { MatPaginatorModule } from '@angular/material/paginator';
 // import { MatSnackBarModule } from '@angular/material/snack-bar';
 
@@ -49,14 +50,15 @@ let p: any[] = [
   MatSortModule,
   MatButtonToggleModule,
   MatTooltipModule,
-  // MatSelectModule,
+  MatProgressSpinnerModule,
   MatChipsModule,
+  MatMenuModule
+  // MatSelectModule,
   // MatChipsModule,
   // MatCheckboxModule,
   // MatSidenavModule,
   // MatListModule,
   // MatCardModule,
-  // MatProgressSpinnerModule,
   // MatTableModule,
   // MatSortModule,
   // MatPaginatorModule,

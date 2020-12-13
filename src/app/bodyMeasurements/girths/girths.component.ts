@@ -1,11 +1,8 @@
-import { FireDatabaseService } from './../../Services/fire-database.service';
 import { ConfirmGirthsComponent } from './confirmGirths';
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { GirthsService } from 'src/app/Services/girths.service';
 
-
-import { Observable } from 'rxjs';
 @Component({
   selector: 'app-girths',
   templateUrl: './girths.component.html',
@@ -20,9 +17,8 @@ export class GirthsComponent implements OnInit {
   listOfZeroGirths: string
   measurementDate: string
   isAllSet = false
-  ngOnInit(): void {
 
-
+  ngOnInit() {
   }
 
   save() {

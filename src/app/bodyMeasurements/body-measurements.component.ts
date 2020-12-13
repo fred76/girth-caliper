@@ -1,3 +1,4 @@
+import { AuthService } from './../Services/auth.service';
 import { Component, OnInit } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 
@@ -15,7 +16,22 @@ import { NavigationEnd, Router } from '@angular/router';
 {{link.label}}</a>
 </nav>
 <div class="router-content">
+<div *ngIf='authService.user$ | async; then authenticated else notAuthenticated'></div>
+<ng-template   #notAuthenticated>
+ <div fxLayoutAlign="center center" style="margin-top: 200px !important;">
+     <mat-card class="mat-elevation-z8 content"  >
+       <mat-card-content >
+         <mat-spinner >
+         </mat-spinner>
+       </mat-card-content>
+     </mat-card>
+ </div>
+
+   </ng-template>
+
+  <ng-template #authenticated>
   <router-outlet></router-outlet>
+  </ng-template>
 </div>
   `,
   styleUrls: ['./body-measurements.component.css']
@@ -24,7 +40,10 @@ export class BodyMeasurementsComponent implements OnInit {
 
   navLinks: any[]
   activeLink = 0
-  constructor(private router: Router ) {
+  constructor(
+    public authService: AuthService,
+    private router: Router
+  ) {
 
     this.navLinks = [
       { label: 'Girths', link: './girthTab', index: 0 },

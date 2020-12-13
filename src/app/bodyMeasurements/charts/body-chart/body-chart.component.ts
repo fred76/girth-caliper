@@ -1,11 +1,13 @@
 import { DummyDataService } from './../../../Utility/dummyData.service';
 import { ChartService } from './../../../Services/chart.service';
 import { Component, OnInit } from '@angular/core';
+
 @Component({
   selector: 'app-body-chart',
   templateUrl: './body-chart.component.html',
   styleUrls: ['./body-chart.component.css']
 })
+
 export class BodyChartComponent implements OnInit {
 
   constructor(
@@ -26,6 +28,7 @@ export class BodyChartComponent implements OnInit {
   }
   data: any
   ngOnInit() {
+
     this.selected_girth_skinfold_id = 1;
     let localDummyArray = [...this.dummyDataService.dummyArraySkinfolds]
     let localDummyArrayLoc = [...localDummyArray].sort((d1, d2) => new Date(d1.metadata.date).getTime() - new Date(d2.metadata.date).getTime())
@@ -49,7 +52,6 @@ export class BodyChartComponent implements OnInit {
     this.selected_girth_skinfold_id = girth_skinfold.id;
     let a = []
     let max: number
-    console.log("ssss")
     switch (true) {
       case girth_skinfold.id == 1: a = this.data.armDataSet, a = this.data.armDataSet; max = this.data.maxArm; break
       case girth_skinfold.id == 2: a = this.data.chestDataSet; max = this.data.maxChest; break

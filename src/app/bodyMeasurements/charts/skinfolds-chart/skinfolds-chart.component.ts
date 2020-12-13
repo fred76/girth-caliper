@@ -1,10 +1,10 @@
+import { DummyDataService } from './../../../Utility/dummyData.service';
 import { FireDatabaseService } from './../../../Services/fire-database.service';
 import { ChartService } from './../../../Services/chart.service';
 import { LoadMoreSkinfoldComponent } from './loadMoreSkinfold';
 import { MatDialog } from '@angular/material/dialog';
 import { ImportExportService } from './../../../Services/import-export.service';
 import { Subject, Subscription } from 'rxjs';
-import { DummyDataService } from '../../../Utility/dummyData.service';
 import { MatTableDataSource } from '@angular/material/table';
 import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { SkinfoldsForDB } from 'src/app/interface-model/skinfold.model';
@@ -18,6 +18,7 @@ export class SkinfoldsChartComponent implements OnInit, OnDestroy {
 
   showChart: boolean
   constructor(
+    private dummyDataService: DummyDataService,
     private chartsService: ChartService,
     private importExportService: ImportExportService,
     public dialog: MatDialog,
@@ -197,6 +198,7 @@ export class SkinfoldsChartComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    this.fireDatabaseService.userUnsubscripiton()
     if (this.exchangeSubscription) {
       this.exchangeSubscription.unsubscribe()
     }

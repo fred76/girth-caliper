@@ -1,6 +1,5 @@
 import { FireDatabaseService } from './fire-database.service';
 import { Utility } from 'src/app/Utility/utility';
-import { DummyDataService } from './../Utility/dummyData.service';
 import { Girths } from './../interface-model/girths.model';
 
 import { GirthTile } from '../interface-model/girths.model';
@@ -12,7 +11,7 @@ import { Injectable } from '@angular/core';
 })
 export class GirthsService {
 
-  constructor(private dummy: DummyDataService, private utility: Utility, private fireDatabaseService: FireDatabaseService) { }
+  constructor(private utility: Utility, private fireDatabaseService: FireDatabaseService) { }
 
   girthTiles: GirthTile[] = [
     { shortName: "weight", title: "Body weight", value: null },
@@ -65,6 +64,5 @@ export class GirthsService {
     })
     girthsObject.date = date
     this.fireDatabaseService.addGirthsToDB({ ...girthsObject })
-    this.dummy.dummyArray.push(girthsObject)
   }
 }

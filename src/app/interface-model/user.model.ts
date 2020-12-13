@@ -1,4 +1,11 @@
 export interface User {
+  uid: string
   email: string;
-  userId: string;
+  displayName?: string;
+  photoURL: string
+}
+
+export interface userExtended extends User {
+  gender: string
+  dateOfBirth: Date
 }

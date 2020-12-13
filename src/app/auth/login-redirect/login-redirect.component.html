@@ -1,0 +1,32 @@
+<div class="mainDiv">
+<div class="margin10" fxLayoutAlign="center">
+  <mat-card>
+    <button mat-icon-button routerLink="">
+      <mat-icon class="clear-icon">home</mat-icon>
+    </button>
+    <div fxLayout.xs="column" fxLayout.gt-xs="row" fxLayoutGap="16px">
+      <div fxLayoutAlign="center" fxLayout="column" fxLayoutGap="2px">
+        <mat-icon class="provider-icon" svgIcon="facebookL"></mat-icon>
+        <p class="mat-subheading-1 div-margin">In order to grant facebook</p>
+        <p class="mat-subheading-1">credential use a previous</p>
+        <p class="mat-subheading-1">login method</p>
+      </div>
+      <mat-divider fxShow.gt-xs [vertical]="true"></mat-divider>
+      <mat-card-content>
+        <div *ngFor="let login of authService.arraOfLogin" >
+          <button *ngIf="login == 'google.com'" class="login-button" mat-stroked-button
+            (click)="authService.redirectWithGoogle()">
+            <mat-icon class="provider-icon" svgIcon="googleL"></mat-icon>
+            <span class="span-text">Sign in with Google</span>
+          </button>
+          <button *ngIf="login == 'apple.com'" class="login-button" mat-stroked-button
+            (click)="authService.redirectWithApple()">
+            <mat-icon class="provider-icon" svgIcon="appleL"></mat-icon>
+            <span class="span-text">Sign in with Apple</span>
+          </button>
+        </div>
+      </mat-card-content>
+    </div>
+  </mat-card>
+</div>
+</div>

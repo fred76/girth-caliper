@@ -1,0 +1,38 @@
+.mainDiv {
+  margin-top: 70px !important;
+}
+
+.margin10{
+  margin-top: 10%;
+}
+
+.login-button {
+  margin-top: 16px;
+  display: flex;
+  justify-content: flex-start;
+  padding: 4px;
+  font-size: 9px;
+  width: 220px;
+  color: whitesmoke;
+}
+
+.provider-icon {
+  margin-left: 16px;
+  width: 24px !important;
+  aspect-ratio: 1;
+}
+
+.clear-icon{
+  font-size: 14px;
+}
+
+.span-text {
+  font-size: 12px !important;
+  padding-left: 16px;
+}
+.smallText {
+  font-size: 8px !important;
+}
+.div-margin {
+  margin-top: 16px;
+}

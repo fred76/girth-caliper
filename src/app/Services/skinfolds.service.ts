@@ -1,6 +1,4 @@
 import { FireDatabaseService } from './fire-database.service';
-
-import { DummyDataService } from '../Utility/dummyData.service';
 import { SkinfoldsForDB } from '../interface-model/skinfold.model';
 import { Utility } from 'src/app/Utility/utility';
 import { SkinfoldsTile } from '../interface-model/skinfold.model';
@@ -12,7 +10,7 @@ import { Subject, Subscription } from 'rxjs';
 })
 export class SkinfoldsService {
 
-  constructor(private utility: Utility, private dummy: DummyDataService, private db: FireDatabaseService) { }
+  constructor(private utility: Utility, private db: FireDatabaseService) { }
 
   selectedSkinfoldsMethod = new Subject<string>()
 
@@ -244,7 +242,6 @@ export class SkinfoldsService {
 
     this.db.addSkinfoldsToDB({ ...this.skinfoldsObjectForDB })
 
-    this.dummy.dummyArraySkinfolds.push(this.skinfoldsObjectForDB)
   }
 
 

@@ -8,6 +8,12 @@
   background-color: #fd7525;
 }
 
+.login-btn{
+  height: 44px;
+  background-color: black;
+    color: #fff;
+}
+
 
 .nav-caption {
   position: -webkit-sticky;
@@ -27,9 +33,86 @@ a {
 .logo {
   width: 100%;
 }
+.logo-small {
+  width: 50%;
+}
+.login-button {
+  border-radius: 50px !important;
+  display: flex;
+  justify-content: flex-start;
+  padding: 2px;
+  font-size: 9px;
+  width: 220px;
+}
+.provider-icon {
+  fill:  #c2185b;
+  margin-left: 8px;
+  width: 20px !important;
+  aspect-ratio: 1;
+}
+
+.span-text {
+  color:  #c2185b;;
+  font-size: 12px !important;
+  padding-left: 8px;
+}
 
 a:hover,
 a:active {
   color: lightgrey;
 }
 
+.circular-square {
+  width: 50%;
+  border-radius: 50%;
+}
+.circular-square-small {
+  width: 80%;
+  border-radius: 50%;
+}
+.div-margin{
+  margin-left: 8px;
+  margin-right: 8px;
+}
+
+.button24 {
+  background-color: rgb(0, 0, 0, 0.0);
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+}
+.icon24 {
+color:  #c2185b;;
+  font-size: 16px;
+  margin-top: -8px;
+}
+
+
+.font {
+  font-size: 12px;
+  color: whitesmoke;
+}
+
+.mat-icons {
+  color: whitesmoke;
+}
+
+.click{
+  cursor: pointer;
+  color: green;
+}
+
+.menuDiv{
+  padding: 16px;
+  width: 180px;
+}
+.menuDivLessPad{
+  padding-left: 8px;
+  padding-right: 8px;
+  margin-top: 0px;
+  width: 180px;
+}
+
+.mat-divider {
+   width: 90%;
+}

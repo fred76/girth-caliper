@@ -165,6 +165,7 @@ export class GirthsChartComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    this.fireDatabaseService.userUnsubscripiton()
     if (this.exchangeSubscription) {
       this.exchangeSubscription.unsubscribe()
     }

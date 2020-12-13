@@ -1,5 +1,3 @@
-import { element } from 'protractor';
-
 import { SkinfoldsForDB } from '../interface-model/skinfold.model';
 import { Girths } from './../interface-model/girths.model';
 import { Utility } from './../Utility/utility';

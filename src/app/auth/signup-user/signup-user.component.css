@@ -3,3 +3,31 @@
 .login-box{
   margin-top: 5%;
 }
+
+
+.fs-Logo {
+  width: 150px;
+  height: 150px;
+  fill:red;
+}
+
+.mat-icon {
+  fill:red;
+}
+.div-margin {
+  margin-top: 16px;
+}
+
+.font {
+  font-size: 10px;
+}
+
+.clear-icon{
+  font-size: 14px;
+}
+
+.login-btn{
+  height: 44px;
+  background-color: black;
+    color: #fff;
+}

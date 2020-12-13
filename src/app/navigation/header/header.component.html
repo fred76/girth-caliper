@@ -1,19 +1,75 @@
-<mat-toolbar  color="primary">
+<mat-toolbar color="primary">
   <div>
-    <button mat-icon-button (click)="onToggleSidenav()">
-      <img class="logo" src="/assets/logo.png" alt="image">
-      <span class="nav-caption"  fxHide.xs>Girths & Caliper</span>
-    </button>
+    <ng-container *ngIf="authService.user$ | async; else elseTemplate">
+      <button mat-icon-button *ngIf="authService.user$ | async" routerLink="/Body&Measurements/girthTab">
+        <img class="logo" src="/assets/logo.png" alt="image">
+        <span class="nav-caption" fxHide.xs>Girths & Caliper</span>
+      </button>
+    </ng-container>
+    <ng-template #elseTemplate>
+      <button mat-icon-button *ngIf="authService.user$ | async" routerLink="/">
+        <img class="logo" src="/assets/logo.png" alt="image">
+        <span class="nav-caption" fxHide.xs>Girths & Caliper</span>
+      </button>
+    </ng-template>
   </div>
   <span class="flexExpand"></span>
   <div fxFlex="grow" fxLayour fxLayoutAlign="flex-end">
-    <ul fxLayout fxLayoutGap="10px" class="navigation-items">
-      <li><a routerLink="/Signup">Signup</a></li>
-      <li><a routerLink="/Login">Login</a></li>
-      <li> <a mat-list-item routerLink="/training">
-          <mat-icon>account_circle</mat-icon>
-          <span class="nav-caption"></span>
-        </a></li>
-    </ul>
+    <div *ngIf="authService.user$ | async as user; else login">
+      <ng-template #elseTemplate>
+      </ng-template>
+      <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+        <img  *ngIf="isUserPhoto"  class="circular-square-small" src="{{user.photoURL}}">
+        <mat-icon *ngIf="!isUserPhoto" >account_circle</mat-icon>
+      </button>
+      <mat-menu #menu="matMenu">
+        <div fxLayoutAlign="center center" fxLayout="column" fxLayoutGap="4px">
+          <img class="circular-square" src="{{user.photoURL}}">
+
+          <p class="div-margin caption font">{{user.displayName}}</p>
+          <p class="div-margin caption font">{{user.email}}</p>
+          <div class="menuDivLessPad" fxLayout="row" fxLayoutAlign="start">
+            <button class="login-button" mat-button routerLink="/UserDashboard">
+              <mat-icon class="provider-icon" svgIcon="logo"></mat-icon>
+              <span class="span-text">Manage your account</span>
+            </button>
+          </div>
+          <mat-divider></mat-divider>
+          <div class="menuDivLessPad" fxLayout="row" fxLayoutAlign="space-between">
+            <p class=" caption font">Date of birth</p>
+            <p class=" caption font">11 feb 1976</p>
+          </div>
+          <div class="menuDivLessPad" fxLayout="row" fxLayoutAlign="space-between">
+            <p class=" caption font">Gender</p>
+            <p class=" caption font">Male</p>
+          </div>
+          <mat-divider></mat-divider>
+          <p class=" caption font">Template CSV</p>
+          <div class="menuDivLessPad" fxLayout="row" fxLayoutAlign="space-between">
+            <p class=" caption font">Girths</p>
+            <button class="mat-elevation-z0 button24" mat-mini-fab aria-label="Example icon button with a menu icon">
+              <mat-icon class="icon24">get_app</mat-icon>
+            </button>
+          </div>
+          <div class="menuDivLessPad" fxLayout="row" fxLayoutAlign="space-between">
+            <p class=" caption font">Skinfolds</p>
+            <button class="mat-elevation-z0 button24" mat-mini-fab color="primary"
+              aria-label="Example icon button with a menu icon">
+              <mat-icon class="icon24">get_app</mat-icon>
+            </button>
+          </div>
+          <mat-divider></mat-divider>
+          <div class="menuDivLessPad" fxLayout="row" fxLayoutAlign="space-between">
+            <p class=" caption font">Subscription end</p>
+            <p class="caption font">11 feb 2020</p>
+          </div>
+          <mat-divider></mat-divider>
+          <a class="div-margin caption font click" (click)="authService.signOut()">Sign out</a>
+        </div>
+      </mat-menu>
+    </div>
+    <ng-template #login>
+      <button class="login-btn" mat-flat-button routerLink="/Login">Get Started</button>
+    </ng-template>
   </div>
 </mat-toolbar>

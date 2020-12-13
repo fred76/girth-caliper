@@ -1,5 +1,4 @@
 import { ChartService } from '../../Services/chart.service';
-
 import { SkinfoldsChartsCardComponent } from './SkinfoldsChartsCard';
 import { ConfirmSkinfoldComponent } from './confirmSkinfolds';
 import { SkinfoldsService } from '../../Services/skinfolds.service';
@@ -103,11 +102,8 @@ export class SkinfoldComponent implements OnInit, OnDestroy {
       dialogRef.afterClosed().subscribe(result => {
         if (result) {
           this.measurementDate = result
-          console.log(result)
           this.skinfoldsService.skinfoldsObjectForDB.metadata.date = result
           this.skinfoldsService.saveSkinfoldToDB()
-        } else {
-          console.log("Non Passa")
         }
       })
     }

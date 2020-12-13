@@ -1,53 +1,66 @@
 <div class="mainDiv" fxLayoutAlign="center">
-  <mat-card class="mat-elevation-z8 login-box" xFlex.gt-xs="30%" xFlex.xs="80%">
 
-    <div fxLayout.xs="column" fxLayout.gt-xs="row" fxLayoutGap="16px">
+  <div *ngIf='authService.user$ | async; then userLogged else userNotLogged'></div>
 
-      <div fxLayoutAlign="center " fxLayout="column">
-        <p class="mat-title">Girths & Caliper</p>
-        <p class="mat-subheading-1">Your body recomposition journey</p>
-        <p class="mat-subheading-1">start here </p>
+  <ng-template #userNotLogged>
+
+    <mat-card *ngIf="!emailUser">
+      <button mat-icon-button routerLink="">
+        <mat-icon class="clear-icon">clear</mat-icon>
+      </button>
+      <div fxLayout="row" fxLayoutGap="16px">
+        <div fxLayoutAlign="center center" fxLayout="column" fxLayoutGap="0px">
+          <p *ngIf="!authService.errorMessage" class="mat-title">Confirm your email</p>
+
+          <p *ngIf="!authService.errorMessage" class="mat-subheading-1  div-margin">to login</p>
+          <p *ngIf="authService.errorMessage" class="mat-title">{{authService.errorMessage}}</p>
+          <div class="div-margin"></div>
+          <div class="div-margin"></div>
+
+          <mat-card-content>
+            <div fxLayoutAlign="center " class="div-margin caption font">Enter email</div>
+            <mat-form-field appearance="legacy">
+
+              <input matInput [(formControl)]="email" required>
+              <mat-error *ngIf="email.invalid">{{getErrorMessage()}}</mat-error>
+            </mat-form-field>
+          </mat-card-content>
+          <div class="div-margin"></div>
+          <button class="login-btn" mat-flat-button [disabled]="authService.emailSent"
+            (click)="emailCheck(email.value)">Continue</button>
+        </div>
       </div>
+      <div class="div-margin" fxLayoutAlign="center center" fxLayout="column">
+        <div class="div-margin"></div>
+        <!-- <a class="mat-subheading-1 click" (click)="isSignInWithEmailAction()">
+        < All sign in options</a> -->
+      </div>
+    </mat-card>
+    <mat-card *ngIf="emailUser">
+      <mat-spinner>
+      </mat-spinner>
+    </mat-card>
+  </ng-template>
 
-      <mat-divider fxShow.gt-xs [vertical]="true"></mat-divider>
-      <mat-card-content fxLayout="column" fxLayoutGap="4px">
-
-        <mat-form-field appearance="outline">
-          <mat-label class="mat-caption">Name</mat-label>
-          <input matInput placeholder="Placeholder">
-        </mat-form-field>
-
-        <mat-form-field appearance="outline">
-          <mat-label class="mat-caption">Family Name</mat-label>
-          <input matInput placeholder="Placeholder">
-        </mat-form-field>
-
-        <mat-form-field appearance="outline">
-          <mat-label class="mat-caption">E-mail</mat-label>
-          <input matInput placeholder="Placeholder">
-          <mat-icon matSuffix>email</mat-icon>
-        </mat-form-field>
-
-        <mat-form-field appearance="outline">
-          <mat-label class="mat-caption">Enter password</mat-label>
-          <input matInput [type]="hide ? 'password' : 'text'">
-          <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'"
-            [attr.aria-pressed]="hide">
-            <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
-          </button>
-        </mat-form-field>
-        <mat-form-field appearance="outline">
-          <mat-label class="mat-caption">Confirm password</mat-label>
-          <input matInput [type]="hide ? 'password' : 'text'">
-          <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'"
-            [attr.aria-pressed]="hide">
-            <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
-          </button>
-        </mat-form-field>
-
-        <button mat-raised-button color="primary">Login</button>
-
-      </mat-card-content>
+  <ng-template #userLogged>
+    <div class="mainDiv">
+      <mat-card>
+        <div fxLayout="row" fxLayoutGap="16px">
+          <mat-card-content>
+            <div fxLayoutAlign="center center" fxLayout="column" fxLayoutGap="0px">
+              <p class="mat-title">Yeah!!!</p>
+              <p class="mat-subheading-1">You are already logged in</p>
+              <div class="div-margin"></div>
+              <div class="div-margin"></div>
+              <div class="div-margin"></div>
+              <button class="login-btn" mat-flat-button routerLink="/Body&Measurements/girthTab">Continue</button>
+            </div>
+          </mat-card-content>
+        </div>
+        <div class="div-margin" fxLayoutAlign="center center" fxLayout="column">
+        </div>
+      </mat-card>
     </div>
-  </mat-card>
+  </ng-template>
+
 </div>
