@@ -1,7 +1,7 @@
 import { ConfirmGirthsComponent } from './confirmGirths';
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { GirthsService } from 'src/app/Services/girths.service';
+import { GirthsService } from 'src/app/bodyMeasurements/girths.service';
 
 @Component({
   selector: 'app-girths',
@@ -19,6 +19,8 @@ export class GirthsComponent implements OnInit {
   isAllSet = false
 
   ngOnInit() {
+    console.log("GirthsComponent ngOnInit");
+
   }
 
   save() {

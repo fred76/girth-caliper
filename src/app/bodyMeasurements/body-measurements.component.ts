@@ -1,4 +1,4 @@
-import { AuthService } from './../Services/auth.service';
+import { AuthService } from '../auth/auth.service';
 import { Component, OnInit } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 
@@ -55,6 +55,7 @@ export class BodyMeasurementsComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    console.log("BodyMeasurementsComponent");
     this.router.events.subscribe((res) => {
       this.activeLink = this.navLinks.indexOf(
         this.navLinks.find(tab => tab.link === '.' + this.router.url))

@@ -9,6 +9,8 @@ export class WelcomeComponent implements OnInit {
 
   constructor() { }
 
+  wel: string = "EEEEEEEE WelcomeComponent"
+
   ngOnInit(): void {
   }
 

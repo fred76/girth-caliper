@@ -1,3 +1,5 @@
+import { SkinfoldsService } from './skinfolds.service';
+import { GirthsService } from './girths.service';
 import { BodyMeasurementRoutesModule } from './body-measurement-routes.module';
 import { SharedModule } from './../Shared/shared.module';
 import { NgxMatStepLazyLoadModule } from 'ngx-mat-step-lazy-load';
@@ -9,7 +11,7 @@ import { ConfirmGirthsComponent } from './girths/confirmGirths';
 import { GirthsComponent } from './girths/girths.component';
 import { BodyMeasurementsComponent } from './body-measurements.component';
 import { NgModule } from '@angular/core';
-import { BodyMeasurementsChartsModule } from './body-measurements-charts.module';
+import { BodyMeasurementsChartsModule } from './charts/body-measurements-charts.module';
 
 @NgModule({
   declarations: [
@@ -26,6 +28,7 @@ import { BodyMeasurementsChartsModule } from './body-measurements-charts.module'
     BodyMeasurementsChartsModule,
     BodyMeasurementRoutesModule
   ],
-  exports: []
+  exports: [],
+  providers: [GirthsService, SkinfoldsService]
 })
 export class BodyMeasuremntsModule { }

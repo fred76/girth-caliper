@@ -1,6 +1,8 @@
-import { SkinfoldsForDB } from '../interface-model/skinfold.model';
-import { Girths } from './../interface-model/girths.model';
-import { Utility } from './../Utility/utility';
+import { Girths } from './../../interface-model/girths.model';
+import { FireDatabaseService } from 'src/app/Services/fire-database.service';
+import { Subscription, BehaviorSubject, Observable, Subject } from 'rxjs';
+import { SkinfoldsForDB } from '../../interface-model/skinfold.model';
+import { Utility } from '../../Utility/utility';
 import { Injectable } from '@angular/core';
 
 import { ChartDataSets, ChartOptions, ChartType, ChartPluginsOptions, Chart, ChartData } from 'chart.js';
@@ -9,13 +11,12 @@ import * as pluginDataLabels from 'chartjs-plugin-datalabels';
 import { Options } from 'chartjs-plugin-datalabels/types/options';
 import 'chartjs-plugin-colorschemes';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 
 export class ChartService {
 
-  constructor(private utility: Utility) { }
+  constructor(private utility: Utility) {
+  }
 
   girthLineChartData(arraOfGirths: Girths[]) {
 
@@ -363,11 +364,16 @@ export class ChartService {
     chart.update();
   }
 
-
-
   UpdateLineChartSkinfolds(chart, data, maxSkinfold, maxWeight, maxBodyDensity) {
     chart.data.datasets = data
     chart.options = this.dualChartOption("Weight, Lean mass, Fat maas ( Kg )", "Body density ( g/cc )", "Skinfolds sum ( mm )", true, maxSkinfold + 10, maxWeight, maxBodyDensity)
+    chart.update();
+  }
+
+  UpdateLineChartSkinfoldsBack(chart, data: ChartDataSets[], labels: string[], maxSkinfold: number, maxWeight: number ) {
+    chart.data.datasets = data
+    chart.data.labels =  labels
+    chart.options = this.lineChartOption("Skinfold ( mm )", "Body weight ( Kg )", maxSkinfold, maxWeight)
     chart.update();
   }
 

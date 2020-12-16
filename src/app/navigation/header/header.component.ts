@@ -1,6 +1,6 @@
 import { Subscription } from 'rxjs';
 import { User } from './../../interface-model/user.model';
-import { AuthService } from './../../Services/auth.service';
+import { AuthService } from '../../auth/auth.service';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { DomSanitizer } from "@angular/platform-browser";
 import { MatIconRegistry } from '@angular/material/icon';
@@ -26,7 +26,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
     this.authSubscription = this.authService.user$.subscribe(user => {
       this.user = user
-      if (user) {
+      if (user.photoURL) {
         this.isUserPhoto = true
       } else {
         this.isUserPhoto = false

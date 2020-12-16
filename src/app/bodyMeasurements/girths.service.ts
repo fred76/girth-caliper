@@ -1,14 +1,12 @@
-import { FireDatabaseService } from './fire-database.service';
+import { FireDatabaseService } from '../Services/fire-database.service';
 import { Utility } from 'src/app/Utility/utility';
-import { Girths } from './../interface-model/girths.model';
+import { Girths } from '../interface-model/girths.model';
 
 import { GirthTile } from '../interface-model/girths.model';
 
 import { Injectable } from '@angular/core';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class GirthsService {
 
   constructor(private utility: Utility, private fireDatabaseService: FireDatabaseService) { }

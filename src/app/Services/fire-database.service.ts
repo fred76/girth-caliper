@@ -1,7 +1,9 @@
+import { logging } from 'protractor';
+import { DummyDataService } from './../Utility/dummyData.service';
 import { User } from './../interface-model/user.model';
 import { AngularFireAuth } from '@angular/fire/auth';
-import { AuthService } from './auth.service';
-import { Subject, of, Subscription } from 'rxjs';
+import { AuthService } from '../auth/auth.service';
+import { Subject, of, Subscription, BehaviorSubject } from 'rxjs';
 import { Girths } from './../interface-model/girths.model';
 import { SkinfoldsForDB } from './../interface-model/skinfold.model';
 import { Injectable } from '@angular/core';
@@ -13,22 +15,19 @@ import { AngularFirestore } from '@angular/fire/firestore';
   providedIn: 'root'
 })
 export class FireDatabaseService {
-  user: User
-  constructor(private db: AngularFirestore, private authService: AuthService,
-    private afAuth: AngularFireAuth) {
+  constructor(private dum: DummyDataService,
+    private db: AngularFirestore,
+    private authService: AuthService) {
+    console.log("FireDatabaseService Constr")
     this.userSubscripiton = this.authService.user$.subscribe(user => {
       this.user = user
     })
   }
-
-  girthsSubj = new Subject<Girths[]>();
+  user: User
+  girthsSubj = new BehaviorSubject<Girths[]>([]);
   skinfoldsSubj = new Subject<SkinfoldsForDB[]>()
-
   userSubscripiton: Subscription
 
-  userUnsubscripiton() {
-    this.userSubscripiton.unsubscribe()
-  }
 
   addSkinfoldsToDB(skinfolds: SkinfoldsForDB) {
     this.db.collection(`users/${this.user.uid}/skinfoldsData`).add(skinfolds)
@@ -38,17 +37,11 @@ export class FireDatabaseService {
     this.db.collection(`users/${this.user.uid}/girthsData`).add(girths)
   }
 
-  dummyGirthsToDB(girths: Girths) {
-    //  this.db.collection(`user/${this.authService.userID}/girthsData`).add(girths)
-  }
-
-  dummySkinfoldsToDB(skinfolds: SkinfoldsForDB) {
-    //this.db.collection(`user/${this.authService.userID}/skinfoldsData`).add(skinfolds)
-  }
+  private fbSubs: Subscription[] = []
 
   fetchAvailableGirths() {
-    let girthsCollectionRef = this.db.collection<Girths>(`users/${this.user.uid}/girthsData`, ref => ref.orderBy("date", "desc").limit(10))
-    girthsCollectionRef.valueChanges()
+    this.fbSubs.push(this.db.collection<Girths>(`users/${this.user.uid}/girthsData`, ref => ref.orderBy("date", "desc").limit(10))
+      .valueChanges()
       .pipe(
         map((girths, ref) => girths.map(girth => {
           return <Girths>{
@@ -58,13 +51,16 @@ export class FireDatabaseService {
         }))
       ).subscribe((girths: Girths[]) => {
         this.girthsSubj.next(girths)
+        console.log("EMESSO")
       }, error => {
-      })
+        console.log("EMESSO IN CAZZO");
+
+      }))
   }
 
   fetchAvailableSkinfolds() {
-    let skinfoldsCollectionRef = this.db.collection<SkinfoldsForDB>(`users/${this.user.uid}/skinfoldsData`, ref => ref.orderBy("metadata.date", "asc").limit(10))//
-    skinfoldsCollectionRef.valueChanges()
+    this.fbSubs.push(this.db.collection<SkinfoldsForDB>(`users/${this.user.uid}/skinfoldsData`, ref => ref.orderBy("metadata.date", "asc").limit(10))//
+      .valueChanges()
       .pipe(
         map((skinfolds, ref) => skinfolds.map(skinfold => {
           skinfold.metadata.date = new Date(skinfold.metadata.date.seconds * 1000)
@@ -76,7 +72,44 @@ export class FireDatabaseService {
         this.skinfoldsSubj.next(skinfolds)
       }, error => {
         console.log(error)
-      })
+      }))
+  }
+
+  cancelSubscription() {
+    this.fbSubs.forEach(sub => sub.unsubscribe())
+  }
+
+  populateGirths() {
+    this.db.firestore
+      .collection('users')
+      .doc(`${this.user.uid}`)
+      .collection('girthsData')
+      .limit(1)
+      .get()
+      .then(query => {
+        if (query.size < 1) {
+          for (let index = 0; index < 15; index++) {
+            this.addGirthsToDB(this.dum.createGirth(index))
+
+          }
+        }
+      });
+  }
+
+  populateSkinfolds() {
+    this.db.firestore
+      .collection('users')
+      .doc(`${this.user.uid}`)
+      .collection('skinfoldsData')
+      .limit(1)
+      .get()
+      .then(query => {
+        if (query.size < 1) {
+          for (let index = 0; index < 15; index++) {
+            this.addSkinfoldsToDB(this.dum.createSkinfold(index))
+          }
+        }
+      });
   }
 
 }

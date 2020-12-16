@@ -1,4 +1,4 @@
-import { AuthService } from './../../Services/auth.service';
+import { AuthService } from '../auth.service';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -26,7 +26,7 @@ export class SignupUserComponent implements OnInit {
     if (this.emailUser !== null) {
       console.log("emailCheck()")
       const url = this.router.url
-      this.authService.confirmEmailFromURL(url)
+      this.authService.confirmEmailFromURLToSignup(url)
       window.localStorage.removeItem('emailForSignIn');
     }
 

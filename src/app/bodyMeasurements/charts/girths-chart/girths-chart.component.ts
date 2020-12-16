@@ -2,12 +2,12 @@ import { FireDatabaseService } from './../../../Services/fire-database.service';
 import { ImportExportService } from './../../../Services/import-export.service';
 import { Girths } from './../../../interface-model/girths.model';
 import { Subject, Subscription } from 'rxjs';
-import { ChartService } from '../../../Services/chart.service';
-import { DummyDataService } from '../../../Utility/dummyData.service';
+import { ChartService } from '../chart.service';
 
 import { MatTableDataSource } from '@angular/material/table';
 import { Component, Input, OnInit, ViewChild, ViewEncapsulation, OnDestroy } from '@angular/core';
 import { BaseChartDirective } from 'ng2-charts';
+import { ChartContainerComponent } from '../chart-container.component';
 
 @Component({
   selector: 'app-girths-chart',
@@ -122,15 +122,17 @@ import { BaseChartDirective } from 'ng2-charts';
 export class GirthsChartComponent implements OnInit, OnDestroy {
   showChart: boolean
   constructor(
-    private dum: DummyDataService,
     private chartsService: ChartService,
     private importExportService: ImportExportService,
-    private fireDatabaseService: FireDatabaseService) { }
+    private chartContainerComponent: ChartContainerComponent) {
+    console.log("GirthsChartComponent constructor");
+  }
 
   private toggleSkinfoldChartListEvent = new Subject<Event>();
   @Input() isToggleSkinfoldChartList: boolean = false
   dataSource = new MatTableDataSource<Girths>()
   displayedColumns = ["Date", "Body weight", "Neck", "Chest", "Bicep Rigth", "Bicep Left", "Bicep Relaxed Rigth", "Bicep Relaxed Left", "Forearm Rigth", "Forearm Left", "Wrist", "Waist", "Hips", "Thigt Rigth", "Thigt Left", "Calf Rigth", "Calf Left"]
+  girths: Girths[]
 
   toggleSkinfoldChartListButton(event: Event) {
     this.toggleSkinfoldChartListEvent.next(event);
@@ -143,7 +145,7 @@ export class GirthsChartComponent implements OnInit, OnDestroy {
   lineChartGirths: any
 
   clickExportSkinfolds() {
-    this.importExportService.flatGirthsForDB()
+    this.importExportService.flatGirthsForDB(this.girths)
   }
   // events
   public chartClicked({ event, active }: { event: MouseEvent, active: {}[] }): void {
@@ -154,25 +156,18 @@ export class GirthsChartComponent implements OnInit, OnDestroy {
     // console.log(event, active);
   }
 
-
   ngOnInit(): void {
-    this.dum.createGirth()
-    this.exchangeSubscription = this.fireDatabaseService.girthsSubj.subscribe((girths: Girths[]) => {
-      this.dataSource.data = girths
-      this.lineChartGirths = this.chartsService.lineChartGirths(girths)
+    this.exchangeSubscription = this.chartContainerComponent.girthsSubj.subscribe((g: Girths[]) => {
+      this.girths = g
+      this.dataSource.data = g
+      this.lineChartGirths = this.chartsService.lineChartGirths(g)
     })
-    this.fireDatabaseService.fetchAvailableGirths()
   }
 
   ngOnDestroy(): void {
-    this.fireDatabaseService.userUnsubscripiton()
-    if (this.exchangeSubscription) {
-      this.exchangeSubscription.unsubscribe()
-    }
+    this.exchangeSubscription.unsubscribe()
+
   }
-
-
-
 
 }
 

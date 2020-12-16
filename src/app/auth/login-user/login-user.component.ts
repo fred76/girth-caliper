@@ -1,4 +1,4 @@
-import { AuthService } from './../../Services/auth.service';
+import { AuthService } from '../auth.service';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { DomSanitizer } from "@angular/platform-browser";
@@ -50,20 +50,12 @@ export class LoginUserComponent implements OnInit {
     );
   }
 
-  flip: string = 'inactive';
 
-  toggleFlip() {
-    this.flip = (this.flip == 'inactive') ? 'active' : 'inactive';
-  }
 
   isSignInWithEmail: boolean = false
-  isSignUpWithEmail: boolean = false
 
   isSignInWithEmailAction() {
     this.isSignInWithEmail = !this.isSignInWithEmail
-  }
-  isSignUpWithEmailAction() {
-    this.isSignUpWithEmail = !this.isSignUpWithEmail
   }
   url: string
   ngOnInit() {
@@ -78,6 +70,4 @@ export class LoginUserComponent implements OnInit {
     }
     return this.emailF.hasError('email') ? 'Not a valid email' : '';
   }
-
-
 }

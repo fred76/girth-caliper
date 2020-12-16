@@ -1,3 +1,5 @@
+import { Girths } from './../interface-model/girths.model';
+import { SkinfoldsForDB } from './../interface-model/skinfold.model';
 import { DummyDataService } from './../Utility/dummyData.service';
 import { Injectable } from '@angular/core';
 
@@ -25,20 +27,16 @@ export class ImportExportService {
     FileSaver.saveAs(data, fileName + '_export_' + new Date().getTime() + EXCEL_EXTENSION);
   }
 
-  flatSkinfoldsForDB() {
+  flatSkinfoldsForDB(s : SkinfoldsForDB[]) {
     let i = this.dummyDataService.dummyArraySkinfolds
-
-    let localSkinfoldObject = [...i].sort((d1, d2) => new Date(d1.metadata.date).getTime() - new Date(d2.metadata.date).getTime())
-    let e: any[] = []
-    localSkinfoldObject.map((element) => {
+ let e: any[] = []
+    s.map((element) => {
       let o = { ...element.metadata, ...element.fold, ...element.bodyResult }
       e.push(o)
     });
     this.exportAsExcelFile(e, 'SkinFolds')
   }
-  flatGirthsForDB() {
-    let i = this.dummyDataService.dummyArray
-
-    this.exportAsExcelFile(i, 'Girths')
+  flatGirthsForDB(g: Girths[]) {
+    this.exportAsExcelFile(g, 'Girths')
   }
 }

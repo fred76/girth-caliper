@@ -11,30 +11,30 @@
   <a class="mat-subheading-1 click" (click)="authService.signOut()">
     Sign out</a>
   <div  class="tp-wrapper">
-    <div class="tp-box" fxLayoutAlign="center" [@flipState]="flip">
+    <div class="tp-box" fxLayoutAlign="center" >
       <!-- SIGN IN CARD -->
-      <mat-card *ngIf="!isSignInWithEmail" class="tp-box__side tp-box__front">
+      <mat-card *ngIf="!isSignInWithEmail" >
         <button mat-icon-button routerLink="">
-          <mat-icon class="clear-icon">home</mat-icon>
+          <mat-icon class="clear-icon">clear</mat-icon>
         </button>
         <div fxLayout.xs="column" fxLayout.gt-xs="row" fxLayoutGap="16px">
           <div fxLayoutAlign="center " fxLayout="column" fxLayoutGap="0px">
-            <p class="mat-title">Welcome back.</p>
-            <p class="mat-subheading-1  div-margin">Continue to monitoring</p>
+            <p class="mat-title">Join Girth & Caliper.</p>
+            <p class="mat-subheading-1  div-margin">Start to monitoring</p>
             <p class="mat-subheading-1">your body recomposition</p>
           </div>
           <mat-divider fxShow.gt-xs [vertical]="true"></mat-divider>
           <mat-card-content>
             <div fxLayout="column" fxLayoutGap="16px">
-              <button class="login-button" mat-stroked-button (click)="authService.googleSignin()">
+              <button class="login-button" mat-stroked-button (click)="authService.googleSignup()">
                 <mat-icon class="provider-icon" svgIcon="googleL"></mat-icon>
                 <span class="span-text">Sign in with Google</span>
               </button>
-              <button class="login-button" mat-stroked-button (click)="authService.facebookSignin()">
+              <button class="login-button" mat-stroked-button (click)="authService.facebookSignup()">
                 <mat-icon class="provider-icon" svgIcon="facebookL"></mat-icon>
                 <span class="span-text">Sign in with Facebook</span>
               </button>
-              <button class="login-button" mat-stroked-button (click)="authService.appleSignin()">
+              <button class="login-button" mat-stroked-button (click)="authService.appleSignup()">
                 <mat-icon class="provider-icon" svgIcon="appleL"></mat-icon>
                 <span class="span-text">Sign in with Apple</span>
               </button>
@@ -45,11 +45,8 @@
             </div>
           </mat-card-content>
         </div>
-        <div class="div-margin" fxLayoutAlign="center center" fxLayout="column">
-          <p class="mat-subheading-1">Already have an account?
-            <a class="mat-subheading-1 click" (click)="toggleFlip()">Sign in.</a>
-          </p>
-        </div>
+        <div class="div-margin"></div>
+        <div class="div-margin"></div>
         <div class="div-margin"></div>
         <div class="div-margin" fxLayoutAlign="center center" fxLayout="column" fxLayoutGap="0px">
           <p class="caption font">Click “Sign In” to agree to Girths & Caliper’s Terms of Service</p>
@@ -81,91 +78,13 @@
             </mat-card-content>
             <div class="div-margin"></div>
             <button class="login-btn" mat-flat-button [disabled]="authService.emailSent"
-              (click)="authService.sendEmailLink(emailF.value)">Continuep</button>
+              (click)="authService.sendEmailLinkToSignup(emailF.value)">Continue</button>
           </div>
         </div>
         <div class="div-margin" fxLayoutAlign="center center" fxLayout="column">
           <div class="div-margin"></div>
           <a class="mat-subheading-1 click" (click)="isSignInWithEmailAction()">
             < All sign in options</a>
-        </div>
-      </mat-card>
-      <!-- SIGN UP CARD -->
-      <mat-card *ngIf="!isSignUpWithEmail" class="tp-box__side tp-box__back">
-        <button mat-icon-button routerLink="">
-          <mat-icon class="clear-icon">clear</mat-icon>
-        </button>
-        <div fxLayout.xs="column" fxLayout.gt-xs="row" fxLayoutGap="16px">
-          <div fxLayoutAlign="center " fxLayout="column" fxLayoutGap="0px">
-            <p class="mat-title">Join Girth & Caliper.</p>
-            <p class="mat-subheading-1  div-margin">Start to monitoring</p>
-            <p class="mat-subheading-1">your body recomposition</p>
-          </div>
-          <mat-divider fxShow.gt-xs [vertical]="true"></mat-divider>
-          <mat-card-content>
-            <div fxLayout="column" fxLayoutGap="16px">
-              <button class="login-button" mat-stroked-button (click)="authService.googleSignin()">
-                <mat-icon class="provider-icon" svgIcon="googleL"></mat-icon>
-                <span class="span-text">Sign in with Google</span>
-              </button>
-              <button class="login-button" mat-stroked-button (click)="authService.facebookSignin()">
-                <mat-icon class="provider-icon" svgIcon="facebookL"></mat-icon>
-                <span class="span-text">Sign in with Facebook</span>
-              </button>
-              <button class="login-button" mat-stroked-button (click)="authService.appleSignin()">
-                <mat-icon class="provider-icon" svgIcon="appleL"></mat-icon>
-                <span class="span-text">Sign in with Apple</span>
-              </button>
-              <button class="login-button" mat-stroked-button (click)="isSignUpWithEmailAction()">
-                <mat-icon class="provider-icon" svgIcon="email"></mat-icon>
-                <span class="span-text">Sign in with email</span>
-              </button>
-            </div>
-          </mat-card-content>
-        </div>
-        <div class="div-margin" fxLayoutAlign="center center" fxLayout="column">
-          <p class="mat-subheading-1">No account?
-            <a class="mat-subheading-1 click" (click)="toggleFlip()">Create one.</a>
-          </p>
-        </div>
-        <div class="div-margin"></div>
-        <div class="div-margin" fxLayoutAlign="center center" fxLayout="column" fxLayoutGap="0px">
-          <p class="caption font">Click “Sign In” to agree to Medium’s Terms of Service</p>
-          <p class="caption font">and acknowledge that Medium’s Privacy Policy applies</p>
-          <p class="caption font">to you.</p>
-        </div>
-      </mat-card>
-      <!-- EMAIL SIGN IN -->
-      <mat-card *ngIf="isSignUpWithEmail" class="tp-box__side tp-box__back">
-        <button mat-icon-button routerLink="">
-          <mat-icon class="clear-icon">clear</mat-icon>
-        </button>
-        <div fxLayout="row" fxLayoutGap="16px">
-          <div fxLayoutAlign="center center" fxLayout="column" fxLayoutGap="0px">
-            <p class="mat-title">Sign up with email</p>
-            <p class="mat-subheading-1  div-margin">Enter your email address to create an</p>
-            <p class="mat-subheading-1">account.</p>
-            <div class="div-margin"></div>
-            <div class="div-margin"></div>
-
-            <mat-card-content>
-              <div fxLayoutAlign="center " class="div-margin caption font">Your email</div>
-              <mat-form-field appearance="legacy">
-
-                <input type="email" class="input" [(ngModel)]="authService.email">
-                <input matInput [(formControl)]="authService.email" required>
-                <mat-error *ngIf="emailF.invalid">{{getErrorMessage()}}</mat-error>
-              </mat-form-field>
-            </mat-card-content>
-            <div class="div-margin"></div>
-            <button class="login-btn" mat-flat-button (click)="authService.se()">Continue</button>
-          </div>
-        </div>
-        <div class="div-margin" fxLayoutAlign="center center" fxLayout="column">
-          <div class="div-margin"></div>
-          <a class="mat-subheading-1 click" (click)="isSignUpWithEmailAction()">
-            < All sign in options</a>
-
         </div>
       </mat-card>
     </div>

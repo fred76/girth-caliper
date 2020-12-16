@@ -9,7 +9,6 @@ import { map, take, tap } from 'rxjs/Operators';
 })
 export class AuthGuard implements CanActivate, CanActivateChild {
 
-
   constructor(private authService: AuthService, private router: Router) { }
 
   canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
@@ -40,6 +39,5 @@ export class AuthGuard implements CanActivate, CanActivateChild {
       })
     )
   }
-
 
 }

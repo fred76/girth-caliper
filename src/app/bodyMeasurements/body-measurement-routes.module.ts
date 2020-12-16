@@ -5,7 +5,7 @@ import { ChartContainerComponent } from './charts/chart-container.component';
 import { HistoryComponent } from './history/history.component';
 import { GirthsComponent } from './girths/girths.component';
 import { SkinfoldComponent } from './skinfold/skinfold.component';
-import { AuthGuard } from './../Services/auth.guard';
+import { AuthGuard } from '../auth/auth.guard';
 import { BodyMeasurementsComponent } from './body-measurements.component';
 import { Routes, RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';

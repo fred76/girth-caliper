@@ -1,6 +1,12 @@
+import { Girths } from './../../../interface-model/girths.model';
+import { concatAll, concatMap, take } from 'rxjs/Operators';
+import { SkinfoldsForDB } from './../../../interface-model/skinfold.model';
+import { Subscription, concat } from 'rxjs';
+import { ChartContainerComponent } from './../chart-container.component';
 import { DummyDataService } from './../../../Utility/dummyData.service';
-import { ChartService } from './../../../Services/chart.service';
+import { ChartService } from '../chart.service';
 import { Component, OnInit } from '@angular/core';
+import { Console } from 'console';
 
 @Component({
   selector: 'app-body-chart',
@@ -12,7 +18,8 @@ export class BodyChartComponent implements OnInit {
 
   constructor(
     private dummyDataService: DummyDataService,
-    private chartsService: ChartService) { }
+    private chartsService: ChartService,
+    private chartContainerComponent: ChartContainerComponent) { }
 
   lineChartGirthsOverSkinfolds: any
   localDummyArray = []
@@ -26,17 +33,31 @@ export class BodyChartComponent implements OnInit {
   public chartHovered({ event, active }: { event: MouseEvent, active: {}[] }): void {
     // console.log(event, active);
   }
+
   data: any
+
+  private exchangeSubscriptionGirth: Subscription
+  private exchangeSubscriptionSkinfold: Subscription
+
+  girths: Girths[]
+  skinfolds: SkinfoldsForDB[]
+
   ngOnInit() {
+    this.exchangeSubscriptionGirth = this.chartContainerComponent.girthsSubj.subscribe((g: Girths[]) => {
+      this.girths = g
+    })
 
+    this.exchangeSubscriptionSkinfold = this.chartContainerComponent.skinfoldsSubj.subscribe((s: SkinfoldsForDB[]) => {
+      this.skinfolds = s
+    })
     this.selected_girth_skinfold_id = 1;
-    let localDummyArray = [...this.dummyDataService.dummyArraySkinfolds]
-    let localDummyArrayLoc = [...localDummyArray].sort((d1, d2) => new Date(d1.metadata.date).getTime() - new Date(d2.metadata.date).getTime())
-    this.localDummyArray = localDummyArrayLoc
-    this.localDummyArrayGirths = [...this.dummyDataService.dummyArray]
-    this.data = this.chartsService.compareGirthsSkinfolds(this.localDummyArray, this.localDummyArrayGirths)
+    this.data = this.chartsService.compareGirthsSkinfolds(this.skinfolds, this.girths)
     this.lineChartGirthsOverSkinfolds = this.chartsService.lineChartGirthsOverSkinfolds(this.data.armDataSet, this.data.avarageDateArray, this.data.maxArm)
+  }
 
+  ngOnDestroy(): void {
+    this.exchangeSubscriptionGirth.unsubscribe()
+    this.exchangeSubscriptionSkinfold.unsubscribe()
   }
   girth_skinfold: any[] = [
     { name: 'Arm - girth & skinfold', id: 1 },

@@ -1,5 +1,5 @@
 import { LoginRedirectComponent } from './login-redirect/login-redirect.component';
-import { AuthGuard } from './../Services/auth.guard';
+import { AuthGuard } from './auth.guard';
 import { UserDashboardComponent } from './../auth/user-dashboard/user-dashboard.component';
 import { SignupUserComponent } from './../auth/signup-user/signup-user.component';
 import { LoginUserComponent } from './../auth/login-user/login-user.component';

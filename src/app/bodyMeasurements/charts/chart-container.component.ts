@@ -1,5 +1,9 @@
-
-import { Component, OnInit } from '@angular/core';
+import { SkinfoldsForDB } from './../../interface-model/skinfold.model';
+import { FireDatabaseService } from 'src/app/Services/fire-database.service';
+import { BehaviorSubject, Subscription } from 'rxjs';
+import { Girths } from './../../interface-model/girths.model';
+import { ChartService } from './chart.service';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 
 @Component({
   selector: 'app-chart-container',
@@ -21,11 +25,34 @@ import { Component, OnInit } from '@angular/core';
  `,
   styleUrls: ['./chart-container.component.css']
 })
-export class ChartContainerComponent implements OnInit {
+export class ChartContainerComponent implements OnInit, OnDestroy {
 
-  constructor() { }
 
-  ngOnInit() {
+  constructor(private fireDatabaseService: FireDatabaseService) {
+    console.log("ChartContainerComponent Constr")
   }
 
+  girthsSubj = new BehaviorSubject<Girths[]>([]);
+  skinfoldsSubj = new BehaviorSubject<SkinfoldsForDB[]>([]);
+
+  private exchangeSubscription: Subscription
+  ngOnInit() {
+    this.exchangeSubscription = (this.fireDatabaseService.girthsSubj.subscribe((girths: Girths[]) => {
+      this.girthsSubj.next(girths)
+    }))
+    this.fireDatabaseService.fetchAvailableGirths()
+    this.exchangeSubscription = this.fireDatabaseService.skinfoldsSubj.subscribe((skinFolds: SkinfoldsForDB[]) => {
+      this.skinfoldsSubj.next(skinFolds)
+    })
+    this.fireDatabaseService.fetchAvailableSkinfolds()
+
+  }
+  unsub() {
+    this.fireDatabaseService.cancelSubscription()
+    this.exchangeSubscription.unsubscribe()
+    // this.exchangeSubscription.forEach(sub => sub.unsubscribe())
+  }
+  ngOnDestroy(): void {
+    this.unsub()
+  }
 }

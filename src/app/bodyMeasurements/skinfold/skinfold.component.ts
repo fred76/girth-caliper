@@ -1,7 +1,8 @@
-import { ChartService } from '../../Services/chart.service';
+
+import { ChartService } from '../charts/chart.service';
 import { SkinfoldsChartsCardComponent } from './SkinfoldsChartsCard';
 import { ConfirmSkinfoldComponent } from './confirmSkinfolds';
-import { SkinfoldsService } from '../../Services/skinfolds.service';
+import { SkinfoldsService } from '../skinfolds.service';
 import { Component, OnDestroy, OnInit, Output } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog'
 
@@ -29,6 +30,7 @@ export class SkinfoldComponent implements OnInit, OnDestroy {
   userAge: number = 44
 
   ngOnInit(): void {
+    console.log("SkinfoldComponent");
     this.skinfoldsService.selectedSkinfoldsMethodSubs()
   }
 

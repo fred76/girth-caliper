@@ -1,3 +1,4 @@
+import { logging } from 'protractor';
 import { Injectable } from '@angular/core';
 
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
@@ -6,11 +7,11 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { Router } from '@angular/router';
 
 import { Observable, of, Subject } from 'rxjs';
-import { switchMap } from 'rxjs/Operators';
+import { switchMap, map } from 'rxjs/Operators';
 
 import firebase from 'firebase/app'
 
-import { User } from './../interface-model/user.model';
+import { User } from '../interface-model/user.model';
 
 
 
@@ -40,7 +41,9 @@ export class AuthService {
     )
   }
 
-  async googleSignin() {
+  async googleSignkup() {
+    console.log("this.userPhoto m mm " + this.userPhoto);
+    this.userPhoto = ""
     const provider = new firebase.auth.GoogleAuthProvider()
     const credential = await this.afAuth.signInWithPopup(provider)
     this.router.navigate(['Body&Measurements/girthTab'])
@@ -52,14 +55,29 @@ export class AuthService {
   email: string
   emailSent = false;
   errorMessage: string;
+  userPhoto: string
 
-  async facebookSignin() {
+  actionCodeSettings = {
+    url: 'http://localhost:4200/Signup/',
+    handleCodeInApp: true,
+  };
+
+  async facebookSignup() {
     let r: number = 0
     try {
       const provider = new firebase.auth.FacebookAuthProvider()
       const credential = await this.afAuth.signInWithPopup(provider)
+      const providerData = credential.user.providerData
+      let uid: string = ""
+      for (var i = 0; i < providerData.length; i++) {
+        if (providerData[i].providerId === firebase.auth.FacebookAuthProvider.PROVIDER_ID) {
+          console.log(providerData[i].uid + "providerData[i].uid")
+          uid = providerData[i].uid
+        }
+      }
+      const accessToken = (<any>credential).credential.accessToken
+      this.userPhoto = "https://graph.facebook.com/" + uid + "/picture?width=800&access_token=" + accessToken
       this.router.navigate(['Body&Measurements/girthTab'])
-      console.log("PIPPO 1")
       return this.updateUserData(credential.user)
     } catch (err) {
       (await firebase.auth().fetchSignInMethodsForEmail(err.email)).map(async methods => {
@@ -70,7 +88,7 @@ export class AuthService {
     }
   }
 
-  async appleSignin() {
+  async appleSignup() {
     const provider = new firebase.auth.OAuthProvider('apple.com')
     const credential = await this.afAuth.signInWithPopup(provider)
     this.router.navigate(['Body&Measurements/girthTab'])
@@ -81,7 +99,6 @@ export class AuthService {
     const provider = new firebase.auth.GoogleAuthProvider()
     const credential = await this.afAuth.signInWithPopup(provider)
     credential.user.linkWithCredential(this.cred)
-    window.localStorage.removeItem('errorCred');
     this.router.navigate(['Body&Measurements/girthTab'])
     return this.updateUserData(credential.user)
   }
@@ -90,17 +107,13 @@ export class AuthService {
     const provider = new firebase.auth.OAuthProvider('apple.com')
     const credential = await this.afAuth.signInWithPopup(provider)
     credential.user.linkWithCredential(this.cred)
-    window.localStorage.removeItem('errorCred');
     this.router.navigate(['Body&Measurements/girthTab'])
     return this.updateUserData(credential.user)
   }
 
-  actionCodeSettings = {
-    url: 'http://localhost:4200/Signup/',
-    handleCodeInApp: true,
-  };
 
-  async sendEmailLink(emailUser: string) {
+
+  async sendEmailLinkToSignup(emailUser: string) {
     this.email = emailUser
     const actionCodeSettings = {
       url: 'http://localhost:4200/Signup/',
@@ -118,7 +131,7 @@ export class AuthService {
     }
   }
 
-  async confirmEmailFromURL(url) {
+  async confirmEmailFromURLToSignup(url) {
     let email = window.localStorage.getItem('emailForSignIn')
     try {
       if (this.afAuth.isSignInWithEmailLink(url)) {
@@ -157,6 +170,11 @@ export class AuthService {
       email: user.email,
       displayName: user.displayName,
       photoURL: user.photoURL
+    }
+    if (this.userPhoto) {
+      console.log("this.userPhoto" + this.userPhoto);
+
+      data.photoURL = this.userPhoto
     }
     return userRef.set(data, { merge: true })
   }

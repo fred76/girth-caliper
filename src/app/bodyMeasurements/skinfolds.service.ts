@@ -1,13 +1,11 @@
-import { FireDatabaseService } from './fire-database.service';
+import { FireDatabaseService } from '../Services/fire-database.service';
 import { SkinfoldsForDB } from '../interface-model/skinfold.model';
 import { Utility } from 'src/app/Utility/utility';
 import { SkinfoldsTile } from '../interface-model/skinfold.model';
 import { Injectable } from '@angular/core';
 import { Subject, Subscription } from 'rxjs';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class SkinfoldsService {
 
   constructor(private utility: Utility, private db: FireDatabaseService) { }
