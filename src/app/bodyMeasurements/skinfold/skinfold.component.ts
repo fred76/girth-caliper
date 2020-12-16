@@ -30,7 +30,6 @@ export class SkinfoldComponent implements OnInit, OnDestroy {
   userAge: number = 44
 
   ngOnInit(): void {
-    console.log("SkinfoldComponent");
     this.skinfoldsService.selectedSkinfoldsMethodSubs()
   }
 

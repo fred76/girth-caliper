@@ -22,9 +22,7 @@ export class SignupUserComponent implements OnInit {
 
 
   ngOnInit(): void {
-    console.log("emailCheck() f " + this.emailUser)
     if (this.emailUser !== null) {
-      console.log("emailCheck()")
       const url = this.router.url
       this.authService.confirmEmailFromURLToSignup(url)
       window.localStorage.removeItem('emailForSignIn');

@@ -30,11 +30,9 @@ export class AuthService {
     this.user$ = this.afAuth.authState.pipe(
       switchMap(user => {
         if (user) {
-          console.log("USER LOGGED")
           const userChanges = this.afs.doc<User>(`users/${user.uid}`).valueChanges()
           return userChanges
         } else {
-          console.log("USER NOT LOGGED")
           return of(null)
         }
       })
@@ -42,7 +40,6 @@ export class AuthService {
   }
 
   async googleSignkup() {
-    console.log("this.userPhoto m mm " + this.userPhoto);
     this.userPhoto = ""
     const provider = new firebase.auth.GoogleAuthProvider()
     const credential = await this.afAuth.signInWithPopup(provider)
@@ -71,7 +68,6 @@ export class AuthService {
       let uid: string = ""
       for (var i = 0; i < providerData.length; i++) {
         if (providerData[i].providerId === firebase.auth.FacebookAuthProvider.PROVIDER_ID) {
-          console.log(providerData[i].uid + "providerData[i].uid")
           uid = providerData[i].uid
         }
       }
@@ -172,8 +168,6 @@ export class AuthService {
       photoURL: user.photoURL
     }
     if (this.userPhoto) {
-      console.log("this.userPhoto" + this.userPhoto);
-
       data.photoURL = this.userPhoto
     }
     return userRef.set(data, { merge: true })

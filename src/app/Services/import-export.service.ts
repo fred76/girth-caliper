@@ -27,9 +27,9 @@ export class ImportExportService {
     FileSaver.saveAs(data, fileName + '_export_' + new Date().getTime() + EXCEL_EXTENSION);
   }
 
-  flatSkinfoldsForDB(s : SkinfoldsForDB[]) {
+  flatSkinfoldsForDB(s: SkinfoldsForDB[]) {
     let i = this.dummyDataService.dummyArraySkinfolds
- let e: any[] = []
+    let e: any[] = []
     s.map((element) => {
       let o = { ...element.metadata, ...element.fold, ...element.bodyResult }
       e.push(o)

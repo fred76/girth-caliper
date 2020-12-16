@@ -18,7 +18,6 @@ export class AuthGuard implements CanActivate, CanActivateChild {
       map(user => !!user), // <-- map to boolean
       tap(loggedIn => {
         if (!loggedIn) {
-          console.log('access denied')
           this.router.navigate(['/Login']);
         }
       })
@@ -33,7 +32,6 @@ export class AuthGuard implements CanActivate, CanActivateChild {
       map(user => !!user), // <-- map to boolean
       tap(loggedIn => {
         if (!loggedIn) {
-          console.log('access denied')
           this.router.navigate(['/Login']);
         }
       })

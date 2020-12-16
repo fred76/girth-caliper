@@ -18,10 +18,7 @@ export class GirthsComponent implements OnInit {
   measurementDate: string
   isAllSet = false
 
-  ngOnInit() {
-    console.log("GirthsComponent ngOnInit");
-
-  }
+  ngOnInit() { }
 
   save() {
     const zeroMeasure = []

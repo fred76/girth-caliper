@@ -25,20 +25,20 @@ export class SkinfoldsChartComponent implements OnInit, OnDestroy {
     private chartContainerComponent: ChartContainerComponent) { }
 
 
-    private toggleBoyCompChartEvent = new Subject<Event>();
-    private nextBodyCompDateEvent = new Subject<Event>();
-    private previousBodyCompDateEvent = new Subject<Event>();
-    private toggleSkinfoldChartListEvent = new Subject<Event>();
-    private toggleSkinfoldBodyCompeEvent = new Subject<Event>();
+  private toggleBoyCompChartEvent = new Subject<Event>();
+  private nextBodyCompDateEvent = new Subject<Event>();
+  private previousBodyCompDateEvent = new Subject<Event>();
+  private toggleSkinfoldChartListEvent = new Subject<Event>();
+  private toggleSkinfoldBodyCompeEvent = new Subject<Event>();
 
-    @Input() toggleBodyCompChart: boolean = true
-    @Input() selectorBodyCompDate: number = 1
-    @Input() isShowNextBodyCompButton: boolean = false
-    @Input() isToggleSkinfoldChartList: boolean = false
-    @Input() toggleSkinfoldBodyComp: boolean = true;
+  @Input() toggleBodyCompChart: boolean = true
+  @Input() selectorBodyCompDate: number = 1
+  @Input() isShowNextBodyCompButton: boolean = false
+  @Input() isToggleSkinfoldChartList: boolean = false
+  @Input() toggleSkinfoldBodyComp: boolean = true;
 
-    displayedColumns = ["method", "age", "date", "weight", "Chest", "Subscapular", "Midaxillary", "Triceps", "Bicep", "Suprailiac", "Abdominal", "Thigh"]
-    displayedColumnsBody = ["method", "age", "date", "weight", "Skinfolds sum", "Body Density", "Fat Percentage", "Lean Mass", "Fat Mass"]
+  displayedColumns = ["method", "age", "date", "weight", "Chest", "Subscapular", "Midaxillary", "Triceps", "Bicep", "Suprailiac", "Abdominal", "Thigh"]
+  displayedColumnsBody = ["method", "age", "date", "weight", "Skinfolds sum", "Body Density", "Fat Percentage", "Lean Mass", "Fat Mass"]
 
   showChart: boolean
   show: boolean = true
@@ -92,7 +92,6 @@ export class SkinfoldsChartComponent implements OnInit, OnDestroy {
   toggleSkinfoldBodyCompButton(event: Event) {
     this.toggleSkinfoldBodyCompeEvent.next(event)
     this.toggleSkinfoldBodyComp = !this.toggleSkinfoldBodyComp
-    console.log("this.toggleSkinfoldBodyComp =  " + this.toggleSkinfoldBodyComp)
     let lineChart = this.chartsService.skinfoldLineChartData(this.SkinfoldsArray)
     if (!this.toggleSkinfoldBodyComp) {
       this.chartsService.UpdateLineChartSkinfolds(this.lineChartSkinfoldsBodyComposition, lineChart.bodyCompostitionDataSet, lineChart.maxSkinfold + 10, lineChart.maxWeight, lineChart.maxBodyDensity)

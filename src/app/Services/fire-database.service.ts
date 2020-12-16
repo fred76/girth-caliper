@@ -18,7 +18,6 @@ export class FireDatabaseService {
   constructor(private dum: DummyDataService,
     private db: AngularFirestore,
     private authService: AuthService) {
-    console.log("FireDatabaseService Constr")
     this.userSubscripiton = this.authService.user$.subscribe(user => {
       this.user = user
     })
@@ -51,10 +50,7 @@ export class FireDatabaseService {
         }))
       ).subscribe((girths: Girths[]) => {
         this.girthsSubj.next(girths)
-        console.log("EMESSO")
       }, error => {
-        console.log("EMESSO IN CAZZO");
-
       }))
   }
 
@@ -71,7 +67,6 @@ export class FireDatabaseService {
       ).subscribe((skinfolds: SkinfoldsForDB[]) => {
         this.skinfoldsSubj.next(skinfolds)
       }, error => {
-        console.log(error)
       }))
   }
 

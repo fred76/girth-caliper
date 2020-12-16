@@ -28,9 +28,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 export class ChartContainerComponent implements OnInit, OnDestroy {
 
 
-  constructor(private fireDatabaseService: FireDatabaseService) {
-    console.log("ChartContainerComponent Constr")
-  }
+  constructor(private fireDatabaseService: FireDatabaseService) { }
 
   girthsSubj = new BehaviorSubject<Girths[]>([]);
   skinfoldsSubj = new BehaviorSubject<SkinfoldsForDB[]>([]);

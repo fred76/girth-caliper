@@ -370,9 +370,9 @@ export class ChartService {
     chart.update();
   }
 
-  UpdateLineChartSkinfoldsBack(chart, data: ChartDataSets[], labels: string[], maxSkinfold: number, maxWeight: number ) {
+  UpdateLineChartSkinfoldsBack(chart, data: ChartDataSets[], labels: string[], maxSkinfold: number, maxWeight: number) {
     chart.data.datasets = data
-    chart.data.labels =  labels
+    chart.data.labels = labels
     chart.options = this.lineChartOption("Skinfold ( mm )", "Body weight ( Kg )", maxSkinfold, maxWeight)
     chart.update();
   }
