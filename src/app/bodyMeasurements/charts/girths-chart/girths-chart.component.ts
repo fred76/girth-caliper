@@ -1,3 +1,4 @@
+import { Utility } from 'src/app/Utility/utility';
 import { FireDatabaseService } from './../../../Services/fire-database.service';
 import { ImportExportService } from './../../../Services/import-export.service';
 import { Girths } from './../../../interface-model/girths.model';
@@ -124,9 +125,7 @@ export class GirthsChartComponent implements OnInit, OnDestroy {
   constructor(
     private chartsService: ChartService,
     private importExportService: ImportExportService,
-    private chartContainerComponent: ChartContainerComponent) {
-    console.log("GirthsChartComponent constructor");
-  }
+    private chartContainerComponent: ChartContainerComponent) { }
 
   private toggleSkinfoldChartListEvent = new Subject<Event>();
   @Input() isToggleSkinfoldChartList: boolean = false

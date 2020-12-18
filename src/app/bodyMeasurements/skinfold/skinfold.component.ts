@@ -28,7 +28,7 @@ export class SkinfoldComponent implements OnInit, OnDestroy {
   measurementDate: Date
   bodyWeight: number = 90
   userAge: number = 44
-
+  pieBarBodyComposition: any
   ngOnInit(): void {
     this.skinfoldsService.selectedSkinfoldsMethodSubs()
   }
@@ -82,6 +82,8 @@ export class SkinfoldComponent implements OnInit, OnDestroy {
           bodyDensity: this.utility.numberDecimal(foldSkin.bodyDensity, 2),
           bodyFatPercentage: this.utility.numberDecimal(foldSkin.bodyFatPerc, 2),
           sum: this.utility.numberDecimal(foldSkin.sum, 2),
+          pieBarBodyComposition: this.chartService.pieChart(this.utility.numberDecimal(foldSkin.fatMass, 2), this.utility.numberDecimal(foldSkin.leanMass, 2)),
+
 
           barChartData: this.chartService.barChartData(foldSkin.foldSkinValueArray),
           barChartLabels: this.chartService.barChartLabels(foldSkin.foldSkinTitleArray),
@@ -90,7 +92,7 @@ export class SkinfoldComponent implements OnInit, OnDestroy {
           barChartLegend: this.chartService.barChartLegend,
           barChartType: this.chartService.barChartType,
 
-          pieChartOptions: this.chartService.pieChartOptions,
+          pieChartOptions: this.chartService.pieChartOptionsForCard,
           pieChartLabels: this.chartService.pieChartLabels,
           pieChartData: this.chartService.pieDataChart(this.utility.numberDecimal(foldSkin.fatMass, 2), this.utility.numberDecimal(foldSkin.leanMass, 2)),
           pieChartType: this.chartService.pieChartType,

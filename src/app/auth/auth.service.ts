@@ -31,6 +31,7 @@ export class AuthService {
       switchMap(user => {
         if (user) {
           const userChanges = this.afs.doc<User>(`users/${user.uid}`).valueChanges()
+          this.userID = user.uid
           return userChanges
         } else {
           return of(null)
@@ -47,6 +48,7 @@ export class AuthService {
     return this.updateUserData(credential.user)
   }
 
+  userID: string
   cred: any
   arraOfLogin: string[] = []
   email: string

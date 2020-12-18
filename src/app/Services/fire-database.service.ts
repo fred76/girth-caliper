@@ -1,7 +1,6 @@
-import { logging } from 'protractor';
+import { Router } from '@angular/router';
 import { DummyDataService } from './../Utility/dummyData.service';
 import { User } from './../interface-model/user.model';
-import { AngularFireAuth } from '@angular/fire/auth';
 import { AuthService } from '../auth/auth.service';
 import { Subject, of, Subscription, BehaviorSubject } from 'rxjs';
 import { Girths } from './../interface-model/girths.model';
@@ -17,29 +16,25 @@ import { AngularFirestore } from '@angular/fire/firestore';
 export class FireDatabaseService {
   constructor(private dum: DummyDataService,
     private db: AngularFirestore,
-    private authService: AuthService) {
-    this.userSubscripiton = this.authService.user$.subscribe(user => {
-      this.user = user
-    })
-  }
-  user: User
+    private authService: AuthService) { }
+
   girthsSubj = new BehaviorSubject<Girths[]>([]);
   skinfoldsSubj = new Subject<SkinfoldsForDB[]>()
   userSubscripiton: Subscription
 
 
   addSkinfoldsToDB(skinfolds: SkinfoldsForDB) {
-    this.db.collection(`users/${this.user.uid}/skinfoldsData`).add(skinfolds)
+    this.db.collection(`users/${this.authService.userID}/skinfoldsData`).add(skinfolds)
   }
 
   addGirthsToDB(girths: Girths) {
-    this.db.collection(`users/${this.user.uid}/girthsData`).add(girths)
+    this.db.collection(`users/${this.authService.userID}/girthsData`).add(girths)
   }
 
   private fbSubs: Subscription[] = []
 
   fetchAvailableGirths() {
-    this.fbSubs.push(this.db.collection<Girths>(`users/${this.user.uid}/girthsData`, ref => ref.orderBy("date", "desc").limit(10))
+    this.fbSubs.push(this.db.collection<Girths>(`users/${this.authService.userID}/girthsData`, ref => ref.orderBy("date", "desc").limit(10))
       .valueChanges()
       .pipe(
         map((girths, ref) => girths.map(girth => {
@@ -55,7 +50,7 @@ export class FireDatabaseService {
   }
 
   fetchAvailableSkinfolds() {
-    this.fbSubs.push(this.db.collection<SkinfoldsForDB>(`users/${this.user.uid}/skinfoldsData`, ref => ref.orderBy("metadata.date", "asc").limit(10))//
+    this.fbSubs.push(this.db.collection<SkinfoldsForDB>(`users/${this.authService.userID}/skinfoldsData`, ref => ref.orderBy("metadata.date", "desc").limit(10))//
       .valueChanges()
       .pipe(
         map((skinfolds, ref) => skinfolds.map(skinfold => {
@@ -77,7 +72,7 @@ export class FireDatabaseService {
   populateGirths() {
     this.db.firestore
       .collection('users')
-      .doc(`${this.user.uid}`)
+      .doc(`${this.authService.userID}`)
       .collection('girthsData')
       .limit(1)
       .get()
@@ -94,7 +89,7 @@ export class FireDatabaseService {
   populateSkinfolds() {
     this.db.firestore
       .collection('users')
-      .doc(`${this.user.uid}`)
+      .doc(`${this.authService.userID}`)
       .collection('skinfoldsData')
       .limit(1)
       .get()

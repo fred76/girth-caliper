@@ -25,8 +25,8 @@ import { BodyMeasurementsChartsModule } from './charts/body-measurements-charts.
     SharedModule,
     RouterModule,
     NgxMatStepLazyLoadModule,
+    BodyMeasurementRoutesModule,
     BodyMeasurementsChartsModule,
-    BodyMeasurementRoutesModule
   ],
   exports: [],
   providers: [GirthsService, SkinfoldsService]

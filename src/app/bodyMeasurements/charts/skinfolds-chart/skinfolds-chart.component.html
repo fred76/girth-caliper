@@ -7,14 +7,14 @@
 
   </mat-card-title>
 
-  <div   class="container" fxLayout="row" fxLayout.lt-sm="column" fxLayoutWrap fxLayoutGap="10px"
+  <div  class="container" fxLayout="row" fxLayout.lt-sm="column" fxLayoutWrap fxLayoutGap="10px"
     fxLayoutAlign="center stretch">
 
     <!--  Button "Date Before" -->
 
     <span fxFlex></span>
     <span fxLayoutAlign="center center">
-      <button (click)="previousBodyCompChartButton($event)" mat-mini-fab color="primary"
+      <button  *ngIf="selectorBodyCompDate < SkinfoldsArray.length-1"  (click)="previousBodyCompChartButton($event)" mat-mini-fab color="primary"
         aria-label="Example icon button with a menu icon">
         <mat-icon>chevron_left</mat-icon>
       </button>
@@ -24,14 +24,14 @@
 
       <!--  mat-card "Last skinfold method" -->
 
-      <mat-card class="mat-elevation-z8 height">
+      <mat-card  class="mat-elevation-z8 height">
         <mat-card-title>
-          <p *ngIf="!isShowNextBodyCompButton" class="mat-body-2">Summary data</p>
+          <p  class="mat-body-2">Summary data</p>
         </mat-card-title>
         <mat-card-subtitle>
-          <p class="mat-caption">{{date  | date:'d MMM yyyy'}}</p>
-          <p class="mat-caption">Body weight {{weight }} Kg</p>
-          <p class="mat-caption">Age {{age }} Years</p>
+          <p class="mat-caption">{{SkinfoldsArray[selectorBodyCompDate].metadata.date  | date:'d MMM yyyy'}}</p>
+          <p class="mat-caption">Body weight {{SkinfoldsArray[selectorBodyCompDate].metadata.weight }} Kg</p>
+          <p class="mat-caption">Age {{SkinfoldsArray[selectorBodyCompDate].metadata.age }} Years</p>
         </mat-card-subtitle>
       </mat-card>
 
@@ -39,16 +39,16 @@
 
       <mat-card class="mat-elevation-z8 height">
         <mat-card-title>
-          <p *ngIf="!isShowNextBodyCompButton" class="mat-body-2">Last skinfold sum</p>
-          <p *ngIf="isShowNextBodyCompButton" class="mat-body-2">Skinfold sum</p>
+          <p class="mat-body-2">Skinfold sum</p>
         </mat-card-title>
         <mat-card-subtitle>
-          <p class="mat-caption">{{sum}} mm</p>
+          <p class="mat-caption">{{SkinfoldsArray[selectorBodyCompDate].bodyResult.skinfoldsSum}} mm</p>
         </mat-card-subtitle>
         <mat-card-content>
           <span fxFlex></span>
-          <mat-icon class="colrWorst" *ngIf="isSumIncreasing" [inline]="true">arrow_upward</mat-icon>
-          <mat-icon class="colrBetter" *ngIf="!isSumIncreasing" [inline]="true">arrow_downward</mat-icon>
+          <mat-icon class="colrWorst" *ngIf="SkinfoldsArray[selectorBodyCompDate].bodyResult.skinfoldsSum < SkinfoldsArray[selectorBodyCompDate + 1].bodyResult.skinfoldsSum" [inline]="true">arrow_upward</mat-icon>
+          <mat-icon class="colrBetter" *ngIf="SkinfoldsArray[selectorBodyCompDate].bodyResult.skinfoldsSum > SkinfoldsArray[selectorBodyCompDate + 1].bodyResult.skinfoldsSum" [inline]="true">arrow_downward</mat-icon>
+          <mat-icon class="colrBetter" *ngIf="SkinfoldsArray[selectorBodyCompDate].bodyResult.skinfoldsSum == SkinfoldsArray[selectorBodyCompDate + 1].bodyResult.skinfoldsSum" [inline]="true">remove</mat-icon>
           <span fxFlex></span>
         </mat-card-content>
       </mat-card>
@@ -60,16 +60,16 @@
 
       <mat-card class="mat-elevation-z8 height">
         <mat-card-title>
-          <p *ngIf="!isShowNextBodyCompButton" class="mat-body-2">Last body density</p>
-          <p *ngIf="isShowNextBodyCompButton" class="mat-body-2">Body density</p>
+          <p class="mat-body-2">Body density</p>
         </mat-card-title>
         <mat-card-subtitle>
-          <p class="mat-caption">{{bodyDensity}} g/cc</p>
+          <p class="mat-caption">{{SkinfoldsArray[selectorBodyCompDate].bodyResult.bodyDensity}} g/cc</p>
         </mat-card-subtitle>
         <mat-card-content>
           <span fxFlex></span>
-          <mat-icon class="colrBetterD" *ngIf="isBodyDensityIncreasing" [inline]="true">arrow_upward</mat-icon>
-          <mat-icon class="colrWorstD" *ngIf="!isBodyDensityIncreasing" [inline]="true">arrow_downward</mat-icon>
+          <mat-icon class="colrBetterD" *ngIf="SkinfoldsArray[selectorBodyCompDate].bodyResult.bodyDensity < SkinfoldsArray[selectorBodyCompDate + 1].bodyResult.bodyDensity" [inline]="true">arrow_upward</mat-icon>
+          <mat-icon class="colrWorstD" *ngIf="SkinfoldsArray[selectorBodyCompDate].bodyResult.bodyDensity > SkinfoldsArray[selectorBodyCompDate + 1].bodyResult.bodyDensity" [inline]="true">arrow_downward</mat-icon>
+          <mat-icon class="colrWorstD" *ngIf="SkinfoldsArray[selectorBodyCompDate].bodyResult.bodyDensity == SkinfoldsArray[selectorBodyCompDate + 1].bodyResult.bodyDensity" [inline]="true">remove</mat-icon>
           <span fxFlex></span>
         </mat-card-content>
       </mat-card>
@@ -78,16 +78,16 @@
 
       <mat-card class="mat-elevation-z8 height">
         <mat-card-title>
-          <p *ngIf="!isShowNextBodyCompButton" class="mat-body-2">Last body fat percentage</p>
-          <p *ngIf="isShowNextBodyCompButton" class="mat-body-2">Body fat percentage</p>
+          <p  class="mat-body-2">Body fat percentage</p>
         </mat-card-title>
         <mat-card-subtitle>
-          <p class="mat-caption">{{bodyFatPercentage}}%</p>
+          <p class="mat-caption">{{SkinfoldsArray[selectorBodyCompDate].bodyResult.bodyFatPercentage}}%</p>
         </mat-card-subtitle>
         <mat-card-content>
           <span fxFlex></span>
-          <mat-icon class="colrWorst" *ngIf="isBodyFatPercentageIncreasing" [inline]="true">arrow_upward</mat-icon>
-          <mat-icon class="colrBetter" *ngIf="!isBodyFatPercentageIncreasing" [inline]="true">arrow_downward</mat-icon>
+          <mat-icon class="colrWorst" *ngIf="SkinfoldsArray[selectorBodyCompDate].bodyResult.bodyFatPercentage < SkinfoldsArray[selectorBodyCompDate + 1].bodyResult.bodyFatPercentage" [inline]="true">arrow_upward</mat-icon>
+          <mat-icon class="colrBetter" *ngIf="SkinfoldsArray[selectorBodyCompDate].bodyResult.bodyFatPercentage > SkinfoldsArray[selectorBodyCompDate + 1].bodyResult.bodyFatPercentage" [inline]="true">arrow_downward</mat-icon>
+          <mat-icon class="colrBetter" *ngIf="SkinfoldsArray[selectorBodyCompDate].bodyResult.bodyFatPercentage == SkinfoldsArray[selectorBodyCompDate + 1].bodyResult.bodyFatPercentage" [inline]="true">remove</mat-icon>
           <span fxFlex></span>
         </mat-card-content>
       </mat-card>
@@ -101,23 +101,22 @@
 
       <mat-card-subtitle>
         <div fxLayout="row" fxLayout="row" fxLayout.lt-sm="column" fxLayoutAlign="space-between center">
-          <p class="mat-caption">{{method}}</p>
+          <p class="mat-caption">{{SkinfoldsArray[selectorBodyCompDate].metadata.method}}</p>
           <button mat-mini-fab color="primary" (click)="toggleBodyCompChartButton($event)" class="button24">
             <mat-icon *ngIf="!toggleBodyCompChart" class="icon24">insert_chart</mat-icon>
             <mat-icon *ngIf="toggleBodyCompChart" class="icon24">pie_chart</mat-icon>
           </button>
         </div>
       </mat-card-subtitle>
-      <mat-card-content *ngIf="!show">
-        <div *ngIf="!toggleBodyCompChart">
-          <canvas baseChart [data]="pieChartData" [chartType]="pieChartType" [labels]="pieChartLabels"
-            [options]="pieChartOptions" [plugins]="pieChartPlugins" [colors]="pieChartColors" >
+      <mat-card-content   >
+        <div ><span fxFlex></span>
+          <canvas  id="pieChart" >{{ pieBarBodyComposition }}
           </canvas></div>
         <div *ngIf="toggleBodyCompChart">
           <span fxFlex></span>
-          <canvas baseChart [datasets]="barChartData" [chartType]="barChartType" [labels]="barChartLabels"
+          <!-- <canvas baseChart [datasets]="barChartData" [chartType]="barChartType" [labels]="barChartLabels"
             [options]="barChartOptions" [plugins]="barChartPlugins" >
-          </canvas>
+          </canvas> -->
           <span fxFlex></span>
         </div>
       </mat-card-content>
@@ -127,7 +126,7 @@
 
     <span fxFlex></span>
     <span fxLayoutAlign="start center">
-      <button *ngIf="isShowNextBodyCompButton" mat-mini-fab color="primary" (click)="nextBodyCompChartButton($event)"
+      <button *ngIf="selectorBodyCompDate > 0" mat-mini-fab color="primary" (click)="nextBodyCompChartButton($event)"
         aria-label="Example icon button with a menu icon">
         <mat-icon>chevron_right</mat-icon>
       </button>

@@ -3,7 +3,6 @@ import { ChartContainerComponent } from './../chart-container.component';
 import { ChartService } from './../chart.service';
 import { FireDatabaseService } from './../../../Services/fire-database.service';
 
-import { LoadMoreSkinfoldComponent } from './loadMoreSkinfold';
 import { MatDialog } from '@angular/material/dialog';
 import { ImportExportService } from './../../../Services/import-export.service';
 import { Subject, Subscription } from 'rxjs';
@@ -12,7 +11,6 @@ import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 @Component({
   selector: 'app-skinfolds-chart',
   templateUrl: './skinfolds-chart.component.html',
-
   styleUrls: ['./skinfolds-chart.component.css']
 })
 export class SkinfoldsChartComponent implements OnInit, OnDestroy {
@@ -26,13 +24,12 @@ export class SkinfoldsChartComponent implements OnInit, OnDestroy {
 
 
   private toggleBoyCompChartEvent = new Subject<Event>();
-  private nextBodyCompDateEvent = new Subject<Event>();
-  private previousBodyCompDateEvent = new Subject<Event>();
   private toggleSkinfoldChartListEvent = new Subject<Event>();
   private toggleSkinfoldBodyCompeEvent = new Subject<Event>();
 
   @Input() toggleBodyCompChart: boolean = true
-  @Input() selectorBodyCompDate: number = 1
+  @Input() selectorBodyCompDate: number = 0
+  @Input() selectorBodyCompDatePrevious: number = 0
   @Input() isShowNextBodyCompButton: boolean = false
   @Input() isToggleSkinfoldChartList: boolean = false
   @Input() toggleSkinfoldBodyComp: boolean = true;
@@ -60,22 +57,7 @@ export class SkinfoldsChartComponent implements OnInit, OnDestroy {
   pieChartPlugins: any
   pieChartColors: any[]
 
-  method: string
-  date: Date
-  weight: number
-  age: number
 
-  bodyDensity: number
-  bodyFatPercentage: number
-  sum: number
-
-  bodyDensitySecondlast: number
-  bodyFatPercentageSecondlast: number
-  sumSecondlast: number
-
-  isBodyDensityIncreasing: boolean
-  isBodyFatPercentageIncreasing: boolean
-  isSumIncreasing: boolean
 
   dataSource = new MatTableDataSource<SkinfoldsForDB>()
 
@@ -105,13 +87,17 @@ export class SkinfoldsChartComponent implements OnInit, OnDestroy {
     this.fireDatabaseService.populateSkinfolds()
     this.exchangeSubscription = this.chartContainerComponent.skinfoldsSubj.subscribe((s: SkinfoldsForDB[]) => {
       this.show = false
-      this.SkinfoldsArray = s
-      this.dataSource.data = s
-      this.createBodyCompositionTile(1, s)
-      let lineChart = this.chartsService.skinfoldLineChartData(s)
+      let localSkinfoldObject = [...s].sort((d2, d1) => new Date(d1.metadata.date).getTime() - new Date(d2.metadata.date).getTime())
+
+      this.SkinfoldsArray = localSkinfoldObject
+      this.dataSource.data = localSkinfoldObject
+      // this.createBodyCompositionTile(1, s)
+      let lineChart = this.chartsService.skinfoldLineChartData(localSkinfoldObject)
       this.lineChartSkinfoldsBodyComposition = this.chartsService.lineChartSkinfolds(lineChart.skinfoldChartDataSet, lineChart.skinfoldXaxisLabel, lineChart.maxSkinfold, lineChart.maxWeight)
 
     })
+    this.pieBarBodyComposition = this.chartsService.pieChart(this.SkinfoldsArray[this.selectorBodyCompDate].bodyResult.fatMass, this.SkinfoldsArray[this.selectorBodyCompDate].bodyResult.leanMass)
+
   }
 
   toggleSkinfoldChartListButton(event: Event) {
@@ -122,34 +108,31 @@ export class SkinfoldsChartComponent implements OnInit, OnDestroy {
   toggleBodyCompChartButton(event: Event) {
     this.toggleBoyCompChartEvent.next(event);
     this.toggleBodyCompChart = !this.toggleBodyCompChart
-    this.createBodyCompositionTile(this.selectorBodyCompDate, this.SkinfoldsArray)
   }
 
   previousBodyCompChartButton(event: Event) {
-    this.previousBodyCompDateEvent.next(event);
-    if (this.selectorBodyCompDate < this.SkinfoldsArray.length) {
-      this.selectorBodyCompDate += 1
-      this.createBodyCompositionTile(this.selectorBodyCompDate, this.SkinfoldsArray)
-      this.isShowNextBodyCompButton = true
-    } else {
-      const dialogRef = this.dialog.open(LoadMoreSkinfoldComponent, {
-        data: { measurementDate: this.loadSkinfoldsSince }
-      })
-      dialogRef.afterClosed().subscribe(result => {
-        console.log(result);
-      })
-    }
-    this.createBodyCompositionTile(this.selectorBodyCompDate, this.SkinfoldsArray)
+    this.selectorBodyCompDate += 1
+    this.chartsService.updatePieChart(this.pieBarBodyComposition, this.SkinfoldsArray[this.selectorBodyCompDate].bodyResult.fatMass, this.SkinfoldsArray[this.selectorBodyCompDate].bodyResult.leanMass)
+
+    // this.previousBodyCompDateEvent.next(event);
+    // if (this.selectorBodyCompDate < this.SkinfoldsArray.length) {
+    //   this.selectorBodyCompDate += 1
+    //   this.createBodyCompositionTile(this.selectorBodyCompDate, this.SkinfoldsArray)
+    //   this.isShowNextBodyCompButton = true
+    // } else {
+    //   const dialogRef = this.dialog.open(LoadMoreSkinfoldComponent, {
+    //     data: { measurementDate: this.loadSkinfoldsSince }
+    //   })
+    //   dialogRef.afterClosed().subscribe(result => {
+    //     console.log(result);
+    //   })
+    // }
   }
 
   nextBodyCompChartButton(event: Event) {
-    this.nextBodyCompDateEvent.next(event);
-    if (this.selectorBodyCompDate > 1) {
-      this.selectorBodyCompDate -= 1
-      this.createBodyCompositionTile(this.selectorBodyCompDate, this.SkinfoldsArray)
-    } else {
-      this.isShowNextBodyCompButton = false
-    }
+    this.selectorBodyCompDate -= 1
+    this.chartsService.updatePieChart(this.pieBarBodyComposition, this.SkinfoldsArray[this.selectorBodyCompDate].bodyResult.fatMass, this.SkinfoldsArray[this.selectorBodyCompDate].bodyResult.leanMass)
+
   }
 
   // events
@@ -162,43 +145,25 @@ export class SkinfoldsChartComponent implements OnInit, OnDestroy {
   }
 
   createBodyCompositionTile(n: number, skinfoldsArray: SkinfoldsForDB[]) {
-    if (skinfoldsArray.length > 0) {
-      let lastSkinfoldInArray = skinfoldsArray[skinfoldsArray.length - n]
-      this.method = lastSkinfoldInArray.metadata.method
-      this.date = lastSkinfoldInArray.metadata.date
-      this.sum = lastSkinfoldInArray.bodyResult.skinfoldsSum
-      this.weight = lastSkinfoldInArray.metadata.weight
-      this.age = lastSkinfoldInArray.metadata.age
-      this.bodyDensity = lastSkinfoldInArray.bodyResult.bodyDensity
-      this.bodyFatPercentage = lastSkinfoldInArray.bodyResult.bodyFatPercentage
 
-      if (this.selectorBodyCompDate < this.SkinfoldsArray.length) {
-        let secondLastSkinfoldArray = skinfoldsArray[skinfoldsArray.length - n - 1]
-        let sumSecondlast = secondLastSkinfoldArray.bodyResult.skinfoldsSum
-        let bodyDensitySecondlast = secondLastSkinfoldArray.bodyResult.bodyDensity
-        let bodyFatPercentageSecondlast = secondLastSkinfoldArray.bodyResult.bodyFatPercentage
-        this.sum > sumSecondlast ? this.isSumIncreasing = true : this.isSumIncreasing = false
-        this.bodyDensity > bodyDensitySecondlast ? this.isBodyDensityIncreasing = true : this.isBodyDensityIncreasing = false
-        this.bodyFatPercentage > bodyFatPercentageSecondlast ? this.isBodyFatPercentageIncreasing = true : this.isBodyFatPercentageIncreasing = false
-      }
+    let lastSkinfoldInArray = skinfoldsArray[skinfoldsArray.length - n]
+    let foldSkinTitleArray = Object.keys(lastSkinfoldInArray.fold)
+    let foldSkinValueArray = Object.values(lastSkinfoldInArray.fold)
 
-      let foldSkinTitleArray = Object.keys(lastSkinfoldInArray.fold)
-      let foldSkinValueArray = Object.values(lastSkinfoldInArray.fold)
+    this.barChartData = this.chartsService.barChartData(foldSkinValueArray)
+    this.barChartLabels = this.chartsService.barChartLabels(foldSkinTitleArray)
+    this.barChartOptions = this.chartsService.barChartOptions
+    this.barChartPlugins = this.chartsService.barChartPlugins
+    this.barChartLegend = this.chartsService.barChartLegend
+    this.barChartType = this.chartsService.barChartType
 
-      this.barChartData = this.chartsService.barChartData(foldSkinValueArray)
-      this.barChartLabels = this.chartsService.barChartLabels(foldSkinTitleArray)
-      this.barChartOptions = this.chartsService.barChartOptions
-      this.barChartPlugins = this.chartsService.barChartPlugins
-      this.barChartLegend = this.chartsService.barChartLegend
-      this.barChartType = this.chartsService.barChartType
+    // this.pieChartOptions = this.chartsService.pieChartOptions
+    // this.pieChartLabels = this.chartsService.pieChartLabels
+    // this.pieChartData = this.chartsService.pieDataChart(lastSkinfoldInArray.bodyResult.fatMass, lastSkinfoldInArray.bodyResult.leanMass)
+    // this.pieChartType = this.chartsService.pieChartType
+    // this.pieChartPlugins = this.chartsService.pieChartPlugins
+    // this.pieChartColors = this.chartsService.pieChartColors
 
-      this.pieChartOptions = this.chartsService.pieChartOptions
-      this.pieChartLabels = this.chartsService.pieChartLabels
-      this.pieChartData = this.chartsService.pieDataChart(lastSkinfoldInArray.bodyResult.fatMass, lastSkinfoldInArray.bodyResult.leanMass)
-      this.pieChartType = this.chartsService.pieChartType
-      this.pieChartPlugins = this.chartsService.pieChartPlugins
-      this.pieChartColors = this.chartsService.pieChartColors
-    }
   }
 
 

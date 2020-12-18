@@ -1,3 +1,4 @@
+import { Utility } from 'src/app/Utility/utility';
 import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef } from '@angular/core';
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 @Component({
@@ -9,7 +10,7 @@ export class BtnSidenavAnimatedComponent implements OnInit {
 
   navLinks: any[]
   activeLink = 0
-  constructor(private router: Router, private route: ActivatedRoute) { }
+  constructor(private router: Router, private route: ActivatedRoute, private utility: Utility) { }
 
   @Input() text: string
   @Input() btnStatus: string
@@ -94,13 +95,13 @@ export class BtnSidenavAnimatedComponent implements OnInit {
   }
 
   ngOnInit() {
+
     this.router.events.subscribe((evt) => {
       if (!(evt instanceof NavigationEnd)) {
         return;
       }
       window.scrollTo(0, 0)
     });
-
     this.router.navigate(['./ghirthsChart'], { relativeTo: this.route })
     this.btnStatus == "btn-Girth"
     this.initialShapeGirth = this.ellipseGirth

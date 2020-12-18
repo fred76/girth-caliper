@@ -515,13 +515,44 @@ export class ChartService {
 
   //PIE CHART
 
-  pieDataChart(fatMass: number, leanMass: number,) {
+  pieChart(fatMass: number, leanMass: number,) {
+    let pieChart = new Chart('pieChart', {
+      type: 'pie',
+      data: {
+        labels: [['Fat maas (Kg)'], ['Lean mass (Kg)']],
+        datasets: [{
+          data: [fatMass, leanMass],
+          backgroundColor: ["orangered", "lightskyblue"],
+          borderColor: "white",
+          borderWidth: 1
+        }],
+
+      },
+      options: this.pieChartOptions
+
+    });
+    return pieChart
+  }
+
+  updatePieChart(chart: Chart, fatMass: number, leanMass: number) {
+
+    chart.data.datasets = [{
+      data: [fatMass, leanMass],
+      backgroundColor: ["orangered", "lightskyblue"],
+      borderColor: "white",
+      borderWidth: 1
+    }],
+      chart.options = this.pieChartOptions
+    chart.update();
+  }
+
+  pieDataChart(fatMass: number, leanMass: number,) { // Messo
     let pieDataChart: number[] = [fatMass, leanMass]
     return pieDataChart
   }
-  pieChartLabels: Label[] = [['Fat maas (Kg)'], ['Lean mass (Kg)']]
-  pieChartType: ChartType = 'pie'
-  pieChartLegend: boolean = true
+  pieChartLabels: Label[] = [['Fat maas (Kg)'], ['Lean mass (Kg)']] // Messo
+  pieChartType: ChartType = 'pie' // Messo
+  pieChartLegend: boolean = true // Messo
   pieChartPlugins: ChartPluginsOptions = [pluginDataLabels];
   pieChartColors = [
     {
@@ -531,13 +562,12 @@ export class ChartService {
     }]
 
   pieChartOptions: ChartOptions = {
-    responsive: true,
-    maintainAspectRatio: false,
-    aspectRatio: 1.2,
+    responsive: false,
+    maintainAspectRatio: true,
+    aspectRatio: 1,
     animation: { animateRotate: true, animateScale: true },
     legend: {
-      display: false, position: 'top',
-      labels: { usePointStyle: true, fontColor: 'white' }
+      display: false, position: 'top'
     },
     elements: { point: { pointStyle: 'circle' } },
     tooltips: {
@@ -545,16 +575,37 @@ export class ChartService {
       callbacks: { labelTextColor: function (tooltipItem, chart) { return "black" } }
     },
     plugins: {
+
       datalabels: {
         color: 'white',
         formatter: (value, ctx) => {
           const label = ctx.chart.data.labels[ctx.dataIndex];
           return label;
-
         },
       },
     },
+  }
+  pieChartOptionsForCard: ChartOptions = {
+    responsive: true,
+    animation: { animateRotate: true, animateScale: true },
+    legend: {
+      display: false, position: 'top'
+    },
+    elements: { point: { pointStyle: 'circle' } },
+    tooltips: {
+      backgroundColor: 'white', borderWidth: 0,
+      callbacks: { labelTextColor: function (tooltipItem, chart) { return "black" } }
+    },
+    plugins: {
 
+      datalabels: {
+        color: 'white',
+        formatter: (value, ctx) => {
+          const label = ctx.chart.data.labels[ctx.dataIndex];
+          return label;
+        },
+      },
+    },
   }
 
   //BAR CHART
@@ -577,6 +628,7 @@ export class ChartService {
     ]
     return barChartData
   }
+
   barChartLabels(label: Label[]) {
 
     let barChartLabels: Label[] = label

@@ -1,14 +1,13 @@
+import { AuthService } from './../../auth/auth.service';
 import { SkinfoldsForDB } from './../../interface-model/skinfold.model';
 import { FireDatabaseService } from 'src/app/Services/fire-database.service';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { Girths } from './../../interface-model/girths.model';
-import { ChartService } from './chart.service';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 
 @Component({
   selector: 'app-chart-container',
   template: `
-
   <mat-drawer-container  [hasBackdrop]="false"   >
     <mat-drawer mode="push"  opened="true" >
     <app-btn-sidenav-animated
@@ -21,7 +20,6 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
   </div>
     </mat-drawer-content>
   </mat-drawer-container>
-
  `,
   styleUrls: ['./chart-container.component.css']
 })
@@ -31,9 +29,9 @@ export class ChartContainerComponent implements OnInit, OnDestroy {
   constructor(private fireDatabaseService: FireDatabaseService) { }
 
   girthsSubj = new BehaviorSubject<Girths[]>([]);
-  skinfoldsSubj = new BehaviorSubject<SkinfoldsForDB[]>([]);
-
+  skinfoldsSubj = new BehaviorSubject<SkinfoldsForDB[]>([])
   private exchangeSubscription: Subscription
+
   ngOnInit() {
     this.exchangeSubscription = (this.fireDatabaseService.girthsSubj.subscribe((girths: Girths[]) => {
       this.girthsSubj.next(girths)
@@ -43,7 +41,6 @@ export class ChartContainerComponent implements OnInit, OnDestroy {
       this.skinfoldsSubj.next(skinFolds)
     })
     this.fireDatabaseService.fetchAvailableSkinfolds()
-
   }
   unsub() {
     this.fireDatabaseService.cancelSubscription()

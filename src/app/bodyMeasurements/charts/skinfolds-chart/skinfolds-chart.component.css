@@ -60,8 +60,8 @@ mat-button-toggle-group {
 .h5 {
   margin-bottom: 15px;
 }
-.small-chart{
-  width: 150;
-  height: 150;
+.small{
+  height: 50%;
+  width: 50%;
 }
 

@@ -1,5 +1,6 @@
+import { Subscription } from 'rxjs';
 import { AuthService } from '../auth/auth.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 
 @Component({
@@ -26,9 +27,7 @@ import { NavigationEnd, Router } from '@angular/router';
        </mat-card-content>
      </mat-card>
  </div>
-
    </ng-template>
-
   <ng-template #authenticated>
   <router-outlet></router-outlet>
   </ng-template>
@@ -36,40 +35,40 @@ import { NavigationEnd, Router } from '@angular/router';
   `,
   styleUrls: ['./body-measurements.component.css']
 })
-export class BodyMeasurementsComponent implements OnInit {
+export class BodyMeasurementsComponent implements OnInit, OnDestroy {
 
-  navLinks: any[]
-  activeLink = 0
   constructor(
     public authService: AuthService,
     private router: Router
   ) {
-
     this.navLinks = [
       { label: 'Girths', link: './girthTab', index: 0 },
       { label: 'Skinfolds', link: './skinfoldTab', index: 1 },
       { label: 'Photo', link: './photoTab', index: 2 },
-      { label: 'Insight', link: './insightTab', index: 3 }
-
+      { label: 'Insight', link: './insightTab/ghirthsChart', index: 3 }
     ]
   }
 
+  routerUnsubscribe1: Subscription
+  routerUnsubscribe2: Subscription
+  navLinks: any[]
+  activeLink = 0
+
   ngOnInit(): void {
-    this.router.events.subscribe((res) => {
+    this.routerUnsubscribe1 = this.router.events.subscribe((res) => {
       this.activeLink = this.navLinks.indexOf(
         this.navLinks.find(tab => tab.link === '.' + this.router.url))
     })
-    this.router.events.subscribe((evt) => {
+    this.routerUnsubscribe2 = this.router.events.subscribe((evt) => {
       if (!(evt instanceof NavigationEnd)) {
         return;
       }
       window.scrollTo(0, 0)
-    });
+    })
   }
 
-
-
-
-
-
+  ngOnDestroy(): void {
+    this.routerUnsubscribe1.unsubscribe()
+    this.routerUnsubscribe2.unsubscribe()
+  }
 }
