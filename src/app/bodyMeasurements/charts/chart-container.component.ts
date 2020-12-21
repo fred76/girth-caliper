@@ -1,4 +1,3 @@
-import { AuthService } from './../../auth/auth.service';
 import { SkinfoldsForDB } from './../../interface-model/skinfold.model';
 import { FireDatabaseService } from 'src/app/Services/fire-database.service';
 import { BehaviorSubject, Subscription } from 'rxjs';
@@ -25,7 +24,6 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 })
 export class ChartContainerComponent implements OnInit, OnDestroy {
 
-
   constructor(private fireDatabaseService: FireDatabaseService) { }
 
   girthsSubj = new BehaviorSubject<Girths[]>([]);
@@ -33,6 +31,8 @@ export class ChartContainerComponent implements OnInit, OnDestroy {
   private exchangeSubscription: Subscription
 
   ngOnInit() {
+    this.fireDatabaseService.populateSkinfolds()
+    this.fireDatabaseService.populateGirths()
     this.exchangeSubscription = (this.fireDatabaseService.girthsSubj.subscribe((girths: Girths[]) => {
       this.girthsSubj.next(girths)
     }))
@@ -42,11 +42,20 @@ export class ChartContainerComponent implements OnInit, OnDestroy {
     })
     this.fireDatabaseService.fetchAvailableSkinfolds()
   }
+
+  deleteGirth(id: string) {
+    this.fireDatabaseService.deleteGirth(id)
+  }
+  deleteSkinfold(id: string) {
+    this.fireDatabaseService.deleteSkinfolds(id)
+  }
+
   unsub() {
     this.fireDatabaseService.cancelSubscription()
     this.exchangeSubscription.unsubscribe()
     // this.exchangeSubscription.forEach(sub => sub.unsubscribe())
   }
+
   ngOnDestroy(): void {
     this.unsub()
   }

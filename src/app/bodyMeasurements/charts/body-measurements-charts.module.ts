@@ -1,4 +1,4 @@
-import { ChartService } from './chart.service';
+import { ChartFeederService } from './chart-feeder.service';
 import { BtnSidenavAnimatedComponent } from './sideBar/btn-sidenav-animated.component';
 import { ChartsModule } from 'ng2-charts';
 import { RouterModule } from '@angular/router';
@@ -23,9 +23,9 @@ import { SharedModule } from '../../Shared/shared.module';
   imports: [
     SharedModule,
     RouterModule,
-    ChartsModule
+    ChartsModule,
   ],
   exports: [],
-  providers: [ChartService]
+  providers: [ChartFeederService]
 })
 export class BodyMeasurementsChartsModule { }

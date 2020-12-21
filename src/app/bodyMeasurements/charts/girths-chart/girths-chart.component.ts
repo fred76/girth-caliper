@@ -1,14 +1,11 @@
-import { Utility } from 'src/app/Utility/utility';
-import { FireDatabaseService } from './../../../Services/fire-database.service';
 import { ImportExportService } from './../../../Services/import-export.service';
 import { Girths } from './../../../interface-model/girths.model';
 import { Subject, Subscription } from 'rxjs';
-import { ChartService } from '../chart.service';
-
 import { MatTableDataSource } from '@angular/material/table';
 import { Component, Input, OnInit, ViewChild, ViewEncapsulation, OnDestroy } from '@angular/core';
 import { BaseChartDirective } from 'ng2-charts';
 import { ChartContainerComponent } from '../chart-container.component';
+import { ChartFeederService } from './../chart-feeder.service';
 
 @Component({
   selector: 'app-girths-chart',
@@ -107,6 +104,15 @@ import { ChartContainerComponent } from '../chart-container.component';
           <mat-header-cell *matHeaderCellDef>Calf Left</mat-header-cell>
           <mat-cell *matCellDef="let element">{{element.calf_L}}</mat-cell>
         </ng-container>
+        <ng-container matColumnDef="Option">
+        <mat-header-cell *matHeaderCellDef>Option</mat-header-cell>
+          <mat-cell *matCellDef="let element; let idx = index">
+          <button mat-icon-button (click)="deleteGirth(element.idField, idx)">
+         <mat-icon>delete</mat-icon>
+        </button>
+          </mat-cell>
+        </ng-container>
+
         <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
         <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
       </mat-table>
@@ -123,20 +129,26 @@ import { ChartContainerComponent } from '../chart-container.component';
 export class GirthsChartComponent implements OnInit, OnDestroy {
   showChart: boolean
   constructor(
-    private chartsService: ChartService,
+    private chartFeederService: ChartFeederService,
     private importExportService: ImportExportService,
     private chartContainerComponent: ChartContainerComponent) { }
 
   private toggleSkinfoldChartListEvent = new Subject<Event>();
   @Input() isToggleSkinfoldChartList: boolean = false
   dataSource = new MatTableDataSource<Girths>()
-  displayedColumns = ["Date", "Body weight", "Neck", "Chest", "Bicep Rigth", "Bicep Left", "Bicep Relaxed Rigth", "Bicep Relaxed Left", "Forearm Rigth", "Forearm Left", "Wrist", "Waist", "Hips", "Thigt Rigth", "Thigt Left", "Calf Rigth", "Calf Left"]
+  displayedColumns = ["Date", "Body weight", "Neck", "Chest", "Bicep Rigth", "Bicep Left", "Bicep Relaxed Rigth", "Bicep Relaxed Left", "Forearm Rigth", "Forearm Left", "Wrist", "Waist", "Hips", "Thigt Rigth", "Thigt Left", "Calf Rigth", "Calf Left", "Option"]
   girths: Girths[]
 
   toggleSkinfoldChartListButton(event: Event) {
     this.toggleSkinfoldChartListEvent.next(event);
     this.isToggleSkinfoldChartList = !this.isToggleSkinfoldChartList
 
+  }
+
+  deleteGirth(id: string, index: number) {
+    this.girths.splice(index, 1)
+    this.dataSource._updateChangeSubscription()
+    this.chartContainerComponent.deleteGirth(id)
   }
 
   @ViewChild(BaseChartDirective, { static: true }) chart: BaseChartDirective;
@@ -147,19 +159,15 @@ export class GirthsChartComponent implements OnInit, OnDestroy {
     this.importExportService.flatGirthsForDB(this.girths)
   }
   // events
-  public chartClicked({ event, active }: { event: MouseEvent, active: {}[] }): void {
-    // console.log(event, active);
-  }
+  public chartClicked({ event, active }: { event: MouseEvent, active: {}[] }): void { }
 
-  public chartHovered({ event, active }: { event: MouseEvent, active: {}[] }): void {
-    // console.log(event, active);
-  }
+  public chartHovered({ event, active }: { event: MouseEvent, active: {}[] }): void { }
 
   ngOnInit(): void {
     this.exchangeSubscription = this.chartContainerComponent.girthsSubj.subscribe((g: Girths[]) => {
       this.girths = g
       this.dataSource.data = g
-      this.lineChartGirths = this.chartsService.lineChartGirths(g)
+      this.lineChartGirths = this.chartFeederService.lineChartGirths(g)
     })
   }
 

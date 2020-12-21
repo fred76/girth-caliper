@@ -14,7 +14,7 @@
 
     <span fxFlex></span>
     <span fxLayoutAlign="center center">
-      <button  *ngIf="selectorBodyCompDate < SkinfoldsArray.length-1"  (click)="previousBodyCompChartButton($event)" mat-mini-fab color="primary"
+      <button  *ngIf="selectorBodyCompDate < SkinfoldsArray.length-2"  (click)="previousBodyCompChartButton($event)" mat-mini-fab color="primary"
         aria-label="Example icon button with a menu icon">
         <mat-icon>chevron_left</mat-icon>
       </button>
@@ -109,16 +109,9 @@
         </div>
       </mat-card-subtitle>
       <mat-card-content   >
-        <div ><span fxFlex></span>
+        <div  ><span fxFlex></span>
           <canvas  id="pieChart" >{{ pieBarBodyComposition }}
           </canvas></div>
-        <div *ngIf="toggleBodyCompChart">
-          <span fxFlex></span>
-          <!-- <canvas baseChart [datasets]="barChartData" [chartType]="barChartType" [labels]="barChartLabels"
-            [options]="barChartOptions" [plugins]="barChartPlugins" >
-          </canvas> -->
-          <span fxFlex></span>
-        </div>
       </mat-card-content>
     </mat-card>
 
@@ -223,6 +216,14 @@
           <mat-header-cell *matHeaderCellDef>Thigh</mat-header-cell>
           <mat-cell *matCellDef="let element">{{element.fold.Thigh}}</mat-cell>
         </ng-container>
+        <ng-container matColumnDef="Option">
+          <mat-header-cell *matHeaderCellDef>Option</mat-header-cell>
+            <mat-cell *matCellDef="let element; let idx = index">
+            <button mat-icon-button (click)="deleteSkinfold(element.idField, idx)">
+           <mat-icon>delete</mat-icon>
+          </button>
+            </mat-cell>
+          </ng-container>
         <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
         <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
       </mat-table>

@@ -1,6 +1,7 @@
+import { ChartFeederService } from './../chart-feeder.service';
+
 import { SkinfoldsForDB } from './../../../interface-model/skinfold.model';
 import { ChartContainerComponent } from './../chart-container.component';
-import { ChartService } from './../chart.service';
 import { FireDatabaseService } from './../../../Services/fire-database.service';
 
 import { MatDialog } from '@angular/material/dialog';
@@ -17,8 +18,7 @@ export class SkinfoldsChartComponent implements OnInit, OnDestroy {
 
   constructor(
     private dialog: MatDialog,
-    public chartsService: ChartService,
-    private fireDatabaseService: FireDatabaseService,
+    public chartFeederService: ChartFeederService,
     private importExportService: ImportExportService,
     private chartContainerComponent: ChartContainerComponent) { }
 
@@ -34,7 +34,7 @@ export class SkinfoldsChartComponent implements OnInit, OnDestroy {
   @Input() isToggleSkinfoldChartList: boolean = false
   @Input() toggleSkinfoldBodyComp: boolean = true;
 
-  displayedColumns = ["method", "age", "date", "weight", "Chest", "Subscapular", "Midaxillary", "Triceps", "Bicep", "Suprailiac", "Abdominal", "Thigh"]
+  displayedColumns = ["method", "age", "date", "weight", "Chest", "Subscapular", "Midaxillary", "Triceps", "Bicep", "Suprailiac", "Abdominal", "Thigh", "Option"]
   displayedColumnsBody = ["method", "age", "date", "weight", "Skinfolds sum", "Body Density", "Fat Percentage", "Lean Mass", "Fat Mass"]
 
   showChart: boolean
@@ -43,29 +43,13 @@ export class SkinfoldsChartComponent implements OnInit, OnDestroy {
 
   SkinfoldsArray: SkinfoldsForDB[] = []
 
-  barChartData: any[]
-  barChartLabels: any[]
-  barChartOptions: any
-  barChartPlugins: any[]
-  barChartLegend: boolean
-  barChartType: any
-
-  pieChartOptions: any
-  pieChartLabels: any[]
-  pieChartData: any
-  pieChartType: any
-  pieChartPlugins: any
-  pieChartColors: any[]
-
-
-
   dataSource = new MatTableDataSource<SkinfoldsForDB>()
 
   loadSkinfoldsSince: Date
 
-  lineChartSkinfoldsBodyComposition: any
+  lineChartSkinfoldsBodyComposition: Chart
 
-  pieBarBodyComposition: any
+  pieBarBodyComposition: Chart
 
   clickExportSkinfolds() {
     this.importExportService.flatSkinfoldsForDB(this.SkinfoldsArray)
@@ -74,30 +58,29 @@ export class SkinfoldsChartComponent implements OnInit, OnDestroy {
   toggleSkinfoldBodyCompButton(event: Event) {
     this.toggleSkinfoldBodyCompeEvent.next(event)
     this.toggleSkinfoldBodyComp = !this.toggleSkinfoldBodyComp
-    let lineChart = this.chartsService.skinfoldLineChartData(this.SkinfoldsArray)
+
+    this.lineChartSkinfoldsBodyComposition.destroy()
     if (!this.toggleSkinfoldBodyComp) {
-      this.chartsService.UpdateLineChartSkinfolds(this.lineChartSkinfoldsBodyComposition, lineChart.bodyCompostitionDataSet, lineChart.maxSkinfold + 10, lineChart.maxWeight, lineChart.maxBodyDensity)
+      this.lineChartSkinfoldsBodyComposition = this.chartFeederService.lineChartBodyDensity(this.SkinfoldsArray)
     } else {
-      this.chartsService.UpdateLineChartSkinfoldsBack(this.lineChartSkinfoldsBodyComposition, lineChart.skinfoldChartDataSet, lineChart.skinfoldXaxisLabel, lineChart.maxSkinfold, lineChart.maxWeight)
+      this.lineChartSkinfoldsBodyComposition = this.chartFeederService.lineChartSkinfolds(this.SkinfoldsArray)
     }
 
   }
 
   ngOnInit(): void {
-    this.fireDatabaseService.populateSkinfolds()
     this.exchangeSubscription = this.chartContainerComponent.skinfoldsSubj.subscribe((s: SkinfoldsForDB[]) => {
       this.show = false
       let localSkinfoldObject = [...s].sort((d2, d1) => new Date(d1.metadata.date).getTime() - new Date(d2.metadata.date).getTime())
 
       this.SkinfoldsArray = localSkinfoldObject
       this.dataSource.data = localSkinfoldObject
-      // this.createBodyCompositionTile(1, s)
-      let lineChart = this.chartsService.skinfoldLineChartData(localSkinfoldObject)
-      this.lineChartSkinfoldsBodyComposition = this.chartsService.lineChartSkinfolds(lineChart.skinfoldChartDataSet, lineChart.skinfoldXaxisLabel, lineChart.maxSkinfold, lineChart.maxWeight)
+      this.lineChartSkinfoldsBodyComposition = this.chartFeederService.lineChartSkinfolds(localSkinfoldObject)
 
     })
-    this.pieBarBodyComposition = this.chartsService.pieChart(this.SkinfoldsArray[this.selectorBodyCompDate].bodyResult.fatMass, this.SkinfoldsArray[this.selectorBodyCompDate].bodyResult.leanMass)
-
+    this.pieBarBodyComposition = this.chartFeederService.pieChart(
+      this.SkinfoldsArray[this.selectorBodyCompDate].bodyResult.fatMass,
+      this.SkinfoldsArray[this.selectorBodyCompDate].bodyResult.leanMass)
   }
 
   toggleSkinfoldChartListButton(event: Event) {
@@ -106,14 +89,27 @@ export class SkinfoldsChartComponent implements OnInit, OnDestroy {
   }
 
   toggleBodyCompChartButton(event: Event) {
-    this.toggleBoyCompChartEvent.next(event);
+
     this.toggleBodyCompChart = !this.toggleBodyCompChart
+    this.shiftMiniChartData()
+  }
+
+  shiftMiniChartData() {
+    this.pieBarBodyComposition.destroy()
+    if (this.toggleBodyCompChart) {
+      this.pieBarBodyComposition = this.chartFeederService.pieChart(
+        this.SkinfoldsArray[this.selectorBodyCompDate].bodyResult.fatMass,
+        this.SkinfoldsArray[this.selectorBodyCompDate].bodyResult.leanMass)
+    } else {
+      let foldSkinTitleArray = Object.keys(this.SkinfoldsArray[this.selectorBodyCompDate].fold)
+      let foldSkinValueArray = Object.values(this.SkinfoldsArray[this.selectorBodyCompDate].fold)
+      this.pieBarBodyComposition = this.chartFeederService.barChart(foldSkinValueArray, foldSkinTitleArray)
+    }
   }
 
   previousBodyCompChartButton(event: Event) {
     this.selectorBodyCompDate += 1
-    this.chartsService.updatePieChart(this.pieBarBodyComposition, this.SkinfoldsArray[this.selectorBodyCompDate].bodyResult.fatMass, this.SkinfoldsArray[this.selectorBodyCompDate].bodyResult.leanMass)
-
+    this.shiftMiniChartData()
     // this.previousBodyCompDateEvent.next(event);
     // if (this.selectorBodyCompDate < this.SkinfoldsArray.length) {
     //   this.selectorBodyCompDate += 1
@@ -131,41 +127,19 @@ export class SkinfoldsChartComponent implements OnInit, OnDestroy {
 
   nextBodyCompChartButton(event: Event) {
     this.selectorBodyCompDate -= 1
-    this.chartsService.updatePieChart(this.pieBarBodyComposition, this.SkinfoldsArray[this.selectorBodyCompDate].bodyResult.fatMass, this.SkinfoldsArray[this.selectorBodyCompDate].bodyResult.leanMass)
+    this.shiftMiniChartData()
+  }
 
+  deleteSkinfold(id: string, index: number) {
+    this.SkinfoldsArray.splice(index, 1)
+    this.dataSource._updateChangeSubscription()
+    this.chartContainerComponent.deleteSkinfold(id)
   }
 
   // events
-  public chartClicked({ event, active }: { event: MouseEvent, active: {}[] }): void {
-    // console.log(event, active);
-  }
+  public chartClicked({ event, active }: { event: MouseEvent, active: {}[] }): void { }
 
-  public chartHovered({ event, active }: { event: MouseEvent, active: {}[] }): void {
-    // console.log(event, active);
-  }
-
-  createBodyCompositionTile(n: number, skinfoldsArray: SkinfoldsForDB[]) {
-
-    let lastSkinfoldInArray = skinfoldsArray[skinfoldsArray.length - n]
-    let foldSkinTitleArray = Object.keys(lastSkinfoldInArray.fold)
-    let foldSkinValueArray = Object.values(lastSkinfoldInArray.fold)
-
-    this.barChartData = this.chartsService.barChartData(foldSkinValueArray)
-    this.barChartLabels = this.chartsService.barChartLabels(foldSkinTitleArray)
-    this.barChartOptions = this.chartsService.barChartOptions
-    this.barChartPlugins = this.chartsService.barChartPlugins
-    this.barChartLegend = this.chartsService.barChartLegend
-    this.barChartType = this.chartsService.barChartType
-
-    // this.pieChartOptions = this.chartsService.pieChartOptions
-    // this.pieChartLabels = this.chartsService.pieChartLabels
-    // this.pieChartData = this.chartsService.pieDataChart(lastSkinfoldInArray.bodyResult.fatMass, lastSkinfoldInArray.bodyResult.leanMass)
-    // this.pieChartType = this.chartsService.pieChartType
-    // this.pieChartPlugins = this.chartsService.pieChartPlugins
-    // this.pieChartColors = this.chartsService.pieChartColors
-
-  }
-
+  public chartHovered({ event, active }: { event: MouseEvent, active: {}[] }): void { }
 
 
   ngOnDestroy(): void {

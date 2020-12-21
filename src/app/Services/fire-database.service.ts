@@ -2,14 +2,14 @@ import { Router } from '@angular/router';
 import { DummyDataService } from './../Utility/dummyData.service';
 import { User } from './../interface-model/user.model';
 import { AuthService } from '../auth/auth.service';
-import { Subject, of, Subscription, BehaviorSubject } from 'rxjs';
+import { Subject, of, Subscription, BehaviorSubject, pipe, Observable } from 'rxjs';
 import { Girths } from './../interface-model/girths.model';
 import { SkinfoldsForDB } from './../interface-model/skinfold.model';
 import { Injectable } from '@angular/core';
 
 import { map } from 'rxjs/Operators';
 
-import { AngularFirestore } from '@angular/fire/firestore';
+import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
 @Injectable({
   providedIn: 'root'
 })
@@ -19,6 +19,7 @@ export class FireDatabaseService {
     private authService: AuthService) { }
 
   girthsSubj = new BehaviorSubject<Girths[]>([]);
+  girthsID = new BehaviorSubject<string[]>([]);
   skinfoldsSubj = new Subject<SkinfoldsForDB[]>()
   userSubscripiton: Subscription
 
@@ -35,7 +36,7 @@ export class FireDatabaseService {
 
   fetchAvailableGirths() {
     this.fbSubs.push(this.db.collection<Girths>(`users/${this.authService.userID}/girthsData`, ref => ref.orderBy("date", "desc").limit(10))
-      .valueChanges()
+      .valueChanges({ idField: 'idField' })
       .pipe(
         map((girths, ref) => girths.map(girth => {
           return <Girths>{
@@ -51,7 +52,7 @@ export class FireDatabaseService {
 
   fetchAvailableSkinfolds() {
     this.fbSubs.push(this.db.collection<SkinfoldsForDB>(`users/${this.authService.userID}/skinfoldsData`, ref => ref.orderBy("metadata.date", "desc").limit(10))//
-      .valueChanges()
+      .valueChanges({ idField: 'idField' })
       .pipe(
         map((skinfolds, ref) => skinfolds.map(skinfold => {
           skinfold.metadata.date = new Date(skinfold.metadata.date.seconds * 1000)
@@ -63,6 +64,13 @@ export class FireDatabaseService {
         this.skinfoldsSubj.next(skinfolds)
       }, error => {
       }))
+  }
+
+  deleteGirth(id: string) {
+    this.db.collection<Girths>(`users/${this.authService.userID}/girthsData`).doc(id).delete()
+  }
+  deleteSkinfolds(id: string) {
+    this.db.collection<SkinfoldsForDB>(`users/${this.authService.userID}/skinfoldsData`).doc(id).delete()
   }
 
   cancelSubscription() {

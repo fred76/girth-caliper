@@ -1,5 +1,5 @@
+import { ChartFeederService } from './../charts/chart-feeder.service';
 
-import { ChartService } from '../charts/chart.service';
 import { SkinfoldsChartsCardComponent } from './SkinfoldsChartsCard';
 import { ConfirmSkinfoldComponent } from './confirmSkinfolds';
 import { SkinfoldsService } from '../skinfolds.service';
@@ -19,7 +19,7 @@ export class SkinfoldComponent implements OnInit, OnDestroy {
     private dialog: MatDialog,
     private skinfoldsService: SkinfoldsService,
     private utility: Utility,
-    private chartService: ChartService) { }
+    private chartFeederService: ChartFeederService) { }
 
   skinfoldsTiles = []
   skinfoldsTilesDescriptions = []
@@ -38,13 +38,9 @@ export class SkinfoldComponent implements OnInit, OnDestroy {
   }
 
   // events
-  public chartClicked({ event, active }: { event: MouseEvent, active: {}[] }): void {
-    // console.log(event, active);
-  }
+  public chartClicked({ event, active }: { event: MouseEvent, active: {}[] }): void { }
 
-  public chartHovered({ event, active }: { event: MouseEvent, active: {}[] }): void {
-    // console.log(event, active);
-  }
+  public chartHovered({ event, active }: { event: MouseEvent, active: {}[] }): void { }
 
   eventCaliperMethodChange(s, event) {
     this.skinfoldsService.updateSelectedSkinfoldsrMethod(this.selectedSkinfoldsMethod)
@@ -82,23 +78,23 @@ export class SkinfoldComponent implements OnInit, OnDestroy {
           bodyDensity: this.utility.numberDecimal(foldSkin.bodyDensity, 2),
           bodyFatPercentage: this.utility.numberDecimal(foldSkin.bodyFatPerc, 2),
           sum: this.utility.numberDecimal(foldSkin.sum, 2),
-          pieBarBodyComposition: this.chartService.pieChart(this.utility.numberDecimal(foldSkin.fatMass, 2), this.utility.numberDecimal(foldSkin.leanMass, 2)),
+          pieBarBodyComposition: this.chartFeederService.pieChart(this.utility.numberDecimal(foldSkin.fatMass, 2), this.utility.numberDecimal(foldSkin.leanMass, 2)),
 
 
-          barChartData: this.chartService.barChartData(foldSkin.foldSkinValueArray),
-          barChartLabels: this.chartService.barChartLabels(foldSkin.foldSkinTitleArray),
-          barChartOptions: this.chartService.barChartOptions,
-          barChartPlugins: this.chartService.barChartPlugins,
-          barChartLegend: this.chartService.barChartLegend,
-          barChartType: this.chartService.barChartType,
+          barChartData: this.chartFeederService.barChartData(foldSkin.foldSkinValueArray),
+          barChartLabels: this.chartFeederService.barChartLabels(foldSkin.foldSkinTitleArray),
+          barChartOptions: this.chartFeederService.barChartOptions,
+          barChartPlugins: this.chartFeederService.barChartPlugins,
+          barChartLegend: this.chartFeederService.barChartLegend,
+          barChartType: this.chartFeederService.barChartType,
 
-          pieChartOptions: this.chartService.pieChartOptionsForCard,
-          pieChartLabels: this.chartService.pieChartLabels,
-          pieChartData: this.chartService.pieDataChart(this.utility.numberDecimal(foldSkin.fatMass, 2), this.utility.numberDecimal(foldSkin.leanMass, 2)),
-          pieChartType: this.chartService.pieChartType,
-          pieChartLegend: this.chartService.pieChartLegend,
-          pieChartPlugins: this.chartService.pieChartPlugins,
-          pieChartColors: this.chartService.pieChartColors
+          pieChartOptions: this.chartFeederService.pieChartOptionsForCard,
+          pieChartLabels: this.chartFeederService.pieChartLabels,
+          pieChartData: this.chartFeederService.pieDataChart(this.utility.numberDecimal(foldSkin.fatMass, 2), this.utility.numberDecimal(foldSkin.leanMass, 2)),
+          pieChartType: this.chartFeederService.pieChartType,
+          pieChartLegend: this.chartFeederService.pieChartLegend,
+          pieChartPlugins: this.chartFeederService.pieChartPlugins,
+          pieChartColors: this.chartFeederService.pieChartColors
         }
       });
 
