@@ -34,12 +34,10 @@ export class Utility {
     return strTime;
   }
 
-
   FormattedDate(d: Date) {
     return [d.getDate(), d.getMonth() + 1, d.getFullYear()]
       .map(n => n < 10 ? `0${n}` : `${n}`).join('/');
   }
-
 
   betweenRange(x, min, max) {
     return x >= min && x <= max;

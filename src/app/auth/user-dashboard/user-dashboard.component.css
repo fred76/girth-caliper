@@ -1,3 +1,27 @@
 .mainDiv {
   margin-top: 70px !important;
 }
+
+.pad {
+  padding-left: 24px;
+  padding-right: 24px;
+}
+.circular-square-small {
+  width: 75px;
+  border-radius: 50%;
+}
+.provider-icon {
+  margin-left: 16px;
+  width: 32px !important;
+  aspect-ratio: 1;
+}
+.font {
+  font-size: 12px;
+  color: whitesmoke;
+}
+.div-margin {
+  margin-top: 32px;
+}
+.inputlabel {
+  color: white;
+}

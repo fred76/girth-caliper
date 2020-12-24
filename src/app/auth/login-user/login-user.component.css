@@ -55,3 +55,7 @@
   perspective: 100%;
 }
 
+.pad {
+  padding-left: 24px;
+  padding-right: 24px;
+}

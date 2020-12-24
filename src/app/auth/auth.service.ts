@@ -1,4 +1,4 @@
-import { logging } from 'protractor';
+import { User } from './../interface-model/user.model';
 import { Injectable } from '@angular/core';
 
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
@@ -6,13 +6,10 @@ import { AngularFireAuth } from '@angular/fire/auth';
 
 import { Router } from '@angular/router';
 
-import { Observable, of, Subject } from 'rxjs';
-import { switchMap, map } from 'rxjs/Operators';
+import { Observable, of } from 'rxjs';
+import { switchMap } from 'rxjs/Operators';
 
 import firebase from 'firebase/app'
-
-import { User } from '../interface-model/user.model';
-
 
 
 @Injectable({
@@ -21,6 +18,14 @@ import { User } from '../interface-model/user.model';
 export class AuthService {
 
   user$: Observable<User>
+  userID: string
+  cred: any
+  arraOfLogin: string[] = []
+  email: string
+  emailSent = false;
+  errorMessage: string;
+  userPhoto: string
+  providerId: string
 
   constructor(
     private afAuth: AngularFireAuth,
@@ -32,51 +37,99 @@ export class AuthService {
         if (user) {
           const userChanges = this.afs.doc<User>(`users/${user.uid}`).valueChanges()
           this.userID = user.uid
+          console.log("SI USER")
+          user.providerData.map(profile => {
+            this.providerId = profile.providerId
+          })
           return userChanges
         } else {
+          console.log("No user");
           return of(null)
         }
       })
     )
   }
 
-  async googleSignkup() {
-    this.userPhoto = ""
-    const provider = new firebase.auth.GoogleAuthProvider()
-    const credential = await this.afAuth.signInWithPopup(provider)
-    this.router.navigate(['Body&Measurements/girthTab'])
-    return this.updateUserData(credential.user)
+  async userProvidersList(userEmail: string) {
+    this.arraOfLogin = []
+    const _ = (await firebase.auth().fetchSignInMethodsForEmail(userEmail)).map(async methods => {
+      this.arraOfLogin.push(methods)
+    })
+  }
+  isUserExtendedData() {
+    let isUserData: boolean = false
+    this.afs.firestore
+      .collection('users')
+      .doc(`${this.userID}`).get().then(p => {
+        if (p.exists) {
+          let birthday = p.get('birthday')
+          let gender = p.get('gender')
+          if (!birthday || !gender) {
+            this.router.navigate(['UserDashboard'])
+          } else {
+            this.router.navigate(['Body&Measurements/girthTab'])
+          }
+        }
+      })
   }
 
-  userID: string
-  cred: any
-  arraOfLogin: string[] = []
-  email: string
-  emailSent = false;
-  errorMessage: string;
-  userPhoto: string
+
 
   actionCodeSettings = {
     url: 'http://localhost:4200/Signup/',
     handleCodeInApp: true,
   };
 
+  addNickname(uid: string, nickname: string) {
+    this.afs.collection<User>(`users`).doc(uid).update({ nickname: nickname })
+  }
+  addGiveName(uid: string, givenName: string) {
+    this.afs.collection<User>(`users`).doc(uid).update({ givenName: givenName })
+  }
+  addGender(uid: string, gender: string) {
+    this.afs.collection<User>(`users`).doc(uid).update({ gender: gender })
+  }
+  addDateOfBirth(uid: string, dateOfBirth: string) {
+    this.afs.collection<User>(`users`).doc(uid).update({ dateOfBirth: dateOfBirth })
+  }
+
+  async googleSignup() {
+    const provider = new firebase.auth.GoogleAuthProvider()
+    const credential = await this.afAuth.signInWithPopup(provider)
+    this.isUserExtendedData()
+    const providerData = credential.user.providerData
+    let uid: string = ""
+    let userName = ""
+    let userPhoto = ""
+    for (var i = 0; i < providerData.length; i++) {
+      if (providerData[i].providerId === firebase.auth.GoogleAuthProvider.PROVIDER_ID) {
+        userName = providerData[i].displayName
+        userPhoto = providerData[i].photoURL
+      }
+    }
+    return this.updateUserDataFB(credential.user, userName, userPhoto)
+
+  }
+
   async facebookSignup() {
-    let r: number = 0
+    this.arraOfLogin = []
     try {
       const provider = new firebase.auth.FacebookAuthProvider()
       const credential = await this.afAuth.signInWithPopup(provider)
       const providerData = credential.user.providerData
       let uid: string = ""
+      let userName = ""
+      let userPhoto = ""
       for (var i = 0; i < providerData.length; i++) {
         if (providerData[i].providerId === firebase.auth.FacebookAuthProvider.PROVIDER_ID) {
           uid = providerData[i].uid
+          userName = providerData[i].displayName
         }
       }
       const accessToken = (<any>credential).credential.accessToken
-      this.userPhoto = "https://graph.facebook.com/" + uid + "/picture?width=800&access_token=" + accessToken
-      this.router.navigate(['Body&Measurements/girthTab'])
-      return this.updateUserData(credential.user)
+      userPhoto = "https://graph.facebook.com/" + uid + "/picture?width=800&access_token=" + accessToken
+      this.isUserExtendedData()
+      return this.updateUserDataFB(credential.user, userName, userPhoto)
     } catch (err) {
       (await firebase.auth().fetchSignInMethodsForEmail(err.email)).map(async methods => {
         this.arraOfLogin.push(methods)
@@ -89,27 +142,28 @@ export class AuthService {
   async appleSignup() {
     const provider = new firebase.auth.OAuthProvider('apple.com')
     const credential = await this.afAuth.signInWithPopup(provider)
-    this.router.navigate(['Body&Measurements/girthTab'])
-    return this.updateUserData(credential.user)
+    this.isUserExtendedData()
+    return this.updateUserData(credential.user, credential.additionalUserInfo.isNewUser, false)
   }
 
   async redirectWithGoogle() {
     const provider = new firebase.auth.GoogleAuthProvider()
     const credential = await this.afAuth.signInWithPopup(provider)
     credential.user.linkWithCredential(this.cred)
-    this.router.navigate(['Body&Measurements/girthTab'])
-    return this.updateUserData(credential.user)
+    this.isUserExtendedData()
+    return this.updateUserData(credential.user, credential.additionalUserInfo.isNewUser, true)
+
   }
 
   async redirectWithApple() {
     const provider = new firebase.auth.OAuthProvider('apple.com')
     const credential = await this.afAuth.signInWithPopup(provider)
     credential.user.linkWithCredential(this.cred)
-    this.router.navigate(['Body&Measurements/girthTab'])
-    return this.updateUserData(credential.user)
+    this.isUserExtendedData()
+
+    return this.updateUserData(credential.user, credential.additionalUserInfo.isNewUser, false)
+
   }
-
-
 
   async sendEmailLinkToSignup(emailUser: string) {
     this.email = emailUser
@@ -135,8 +189,13 @@ export class AuthService {
       if (this.afAuth.isSignInWithEmailLink(url)) {
         const credential = await this.afAuth.signInWithEmailLink(email, url);
         window.localStorage.removeItem('emailForSignIn');
-        this.router.navigate(['Body&Measurements/girthTab'])
-        return this.updateUserData(credential.user)
+        this.isUserExtendedData()
+
+
+        return this.updateUserData(credential.user, credential.additionalUserInfo.isNewUser, false)
+
+        // this.router.navigate(['Body&Measurements/girthTab'])
+        // return this.updateUserData(credential.user)
       }
     } catch (err) {
       this.errorMessage = err.message;
@@ -147,9 +206,9 @@ export class AuthService {
     try {
       if (this.afAuth.isSignInWithEmailLink(url)) {
         const credential = await this.afAuth.signInWithEmailLink(emailInserted, url);
-        this.router.navigate(['Body&Measurements/girthTab'])
         window.localStorage.removeItem('emailForSignIn');
-        return this.updateUserData(credential.user)
+        this.isUserExtendedData()
+        return this.updateUserData(credential.user, credential.additionalUserInfo.isNewUser, false)
       }
     } catch (err) {
       this.errorMessage = err.message;
@@ -161,18 +220,80 @@ export class AuthService {
     return this.router.navigate(['/'])
   }
 
-  private updateUserData(user) {
-    const userRef: AngularFirestoreDocument<User> = this.afs.doc(`users/${user.uid}`)
-    const data = {
-      uid: user.uid,
-      email: user.email,
-      displayName: user.displayName,
-      photoURL: user.photoURL
+  unlinkGoolge(isUncheked) {
+    if (!isUncheked) {
+      this.afAuth.currentUser.then(function (user) {
+        user.unlink("google.com").then(function () {
+        }).catch(function (error) {
+          console.log(error);
+        });
+      })
+    } else {
+      this.googleSignup()
     }
-    if (this.userPhoto) {
-      data.photoURL = this.userPhoto
+  }
+
+  unlinkFacebook(isUncheked) {
+    if (!isUncheked) {
+      this.afAuth.currentUser.then(function (user) {
+        user.unlink("facebook.com").then(function () {
+        }).catch(function (error) {
+          console.log(error);
+        });
+      })
+    } else {
+      this.facebookSignup()
     }
+  }
+
+  unlinkApple(isUncheked) {
+    if (!isUncheked) {
+      this.afAuth.currentUser.then(function (user) {
+        user.unlink("apple.com").then(function () {
+        }).catch(function (error) {
+          console.log(error);
+        });
+      })
+    } else {
+      this.appleSignup()
+    }
+  }
+
+  unlinkEmail(isUncheked) {
+    if (!isUncheked) {
+      this.afAuth.currentUser.then(function (user) {
+        user.unlink("emailLink").then(function () {
+        }).catch(function (error) {
+          console.log(error);
+        });
+      })
+    } else {
+      this.afAuth.currentUser.then(function (user) {
+        this.sendEmailLinkToSignup(user.email)
+      })
+
+    }
+  }
+
+  private updateUserData({ uid, email, displayName, photoURL }: User, isNewUser: boolean, isProviderWithPhoto: boolean) {
+    const userRef: AngularFirestoreDocument<User> = this.afs.doc(`users/${uid}`)
+    const data = { uid, email, displayName, photoURL }
+    if (isNewUser || isProviderWithPhoto) {
+      console.log("ENTRO  pp p p p ");
+
+      return userRef.set(data, { merge: true })
+    }
+  }
+
+  private updateUserDataFB({ uid, email }: User, displayName, photoURL) {
+    const userRef: AngularFirestoreDocument<User> = this.afs.doc(`users/${uid}`)
+    const data = { uid, email, displayName, photoURL }
+    console.log("ENTRO  pp p p p ");
+
     return userRef.set(data, { merge: true })
+
+
+
   }
 
 }

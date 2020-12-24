@@ -1,19 +1,8 @@
 <div class="mainDiv">
-  <!-- <div>
-    <label for="email" class="label">Passwordless Auth</label><br>
-    <input type="email" class="input" [(ngModel)]="authService.email">
-    <button class="button is-primary" [disabled]="authService.emailSent"
-      (click)="authService.sendEmailLink(authService.email)">
-      Get Login Link
-    </button>
-
-  </div> -->
-  <a class="mat-subheading-1 click" (click)="authService.signOut()">
-    Sign out</a>
   <div  class="tp-wrapper">
     <div class="tp-box" fxLayoutAlign="center" >
       <!-- SIGN IN CARD -->
-      <mat-card *ngIf="!isSignInWithEmail" >
+      <mat-card  class="mat-elevation-z8 pad" *ngIf="!isSignInWithEmail" >
         <button mat-icon-button routerLink="">
           <mat-icon class="clear-icon">clear</mat-icon>
         </button>
@@ -55,7 +44,7 @@
         </div>
       </mat-card>
       <!-- EMAIL SIGN IN -->
-      <mat-card *ngIf="isSignInWithEmail">
+      <mat-card class="mat-elevation-z8 pad" *ngIf="isSignInWithEmail">
         <button mat-icon-button routerLink="">
           <mat-icon class="clear-icon">clear</mat-icon>
         </button>

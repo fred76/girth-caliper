@@ -1,3 +1,4 @@
+import { FireDatabaseService } from 'src/app/Services/fire-database.service';
 import { AuthService } from '../auth.service';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
@@ -11,19 +12,7 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-login-user',
   templateUrl: './login-user.component.html',
-  styleUrls: ['./login-user.component.css'],
-  animations: [
-    trigger('flipState', [
-      state('active', style({
-        transform: 'rotateY(179deg)'
-      })),
-      state('inactive', style({
-        transform: 'rotateY(0)'
-      })),
-      transition('active => inactive', animate('500ms ease-out')),
-      transition('inactive => active', animate('500ms ease-in'))
-    ])
-  ]
+  styleUrls: ['./login-user.component.css']
 })
 export class LoginUserComponent implements OnInit {
 

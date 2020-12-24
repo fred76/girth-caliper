@@ -9,7 +9,8 @@ import { Router } from '@angular/router';
 })
 export class SignupUserComponent implements OnInit {
 
-  constructor(public authService: AuthService,
+  constructor(
+    public authService: AuthService,
     private router: Router) {
   }
 
@@ -27,8 +28,8 @@ export class SignupUserComponent implements OnInit {
       this.authService.confirmEmailFromURLToSignup(url)
       window.localStorage.removeItem('emailForSignIn');
     }
-
   }
+
   email = new FormControl('', [Validators.required, Validators.email]);
   hide = true;
   getErrorMessage() {

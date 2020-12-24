@@ -3,9 +3,9 @@ export interface User {
   email: string;
   displayName?: string;
   photoURL?: string
+  nickname?: string
+  givenName?: string
+  gender?: string
+  dateOfBirth?: Date | any
 }
 
-export interface UserExtended extends User {
-  gender: string
-  dateOfBirth: Date
-}

@@ -21,6 +21,10 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatStepperModule } from '@angular/material/stepper';
+
+
 // import { MatSelectModule } from '@angular/material/select';
 // import { MatChipsModule } from '@angular/material/chips';
 // import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -52,7 +56,9 @@ let p: any[] = [
   MatTooltipModule,
   MatProgressSpinnerModule,
   MatChipsModule,
-  MatMenuModule
+  MatMenuModule,
+  MatCheckboxModule,
+  MatStepperModule
   // MatSelectModule,
   // MatChipsModule,
   // MatCheckboxModule,
