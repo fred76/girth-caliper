@@ -1,3 +1,5 @@
+import { Subscription } from 'rxjs';
+import { AuthService } from './../../auth/auth.service';
 import { ChartFeederService } from './../charts/chart-feeder.service';
 
 import { SkinfoldsChartsCardComponent } from './SkinfoldsChartsCard';
@@ -7,11 +9,13 @@ import { Component, OnDestroy, OnInit, Output } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog'
 
 import { Utility } from 'src/app/Utility/utility';
-
+import * as moment from 'moment';
+import { DatePipe } from '@angular/common';
 @Component({
   selector: 'app-skinfold',
   templateUrl: './skinfold.component.html',
-  styleUrls: ['./skinfold.component.css']
+  styleUrls: ['./skinfold.component.css'],
+  providers: [DatePipe]
 })
 export class SkinfoldComponent implements OnInit, OnDestroy {
 
@@ -19,22 +23,37 @@ export class SkinfoldComponent implements OnInit, OnDestroy {
     private dialog: MatDialog,
     private skinfoldsService: SkinfoldsService,
     private utility: Utility,
-    private chartFeederService: ChartFeederService) { }
+    private chartFeederService: ChartFeederService,
+    private authService: AuthService,
+    private datePipe: DatePipe) { }
 
   skinfoldsTiles = []
   skinfoldsTilesDescriptions = []
-  skinfoldsMethods = this.skinfoldsService.skinfoldsMethods
+  skinfoldsMethods = []
   selectedSkinfoldsMethod: string
   measurementDate: Date
   bodyWeight: number = 90
   userAge: number = 44
   pieBarBodyComposition: any
-  ngOnInit(): void {
-    this.skinfoldsService.selectedSkinfoldsMethodSubs()
-  }
+  userSub: Subscription
 
+  ngOnInit(): void {
+
+    this.skinfoldsService.selectedSkinfoldsMethodSubs()
+    this.userSub = this.authService.user$.subscribe(user => {
+      let t = this.datePipe.transform(user.dateOfBirth.seconds * 1000, 'MM/dd/yyyy');
+      let d = new Date(t)
+      this.userAge = this.calculateAge(d)
+      user.gender == 'Male' ? this.skinfoldsMethods = this.skinfoldsService.skinfoldsMethodsMan : this.skinfoldsMethods = this.skinfoldsService.skinfoldsMethodsWoman
+
+    })
+  }
+  calculateAge(birthdate: any): number {
+    return moment().diff(birthdate, 'years');
+  }
   ngOnDestroy() {
     this.skinfoldsService.selectedSkinfoldsMethodUnsubscribe()
+    this.userSub.unsubscribe()
   }
 
   // events

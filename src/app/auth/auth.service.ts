@@ -19,6 +19,8 @@ export class AuthService {
 
   user$: Observable<User>
   userID: string
+  gender: string
+  age: number
   cred: any
   arraOfLogin: string[] = []
   email: string
@@ -32,12 +34,12 @@ export class AuthService {
     private afs: AngularFirestore,
     private router: Router
   ) {
+
     this.user$ = this.afAuth.authState.pipe(
       switchMap(user => {
         if (user) {
           const userChanges = this.afs.doc<User>(`users/${user.uid}`).valueChanges()
           this.userID = user.uid
-          console.log("SI USER")
           user.providerData.map(profile => {
             this.providerId = profile.providerId
           })
@@ -48,6 +50,10 @@ export class AuthService {
         }
       })
     )
+  }
+
+  returnUserIdToken(): Observable<string>{
+    return this.afAuth.idToken
   }
 
   async userProvidersList(userEmail: string) {
@@ -62,7 +68,7 @@ export class AuthService {
       .collection('users')
       .doc(`${this.userID}`).get().then(p => {
         if (p.exists) {
-          let birthday = p.get('birthday')
+          let birthday = p.get('dateOfBirth')
           let gender = p.get('gender')
           if (!birthday || !gender) {
             this.router.navigate(['UserDashboard'])
@@ -72,8 +78,6 @@ export class AuthService {
         }
       })
   }
-
-
 
   actionCodeSettings = {
     url: 'http://localhost:4200/Signup/',
@@ -85,6 +89,7 @@ export class AuthService {
   }
   addGiveName(uid: string, givenName: string) {
     this.afs.collection<User>(`users`).doc(uid).update({ givenName: givenName })
+    this.afs.collection<User>(`users`).doc(uid).update({ displayName: givenName })
   }
   addGender(uid: string, gender: string) {
     this.afs.collection<User>(`users`).doc(uid).update({ gender: gender })
@@ -275,12 +280,12 @@ export class AuthService {
     }
   }
 
+
+
   private updateUserData({ uid, email, displayName, photoURL }: User, isNewUser: boolean, isProviderWithPhoto: boolean) {
     const userRef: AngularFirestoreDocument<User> = this.afs.doc(`users/${uid}`)
     const data = { uid, email, displayName, photoURL }
     if (isNewUser || isProviderWithPhoto) {
-      console.log("ENTRO  pp p p p ");
-
       return userRef.set(data, { merge: true })
     }
   }
@@ -288,12 +293,23 @@ export class AuthService {
   private updateUserDataFB({ uid, email }: User, displayName, photoURL) {
     const userRef: AngularFirestoreDocument<User> = this.afs.doc(`users/${uid}`)
     const data = { uid, email, displayName, photoURL }
-    console.log("ENTRO  pp p p p ");
-
     return userRef.set(data, { merge: true })
-
-
-
   }
 
 }
+/*
+export interface User {
+    uid: string;
+    email: string;
+    photoURL?: string;
+    displayName?: string;
+    stripeCustomerId?: string;
+    subscriptions?: {
+      [key: string]: 'active' | 'pastDue' | 'cancelled';
+    }
+
+    // for Stripe Connect
+    accountId?: string;
+    refreshToken?: string;
+  }
+*/

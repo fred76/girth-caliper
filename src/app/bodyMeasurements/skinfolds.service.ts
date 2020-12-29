@@ -22,16 +22,19 @@ export class SkinfoldsService {
 
   skinfoldsObjectForDB: SkinfoldsForDB
 
-  skinfoldsMethods = [
+  skinfoldsMethodsMan = [
     "jackson & Polloc 7 point Man",
-    "jackson & Polloc 7 point Woman",
     "jackson & Polloc 3 point Man",
-    "jackson & Polloc 3 point Woman",
     "Sloan - Men 2 point",
-    "Sloan - Woman 2 point",
     "Durnin & Womersley Man",
+  ]
+  skinfoldsMethodsWoman = [
+    "jackson & Polloc 7 point Woman",
+    "jackson & Polloc 3 point Woman",
+    "Sloan - Woman 2 point",
     "Durnin & Womersley Woman"
   ]
+
 
   selectedSkinfoldsMethodSubs() {
     this.selectedSkinfoldsMethodSubscription = this.selectedSkinfoldsMethod$.subscribe(data => {

@@ -1,7 +1,11 @@
 <div class="mainDiv">
+  <button class="poppo" (click)="purchaseSubscription( 'prod_IekY93sBFiAuwB' )">PIPPO</button>
   <div fxLayoutAlign="center" *ngIf="authService.user$ | async as user ">
     <mat-card class="mat-elevation-z8 pad">
-      <div fxLayoutAlign="center ">
+      <button mat-icon-button routerLink="/Body&Measurements/girthTab">
+        <mat-icon class="clear-icon">clear</mat-icon>
+      </button>
+      <div class="divPhoto" fxLayoutAlign="center ">
         <img *ngIf="user.photoURL" class="circular-square-small" src="{{user.photoURL}}">
       </div>
       <div *ngIf="!user.displayName">
@@ -12,7 +16,7 @@
         <p class="div-margin body-2">Welcome, {{user.displayName}}</p>
         <p class="caption font">Manage your personal data, login and subscription</p>
       </div>
-      <mat-vertical-stepper [linear]=false #stepper>
+      <mat-vertical-stepper [linear]=false #stepper >
         <mat-step [stepControl]="userDataFormGroup" state="account_circle" errorMessage="All * fields are required.">
 
           <form [formGroup]="userDataFormGroup" (ngSubmit)="onSubmit()">
@@ -26,7 +30,7 @@
                 <span class="inputlabel"> </span>
               </mat-form-field>
             </div>
-            <div *ngIf="user.displayName">
+            <div *ngIf="!user.displayName">
               <p class="caption font">{{user.displayName}}</p>
             </div>
             <mat-form-field class="field">

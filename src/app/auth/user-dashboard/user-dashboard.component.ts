@@ -1,13 +1,14 @@
-import { Utility } from './../../Utility/utility';
+import { StrpieService } from './../strpie.service';
+import { User } from './../../interface-model/user.model';
+import { Subscription } from 'rxjs';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
 import { AuthService } from './../auth.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { DatePipe } from '@angular/common';
-import * as moment from 'moment';
 @Component({
   selector: 'app-user-dashboard',
   templateUrl: './user-dashboard.component.html',
@@ -16,14 +17,14 @@ import * as moment from 'moment';
     provide: STEPPER_GLOBAL_OPTIONS, useValue: { displayDefaultIndicatorType: false, showError: true },
   }, DatePipe]
 })
-export class UserDashboardComponent implements OnInit {
+export class UserDashboardComponent implements OnInit, OnDestroy {
 
   constructor(public authService: AuthService,
     private matIconRegistry: MatIconRegistry,
     private domSanitizer: DomSanitizer,
     private _formBuilder: FormBuilder,
-    private utility: Utility,
-    private datePipe: DatePipe,) {
+    private datePipe: DatePipe,
+    private strpieService: StrpieService) {
     this.matIconRegistry.addSvgIcon(
       "appleL",
       this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/accessory/appleL.svg")
@@ -44,31 +45,62 @@ export class UserDashboardComponent implements OnInit {
 
   isLinear = false;
   userDataFormGroup: FormGroup;
-  birthDate: string
+  dateOfBirth: string
   nickname: string
   gender: string
   genders: string[] = ["Male", "Female"]
+  userSub: Subscription
+  displayName: string
+  isLoggedIn: boolean
+  isPurchaseStrated: boolean
+  dateBirth(user: User) {
 
-  // constructor(private _formBuilder: FormBuilder) {}
-
-  calculateAge(birthdate: any): number {
-    return moment().diff(birthdate, 'years');
+    let dateString = this.datePipe.transform(user.dateOfBirth.seconds * 1000, 'MM/dd/yyyy');
+    return new Date(dateString)
   }
 
   ngOnInit() {
-    this.authService.user$.subscribe(u => {
-      let dateString = this.datePipe.transform(u.dateOfBirth.seconds * 1000, 'MM/dd/yyyy');
-      let birthday = new Date(dateString)
-      console.log("PIPPO " + birthday);
+    this.userSub = this.authService.user$.subscribe(u => {
+      console.log(u.email)
+
+      if (u) {
+        this.isLoggedIn = true
+      }
+
+      u.gender ? this.gender = u.gender : this.gender = ""
+      u.nickname ? this.nickname = u.nickname : this.nickname = ""
+      u.dateOfBirth ? this.dateOfBirth = this.dateBirth(u).toLocaleString() : this.dateOfBirth = ""
+      u.displayName ? this.displayName = u.displayName : this.displayName = ""
 
       this.userDataFormGroup = this._formBuilder.group({
-        genderControl: new FormControl(u.gender, Validators.required),
-        nicknameControl: new FormControl(u.nickname),
-        userNameControl: new FormControl(u.displayName, Validators.required),
-        birthDateControl: new FormControl(birthday, Validators.required),
+        genderControl: new FormControl(this.gender, Validators.required),
+        nicknameControl: new FormControl(this.nickname),
+        userNameControl: new FormControl(this.displayName, Validators.required),
+        birthDateControl: new FormControl(this.dateOfBirth, Validators.required),
       });
       this.authService.userProvidersList(u.email)
     })
+
+  }
+
+  purchaseSubscription(id: string) {
+
+    this.isPurchaseStrated = true
+    this.strpieService.startCheckoutSession(id).subscribe(session => {
+      console.log("session 1");
+      console.log(session);
+      console.log("session 1");
+      this.strpieService.redirectToCheckout(session)
+      console.log("session");
+      console.log(session);
+      console.log("session");
+
+    },
+      err => {
+        console.log("Error creating checkout session ...." + err);
+        this.isPurchaseStrated = false
+      }
+    )
   }
 
   googleUnlinkLink(event: MatCheckboxChange): void {
@@ -89,6 +121,10 @@ export class UserDashboardComponent implements OnInit {
     this.authService.addDateOfBirth(this.authService.userID, this.userDataFormGroup.value.birthDateControl)
     this.authService.addNickname(this.authService.userID, this.userDataFormGroup.value.nicknameControl)
     this.authService.addGiveName(this.authService.userID, this.userDataFormGroup.value.userNameControl)
+  }
+
+  ngOnDestroy() {
+    this.userSub.unsubscribe()
   }
 
 }

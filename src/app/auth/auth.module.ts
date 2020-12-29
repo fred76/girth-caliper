@@ -1,3 +1,4 @@
+import { StripeCheckoutComponent } from './stripe-checkout/stripe-checkout.component';
 import { SharedModule } from './../Shared/shared.module';
 import { UserDashboardComponent } from './user-dashboard/user-dashboard.component';
 
@@ -13,7 +14,8 @@ import { LoginRedirectComponent } from './login-redirect/login-redirect.componen
     SignupUserComponent,
     LoginUserComponent,
     UserDashboardComponent,
-    LoginRedirectComponent
+    LoginRedirectComponent,
+    StripeCheckoutComponent
   ],
   imports: [
     SharedModule,

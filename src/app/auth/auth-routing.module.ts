@@ -1,3 +1,4 @@
+import { StripeCheckoutComponent } from './stripe-checkout/stripe-checkout.component';
 import { LoginRedirectComponent } from './login-redirect/login-redirect.component';
 import { AuthGuard } from './auth.guard';
 import { UserDashboardComponent } from './../auth/user-dashboard/user-dashboard.component';
@@ -11,6 +12,7 @@ const routes: Routes = [
   { path: 'Login', component: LoginUserComponent },
   { path: 'Signup', component: SignupUserComponent },
   { path: 'LoginRedirect', component: LoginRedirectComponent },
+  { path: 'stripe-checkout', component: StripeCheckoutComponent },
   { path: 'UserDashboard', component: UserDashboardComponent, canActivate: [AuthGuard] },
 ]
 @NgModule({
