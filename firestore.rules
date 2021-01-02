@@ -1,23 +1,29 @@
-// rules_version = '2';
-// service cloud.firestore {
-//   match /databases/{database}/documents {
-//     // Make sure the uid of the requesting user matches name of the user
-//     // document. The wildcard expression {userId} makes the userId variable
-//     // available in rules.
-//     match /users/{userId} {
-//       allow read, update, delete: if request.auth != null && request.auth.uid == userId;
-//       allow create: if request.auth != null;
-//     }
-//   }
-// }
-// service cloud.firestore {
-//   match /databases/{database}/documents {
-//     // Make sure the uid of the requesting user matches name of the user
-//     // collection. The wildcard expression {userId} makes the userId variable
-//     // available in rules.
-//     match /{userId}/{userDocs=**} {
-//       allow read, update, delete: if request.auth != null && request.auth.uid == userId;
-//       allow create: if request.auth != null;
-//     }
-//   }
-// }
+
+
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isUserWithId(userId) {
+      return request.auth.uid == userId;
+    }
+
+    // match /users/{userId} {
+    //   allow read, write, create, update: if (request.resource.data.diff(resource.data).affectedKeys()
+    //   .hasOnly(['email', 'displayName', 'photoURL', 'nickname', 'givenName', 'gender', 'dateOfBirth', 'uid']));
+    // }
+
+    match /users/{userId} {
+      allow read, write, create : if isUserWithId(userId);
+
+      match /girthsData/{girthsDataId} {
+        allow read, write, create: if isUserWithId(userId);
+      }
+      match /skinfoldsData/{skinfoldsDataId} {
+        allow read, write, create: if isUserWithId(userId);
+      }
+
+    }
+
+  }
+}

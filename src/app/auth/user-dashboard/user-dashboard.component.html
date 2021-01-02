@@ -1,5 +1,5 @@
 <div class="mainDiv">
-  <button class="poppo" (click)="purchaseSubscription( 'prod_IekY93sBFiAuwB' )">PIPPO</button>
+  <button class="poppo" (click)="purchaseSubscription()">PIPPO</button>
   <div fxLayoutAlign="center" *ngIf="authService.user$ | async as user ">
     <mat-card class="mat-elevation-z8 pad">
       <button mat-icon-button routerLink="/Body&Measurements/girthTab">
@@ -43,7 +43,7 @@
               <mat-form-field appearance="standard">
                 <mat-label>Birth date</mat-label>
                 <input matInput placeholder="Birthday" [matDatepicker]="picker" formControlName="birthDateControl"
-                  required [value]="user.dateOfBirth">
+                  required  >
                 <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                 <mat-datepicker #picker required></mat-datepicker>
               </mat-form-field>
@@ -116,6 +116,7 @@
           <mat-icon>monetization_on</mat-icon>
         </ng-template>
       </mat-vertical-stepper>
+
     </mat-card>
   </div>
 </div>

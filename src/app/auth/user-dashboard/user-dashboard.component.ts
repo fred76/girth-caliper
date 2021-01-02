@@ -1,5 +1,4 @@
 import { StrpieService } from './../strpie.service';
-import { User } from './../../interface-model/user.model';
 import { Subscription } from 'rxjs';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -9,13 +8,13 @@ import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms'
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { DatePipe } from '@angular/common';
+
 @Component({
   selector: 'app-user-dashboard',
   templateUrl: './user-dashboard.component.html',
   styleUrls: ['./user-dashboard.component.css'],
-  providers: [{
-    provide: STEPPER_GLOBAL_OPTIONS, useValue: { displayDefaultIndicatorType: false, showError: true },
-  }, DatePipe]
+  providers: [
+    { provide: STEPPER_GLOBAL_OPTIONS, useValue: { displayDefaultIndicatorType: false, showError: true } }]
 })
 export class UserDashboardComponent implements OnInit, OnDestroy {
 
@@ -23,7 +22,6 @@ export class UserDashboardComponent implements OnInit, OnDestroy {
     private matIconRegistry: MatIconRegistry,
     private domSanitizer: DomSanitizer,
     private _formBuilder: FormBuilder,
-    private datePipe: DatePipe,
     private strpieService: StrpieService) {
     this.matIconRegistry.addSvgIcon(
       "appleL",
@@ -45,67 +43,51 @@ export class UserDashboardComponent implements OnInit, OnDestroy {
 
   isLinear = false;
   userDataFormGroup: FormGroup;
-  dateOfBirth: string
   nickname: string
+  dateOfBirth: Date
   gender: string
   genders: string[] = ["Male", "Female"]
   userSub: Subscription
   displayName: string
   isLoggedIn: boolean
   isPurchaseStrated: boolean
-  dateBirth(user: User) {
-
-    let dateString = this.datePipe.transform(user.dateOfBirth.seconds * 1000, 'MM/dd/yyyy');
-    return new Date(dateString)
-  }
 
   ngOnInit() {
     this.userSub = this.authService.user$.subscribe(u => {
-      console.log(u.email)
-
       if (u) {
         this.isLoggedIn = true
       }
 
-      u.gender ? this.gender = u.gender : this.gender = ""
-      u.nickname ? this.nickname = u.nickname : this.nickname = ""
-      u.dateOfBirth ? this.dateOfBirth = this.dateBirth(u).toLocaleString() : this.dateOfBirth = ""
-      u.displayName ? this.displayName = u.displayName : this.displayName = ""
+      u.gender ? this.gender = u.gender : this.gender = null
+      u.nickname ? this.nickname = u.nickname : this.nickname = null
+      u.dateOfBirth ? this.dateOfBirth = new Date(u.dateOfBirth.seconds * 1000) : this.dateOfBirth = null
+      u.displayName ? this.displayName = u.displayName : this.displayName = null
 
-      this.userDataFormGroup = this._formBuilder.group({
+      this.userDataFormGroup = new FormGroup({
         genderControl: new FormControl(this.gender, Validators.required),
         nicknameControl: new FormControl(this.nickname),
         userNameControl: new FormControl(this.displayName, Validators.required),
         birthDateControl: new FormControl(this.dateOfBirth, Validators.required),
       });
       this.authService.userProvidersList(u.email)
-    })
 
+    })
   }
 
-  purchaseSubscription(id: string) {
 
-    this.isPurchaseStrated = true
-    this.strpieService.startCheckoutSession(id).subscribe(session => {
-      console.log("session 1");
-      console.log(session);
-      console.log("session 1");
-      this.strpieService.redirectToCheckout(session)
-      console.log("session");
-      console.log(session);
-      console.log("session");
-
-    },
-      err => {
-        console.log("Error creating checkout session ...." + err);
-        this.isPurchaseStrated = false
-      }
-    )
+  purchaseSubscription() {
+    this.strpieService.startSubscriptionCheckoutSession("price_1I5HSDBFHWy6VCCKqE4IrMcX")
+      .subscribe(
+        session => this.strpieService.redirectToCheckout(session),
+        err => {
+          console.log("Error creating checkout session", err);
+          this.isPurchaseStrated = false;
+        }
+      );
   }
 
   googleUnlinkLink(event: MatCheckboxChange): void {
     this.authService.unlinkGoolge(event.checked)
-    console.log(event.checked);
   }
 
   facebookUnlinkLink(event: MatCheckboxChange): void {

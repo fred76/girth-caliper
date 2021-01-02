@@ -1,5 +1,6 @@
 import { Subject } from 'rxjs';
 import { Injectable } from '@angular/core';
+import * as moment from 'moment';
 
 @Injectable()
 
@@ -20,6 +21,23 @@ export class Utility {
     // Shift back
     value = value.toString().split('e');
     return +(value[0] + 'e' + (value[1] ? (+value[1] - exp) : -exp));
+
+  }
+
+  isSubscripitionOutOfDate(subDate: any): boolean {
+    var subsDate = moment(subDate.seconds * 1000);
+    var now = moment();
+    var diffDays = now.diff(subsDate, 'days');
+    console.log("subsDate " + subsDate);
+    console.log("now " + now);
+    if (diffDays <= 30) {
+      console.log("Maggior " + diffDays);
+
+      return true
+    } else {
+      console.log("Minore " + diffDays);
+      return false
+    }
 
   }
 

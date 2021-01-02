@@ -63,9 +63,6 @@ export class BodyChartComponent implements OnInit {
     this.selected_girth_skinfold_id = girth_skinfold.id;
     let a = []
     let max: number
-
-    console.log("this.selected_girth_skinfold_id" + this.selected_girth_skinfold_id);
-
     this.lineChartGirthsOverSkinfolds.destroy()
     this.lineChartGirthsOverSkinfolds = this.chartsFeederService.lineChartSkinfoldsOverGirths(this.skinfolds, this.girths, this.selected_girth_skinfold_id)
 

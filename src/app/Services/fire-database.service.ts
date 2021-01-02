@@ -24,6 +24,11 @@ export class FireDatabaseService {
   skinfoldsSubj = new Subject<SkinfoldsForDB[]>()
   userSubscripiton: Subscription
 
+  /*
+   addSkinfoldsToDB(skinfolds: SkinfoldsForDB): Observable<any> {
+      return from(this.afs.collection(`users/${this.authService.userID}/skinfoldsData`).add(skinfolds))
+    }
+  */
 
   addSkinfoldsToDB(skinfolds: SkinfoldsForDB) {
     this.afs.collection(`users/${this.authService.userID}/skinfoldsData`).add(skinfolds)

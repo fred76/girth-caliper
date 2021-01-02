@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "girthcaliperweb",
+  "private_key_id": "19d84b17121f0a8ccf39edad17f22b1dafefc7ed",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDMlDDZ26D2jIYr\ni1xOV232mq9FlbH4KmrBKefpz9J7mS6mJbFPlJI0SE8+FebhiS6Hu7YzKMWSIMsk\nvOMZJrGz3PxxaM3CsXnNlPTIinys9JMI7HJ3nOi3IkxulWKoh1R67VerFtTS8uh7\n8Blvn6QX9CYyeIJzoRS8CAqjBTVH6nJqtWCcH22d3L7Urw4WcNSnCQEhcbAojkfG\nF9CBJU3U5SNyGWvp9JVVLmOcxcWh0jpB4ZgvMRA1Yk57uIH2mrrX8C9jsxK/lXpz\nGG8F/SIBp5WJkWDPlY2c6YE3wJ8cC5qCVtrhrU52xwaBY+V3O8FjimzjeoTEbugv\nXXNGN1OTAgMBAAECggEAEodVdACCr/HYRmIFMTSVSWGHKwaSK4eD9bdwQWqeMK2W\nCQb0QTXpQVekkwX0IaHawgEL+87fM2Ce+tZ/ZwwXH32OAPjcsfErC/tIFFBerGIr\nswI0ooVmmmI+iUF5wbPIFf4gaObUzb+hs3VH3dFCpnIUHObHQeZpSgJxxtlg6FYN\nJIP4qTVAdNiWueIj+lMcRs+JVRxv8fumhPwt140OMg8O3c7hZ+RG3gMyOTXYedbX\n/krIKIwtZeUNkzrif7X3LyrzBZ+O1BkRoSP+DV9KReO3VG+K9im8CkGXlgiZPJiF\nxu994tgLMvYiQilkAqilEWGDqOdfOsdrB2dAkS8tOQKBgQDlPAPOIBd4L8CbS3yg\nUVPSA/C9FJUiA6ekrbFvSmhQh4Q2JuUUKgPXt1XbVlLeg5gd7wCjfoKuaic8MbfU\n8O9H0znwBNTLTqhyQOxIunjWRZdRtkYO/ldljaMylb3qXpnSaTpcuQt2BhSTbjtl\nlIO82HC9J/+S7cgP6llZJ5LlhQKBgQDkdzQAWvgdtV8jAyv+gWzyG4/8bZEiZ2UK\njIuUMI+SMYGbjjWR5crtRrGMPWrhRB+qU+FhzpV8BxMSC/3tY2I0yq7g769oMOI0\nOMXs39oNQvUc5ui5RJykwryAiPV/MaxkczmkMtBO26+fTFVycQudHmAhAAaBNR6j\nEgLLiLU0NwKBgQDhzLMG2C+mEIuNrNau6E1DguQgq+SWo7j/iqRLtqR4JnTCDp/5\ns8UjOJEWw7pPOpqdaa5cXaKGAURyk5q74zQfsN3SIkAln25nVLIqlZuvnM8ICx6J\naFlYTCMkEcIH2XV1gHefnBrBAA5Ghv90+MynOSAcAwlJhnVZ0AKAwm19LQKBgQC4\nq5n/B4kzCl4iQPgYuqlDcgAK/M2pz4We50gTusTyWM343RR0IBjNfq0ZPLPd7mDi\nHvc5RfES1e0WU1cnwYOqRILjExrnz0upBpMGC1OIEK1sdUF8L/emPjp8czhtXcuJ\nTpIzJVe3xl/JFbyjyrimgd0WD50yZ6uiCHb16kT+NQKBgCAJWaUtaHoca6XMCkOm\nIR4HePU1Ts+y9fGO0WJAJltU3QP5twDLT78wVN3p2zXjZdEIPvj0YEsZZaRzICiZ\n1hyH5GE85SIeHZweGkOJPblVmwO/uXxRxzV/Fwiz+8WlhRSTtNjGZDnGLRkYE5y4\nWAD3BWCVqnmRzh2rGbVw2nKD\n-----END PRIVATE KEY-----\n",
+  "client_email": "girth-caliper-dev-account@girthcaliperweb.iam.gserviceaccount.com",
+  "client_id": "100525287252513740174",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/girth-caliper-dev-account%40girthcaliperweb.iam.gserviceaccount.com"
+}

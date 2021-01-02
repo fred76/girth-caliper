@@ -1,62 +1,55 @@
 import { Request, Response } from "express"
-import { db } from "./database";
-// import { getDocData } from "./database";
+import { db, getDocData } from "./database";
 import { Timestamp } from '@google-cloud/firestore'
+
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+
 interface RequestInfo {
-  courseId: string,
   callbackUrl: string,
-  userId: string
+  userId: string,
+  pricingPlanId: String
 }
 
 export async function createCheckoutSession(req: Request, res: Response) {
 
-
-
   try {
 
     const info: RequestInfo = {
-      courseId: req.body.courseID,
+      pricingPlanId: req.body.pricingPlanId,
       callbackUrl: req.body.callbackUrl,
       userId: req['uid']
     }
 
-    if (!info.courseId) {
+    if (!info.userId) {
       const message = 'User must be authenticated'
-      console.log(message);
       res.status(403).json({ message })
       return
     }
 
-    console.log("Purchasing course id: ", info);
-
-    const purchaseSession = await db.collection("purchaseSession").doc()
-
     const checkoutSessionData: any = {
       status: 'ongoing',
       created: Timestamp.now(),
-      userId: info.userId
+      stripeCustomerId: '',
+      pricingPlanId: ''
     }
 
-    if (info.courseId) {
-      checkoutSessionData.courseId = info.courseId
+    checkoutSessionData.pricingPlanId = info.pricingPlanId
+
+    const user = await getDocData(`users/${info.userId}`)
+
+    const userRef = db.doc(`users/${info.userId}`);
+
+    await userRef.set(checkoutSessionData, { merge: true })
+
+    let sessionConfig, stripeCustomerId = user ? user.stripeCustomerId : undefined;
+
+
+    if (info.pricingPlanId) {
+      sessionConfig = setupSubscriptionSession(info, info.userId, stripeCustomerId, info.pricingPlanId)
     }
-
-    await purchaseSession.set(checkoutSessionData)
-
-    console.log(checkoutSessionData);
-
-
-    let sessionConfig
-
-    if (info.courseId) {
-      sessionConfig = setupPurchaseCourseSession(info/*, course*/, purchaseSession.id)
-    }
-
-    console.log(sessionConfig);
 
     const session = await stripe.checkout.sessions.create(sessionConfig);
-    console.log(session.id);
+
     res.status(200).json({
       stripeCheckoutSessionId: session.id,
       stripePublicKey: process.env.STRIPE_PUBLIC_KEY
@@ -71,29 +64,28 @@ export async function createCheckoutSession(req: Request, res: Response) {
 
 }
 
-function setupPurchaseCourseSession(info: RequestInfo /*, course*/, sessionId: string) {
-  const config = setupBaseSessionConfig(info, sessionId)
-  config.line_items = [
-    {
-      name: 'compra',
-      description: 'E godi',
-      amount: 10000,
-      currency: 'usd',
-      quantity: 1
-    }
-  ]
-  return config
+function setupSubscriptionSession(info: RequestInfo, sessionId: string, stripeCustomerId, pricingPlanId) {
+
+  const config = setupBaseSessionConfig(info, sessionId, stripeCustomerId);
+
+  config.subscription_data = {
+    items: [{ plan: pricingPlanId }]
+  };
+
+  return config;
 }
 
-
-
-function setupBaseSessionConfig(info: RequestInfo, sessionId: string) {
+function setupBaseSessionConfig(info: RequestInfo, sessionId: string, stripeCustomerId: string) {
   const config: any = {
     payment_method_types: ['card'],
-    success_url: `${info.callbackUrl}/?purchaseResult=succes`,
+    success_url: `${info.callbackUrl}/?purchaseResult=success&ongoingPurchaseSessionId=${sessionId}`,
     cancel_url: `${info.callbackUrl}/?purchaseResult=failed`,
     client_reference_id: sessionId
   }
+
+  if (stripeCustomerId) {
+    config.customer = stripeCustomerId
+  }
+
   return config
 }
-

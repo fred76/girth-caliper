@@ -1,5 +1,4 @@
-
-export interface checkoutSession{
+export interface CheckoutSession {
   stripeCheckoutSessionId: string,
   stripePublicKey: string
 }

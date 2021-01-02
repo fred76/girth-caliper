@@ -1,3 +1,4 @@
+import { Utility } from './../Utility/utility';
 import { User } from './../interface-model/user.model';
 import { Injectable } from '@angular/core';
 
@@ -10,7 +11,6 @@ import { Observable, of } from 'rxjs';
 import { switchMap } from 'rxjs/Operators';
 
 import firebase from 'firebase/app'
-
 
 @Injectable({
   providedIn: 'root'
@@ -32,7 +32,8 @@ export class AuthService {
   constructor(
     private afAuth: AngularFireAuth,
     private afs: AngularFirestore,
-    private router: Router
+    private router: Router,
+    private utility: Utility
   ) {
 
     this.user$ = this.afAuth.authState.pipe(
@@ -52,7 +53,7 @@ export class AuthService {
     )
   }
 
-  returnUserIdToken(): Observable<string>{
+  returnUserIdToken(): Observable<string> {
     return this.afAuth.idToken
   }
 
@@ -62,15 +63,19 @@ export class AuthService {
       this.arraOfLogin.push(methods)
     })
   }
-  isUserExtendedData() {
+
+  isUserExtendedData(userId: string) {
     let isUserData: boolean = false
     this.afs.firestore
       .collection('users')
-      .doc(`${this.userID}`).get().then(p => {
+      .doc(`${userId}`).get().then(p => {
         if (p.exists) {
           let birthday = p.get('dateOfBirth')
           let gender = p.get('gender')
-          if (!birthday || !gender) {
+          let subsDate = p.get('created') || new Date(0)
+          console.log(subsDate);
+
+          if (!birthday || !gender || this.utility.isSubscripitionOutOfDate(subsDate)) {
             this.router.navigate(['UserDashboard'])
           } else {
             this.router.navigate(['Body&Measurements/girthTab'])
@@ -78,6 +83,7 @@ export class AuthService {
         }
       })
   }
+
 
   actionCodeSettings = {
     url: 'http://localhost:4200/Signup/',
@@ -101,7 +107,8 @@ export class AuthService {
   async googleSignup() {
     const provider = new firebase.auth.GoogleAuthProvider()
     const credential = await this.afAuth.signInWithPopup(provider)
-    this.isUserExtendedData()
+    const t = credential.user.uid
+    this.isUserExtendedData(t)
     const providerData = credential.user.providerData
     let uid: string = ""
     let userName = ""
@@ -133,7 +140,8 @@ export class AuthService {
       }
       const accessToken = (<any>credential).credential.accessToken
       userPhoto = "https://graph.facebook.com/" + uid + "/picture?width=800&access_token=" + accessToken
-      this.isUserExtendedData()
+      const t = credential.user.uid
+      this.isUserExtendedData(t)
       return this.updateUserDataFB(credential.user, userName, userPhoto)
     } catch (err) {
       (await firebase.auth().fetchSignInMethodsForEmail(err.email)).map(async methods => {
@@ -147,7 +155,8 @@ export class AuthService {
   async appleSignup() {
     const provider = new firebase.auth.OAuthProvider('apple.com')
     const credential = await this.afAuth.signInWithPopup(provider)
-    this.isUserExtendedData()
+    const t = credential.user.uid
+    this.isUserExtendedData(t)
     return this.updateUserData(credential.user, credential.additionalUserInfo.isNewUser, false)
   }
 
@@ -155,7 +164,8 @@ export class AuthService {
     const provider = new firebase.auth.GoogleAuthProvider()
     const credential = await this.afAuth.signInWithPopup(provider)
     credential.user.linkWithCredential(this.cred)
-    this.isUserExtendedData()
+    const t = credential.user.uid
+    this.isUserExtendedData(t)
     return this.updateUserData(credential.user, credential.additionalUserInfo.isNewUser, true)
 
   }
@@ -164,8 +174,8 @@ export class AuthService {
     const provider = new firebase.auth.OAuthProvider('apple.com')
     const credential = await this.afAuth.signInWithPopup(provider)
     credential.user.linkWithCredential(this.cred)
-    this.isUserExtendedData()
-
+    const t = credential.user.uid
+    this.isUserExtendedData(t)
     return this.updateUserData(credential.user, credential.additionalUserInfo.isNewUser, false)
 
   }
@@ -194,9 +204,8 @@ export class AuthService {
       if (this.afAuth.isSignInWithEmailLink(url)) {
         const credential = await this.afAuth.signInWithEmailLink(email, url);
         window.localStorage.removeItem('emailForSignIn');
-        this.isUserExtendedData()
-
-
+        const t = credential.user.uid
+        this.isUserExtendedData(t)
         return this.updateUserData(credential.user, credential.additionalUserInfo.isNewUser, false)
 
         // this.router.navigate(['Body&Measurements/girthTab'])
@@ -212,7 +221,8 @@ export class AuthService {
       if (this.afAuth.isSignInWithEmailLink(url)) {
         const credential = await this.afAuth.signInWithEmailLink(emailInserted, url);
         window.localStorage.removeItem('emailForSignIn');
-        this.isUserExtendedData()
+        const t = credential.user.uid
+        this.isUserExtendedData(t)
         return this.updateUserData(credential.user, credential.additionalUserInfo.isNewUser, false)
       }
     } catch (err) {

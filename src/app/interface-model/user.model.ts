@@ -7,5 +7,8 @@ export interface User {
   givenName?: string
   gender?: string
   dateOfBirth?: Date | any
+  pricingPlanId?: string,
+  stripeCustomerId?: string
+  created?: Date | any
 }
 
