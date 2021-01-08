@@ -1,9 +1,9 @@
-import { filter, first, map } from 'rxjs/Operators';
+import { filter, first } from 'rxjs/Operators';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { AuthService } from './auth.service';
 import { CheckoutSession } from '../interface-model/checkout-Session.model';
-import { Observable } from 'rxjs';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable, Subscription } from 'rxjs';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
 declare const Stripe
@@ -24,9 +24,32 @@ export class StrpieService {
     const headers = new HttpHeaders().set("Authorization", this.jwtAuth)
     return this.http.post<CheckoutSession>("/api/checkout", {
       pricingPlanId,
+      end : true,
       callbackUrl: this.buildCallcackURL()
     }, { headers })
   }
+
+
+  subscripitonUnsubscription(cancelAtPeriodEnd: boolean, subscriptionId: string, isDeleteSubscription, deleteSubscription  ) : Observable<any>{
+    const headers = new HttpHeaders().set("Authorization", this.jwtAuth)
+
+    return this.http.post("/api/subscripitonUnsubscription", {
+      isDeleteSubscription: isDeleteSubscription,
+      cancelAtPeriodEnd: cancelAtPeriodEnd,
+      deleteSubscription: deleteSubscription,
+      subscriptionId
+    }, { headers })
+
+
+  }
+/*
+35,88
+32
+30
+
+*/
+
+
 
   buildCallcackURL() {
     const protocol = window.location.protocol,

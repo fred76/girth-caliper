@@ -10,6 +10,7 @@
       <button mat-icon-button *ngIf="authService.user$ | async" routerLink="/">
         <img class="logo" src="/assets/logo.png" alt="image">
         <span class="nav-caption" fxHide.xs>Girths & Caliper</span>
+
       </button>
     </ng-template>
   </div>
@@ -19,8 +20,8 @@
       <ng-template #elseTemplate>
       </ng-template>
       <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
-        <img  *ngIf="isUserPhoto"  class="circular-square-small" src="{{user.photoURL}}">
-        <mat-icon *ngIf="!isUserPhoto" >account_circle</mat-icon>
+        <img  *ngIf="user.photoURL"  class="circular-square-small" src="{{user.photoURL}}">
+        <mat-icon *ngIf="!user.photoURL" >account_circle</mat-icon>
       </button>
       <mat-menu #menu="matMenu">
         <div fxLayoutAlign="center center" fxLayout="column" fxLayoutGap="4px">
@@ -36,11 +37,11 @@
           <mat-divider></mat-divider>
           <div class="menuDivLessPad" fxLayout="row" fxLayoutAlign="space-between">
             <p class=" caption font">Date of birth</p>
-            <p class=" caption font">11 feb 1976</p>
+            <p class=" caption font">{{user.dateOfBirth.toMillis() | date:'MMM/dd/yyyy'}}</p>
           </div>
           <div class="menuDivLessPad" fxLayout="row" fxLayoutAlign="space-between">
             <p class=" caption font">Gender</p>
-            <p class=" caption font">Male</p>
+            <p class=" caption font">{{user.gender}}</p>
           </div>
           <mat-divider></mat-divider>
           <p class=" caption font">Template CSV</p>
@@ -60,7 +61,7 @@
           <mat-divider></mat-divider>
           <div class="menuDivLessPad" fxLayout="row" fxLayoutAlign="space-between">
             <p class=" caption font">Subscription end</p>
-            <p class="caption font">11 feb 2020</p>
+            <p class="caption font">{{user.current_period_end.toMillis() | date:'MMM/dd/yyyy'}}</p>
           </div>
           <mat-divider></mat-divider>
           <a class="div-margin caption font click" (click)="authService.signOut()">Sign out</a>

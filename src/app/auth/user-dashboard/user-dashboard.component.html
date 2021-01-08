@@ -1,7 +1,6 @@
 <div class="mainDiv">
-  <button class="poppo" (click)="purchaseSubscription()">PIPPO</button>
   <div fxLayoutAlign="center" *ngIf="authService.user$ | async as user ">
-    <mat-card class="mat-elevation-z8 pad">
+    <mat-card fxFlex.gt-xs="35%" class="mat-elevation-z8 pad  ">
       <button mat-icon-button routerLink="/Body&Measurements/girthTab">
         <mat-icon class="clear-icon">clear</mat-icon>
       </button>
@@ -9,21 +8,20 @@
         <img *ngIf="user.photoURL" class="circular-square-small" src="{{user.photoURL}}">
       </div>
       <div *ngIf="!user.displayName">
-        <p class="caption body-2">Almost there complete your profile</p>
-        <p class="div-margin caption font">Email : {{user.email}}</p>
+        <p class="div-margin body-2">Almost there complete your profile</p>
       </div>
       <div *ngIf="user.displayName">
         <p class="div-margin body-2">Welcome, {{user.displayName}}</p>
         <p class="caption font">Manage your personal data, login and subscription</p>
       </div>
-      <mat-vertical-stepper [linear]=false #stepper >
+      <mat-vertical-stepper [linear]=false #stepper>
         <mat-step [stepControl]="userDataFormGroup" state="account_circle" errorMessage="All * fields are required.">
 
           <form [formGroup]="userDataFormGroup" (ngSubmit)="onSubmit()">
             <ng-template matStepLabel>Personal data</ng-template>
             <p class="caption font">{{user.email}}</p>
             <div *ngIf="!user.displayName">
-              <mat-form-field class="field">
+              <mat-form-field class="inputlabel">
                 <mat-label>Display name</mat-label>
                 <input class="inputlabel" matInput placeholder="Last name, First name" formControlName="userNameControl"
                   required>
@@ -33,17 +31,17 @@
             <div *ngIf="!user.displayName">
               <p class="caption font">{{user.displayName}}</p>
             </div>
-            <mat-form-field class="field">
+            <mat-form-field class="inputlabel">
               <mat-label>Nikname</mat-label>
               <input class="inputlabel" matInput placeholder="Nickname" formControlName="nicknameControl">
               <span class="inputlabel"> </span>
             </mat-form-field>
             <ng-template matStepLabel>Fill out your address</ng-template>
             <div fxLayout="column" fxLayoutGap="16px">
-              <mat-form-field appearance="standard">
+              <mat-form-field class="inputlabel" appearance="standard">
                 <mat-label>Birth date</mat-label>
                 <input matInput placeholder="Birthday" [matDatepicker]="picker" formControlName="birthDateControl"
-                  required  >
+                  required>
                 <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                 <mat-datepicker #picker required></mat-datepicker>
               </mat-form-field>
@@ -55,11 +53,63 @@
                   </mat-option>
                 </mat-select>
               </mat-form-field>
-              <button mat-raised-button color="primary" type="submit" [disabled]="!userDataFormGroup.valid">Update
+              <button mat-raised-button class="field" color="primary" type="submit"
+                [disabled]="!userDataFormGroup.valid">Update
                 info</button>
             </div>
           </form>
         </mat-step>
+        <!-- SUBSCRIPTIONS -->
+        <mat-step state="monetization_on">
+          <ng-template matStepLabel>Subscription</ng-template>
+          <div *ngIf="!user.subscriptionId">
+            <div #login fxLayout="column" fxLayoutGap="24px">
+              <p class="caption font">Monthly subscription</p>
+              <button mat-raised-button class="field" color="primary" type="submit"
+                (click)="monthlySubscription()">Subscribe now for 2.99$</button>
+              <p class="caption font">Quartely subscription</p>
+              <button mat-raised-button class="field" color="primary" type="submit"
+                (click)="quarterlySubscription()">Subscribe now for 7.99$</button>
+              <p class="caption font">Yearly subscription</p>
+              <button mat-raised-button class="field" color="primary" type="submit"
+                (click)="yearlySubscription()">Subscribe now for 29.99$</button>
+            </div>
+          </div>
+          <div *ngIf="user.subscriptionId">
+            <div class="menuDivLessPad" fxLayout="row" fxLayoutAlign="space-between">
+              <p class="caption font">Suscription plan:</p>
+              <p class="caption font">{{dueDate}}</p>
+            </div>
+            <div class="menuDivLessPad" fxLayout="row" fxLayoutAlign="space-between">
+              <p class="caption font">Start on:</p>
+              <p class="caption font">{{user.created.toMillis() | date:'MMM/dd/yyyy'}}</p>
+            </div>
+            <div class="menuDivLessPad" fxLayout="row" fxLayoutAlign="space-between">
+              <p class="caption font">Next invoice:</p>
+              <p class="caption font">{{user.current_period_end.toMillis() | date:'MMM/dd/yyyy'}}</p>
+            </div>
+            <div *ngIf="dueDate && !user.cancel_at_period_end">
+              <div class="menuDivLessPad" fxLayout="row" fxLayoutAlign="space-between">
+                <p class="caption font">Uncheck to cancel recurring subscription:</p>
+                <mat-checkbox class="example-margin" [checked]="!user.cancel_at_period_end"
+                  (change)="subscripitonUnsubscription($event)">
+                </mat-checkbox>
+              </div>
+            </div>
+            <div *ngIf="dueDate">
+              <div *ngIf="user.cancel_at_period_end">
+                <p><button mat-raised-button class="buttonSub" color="primary" type="submit"
+                    (click)="yearlySubscription()">Monthly for .99$</button></p>
+                <p><button mat-raised-button class="buttonSub" color="primary" type="submit"
+                    (click)="yearlySubscription()">Quartely for 7.99$</button></p>
+                <p><button mat-raised-button class="buttonSub" color="primary" type="submit"
+                    (click)="yearlySubscription()">Yearly now for 29.99$</button></p>
+              </div>
+            </div>
+            <a class="DividerMargin caption font click" (click)="deleteSubscripiton()">Unsubscribe from G&C</a>
+          </div>
+        </mat-step>
+        <!-- LOGIN OPTIONS -->
         <mat-step state="public">
           <ng-template matStepLabel>Login Option</ng-template>
           <p class="caption font">Check to athorize login provider</p>
@@ -80,32 +130,11 @@
               <mat-icon class="provider-icon" svgIcon="appleL"></mat-icon>
               <mat-checkbox class="example-margin" [checked]="authService.arraOfLogin.includes('apple.com')"
                 (change)="appleUnlinkLink($event)"></mat-checkbox>
+
             </div>
           </div>
         </mat-step>
-        <mat-step state="monetization_on">
-          <ng-template matStepLabel>Subscription</ng-template>
-          <p class="caption font">Check to authorize login provider</p>
-          <p class="caption font">Uncheck to unauthorize login provider</p>
-          <div #login fxLayout="column" fxLayoutGap="24px">
-            <div fxLayout="row" fxLayoutGap="56px">
-              <mat-icon class="provider-icon" svgIcon="googleL"></mat-icon>
-              <mat-checkbox class="example-margin" [checked]="authService.arraOfLogin.includes('google.com')"
-                (change)="googleUnlinkLink($event)">
-              </mat-checkbox>
-            </div>
-            <div fxLayout="row" fxLayoutGap="56px">
-              <mat-icon class="provider-icon" svgIcon="facebookL"></mat-icon>
-              <mat-checkbox class="example-margin" [checked]="authService.arraOfLogin.includes('facebook.com')"
-                (change)="facebookUnlinkLink($event)"> </mat-checkbox>
-            </div>
-            <div fxLayout="row" fxLayoutGap="56px">
-              <mat-icon class="provider-icon" svgIcon="appleL"></mat-icon>
-              <mat-checkbox class="example-margin" [checked]="authService.arraOfLogin.includes('apple.com')"
-                (change)="appleUnlinkLink($event)"></mat-checkbox>
-            </div>
-          </div>
-        </mat-step>
+        <!-- LABEL STEPPER -->
         <ng-template matStepperIcon="account_circle">
           <mat-icon>account_circle</mat-icon>
         </ng-template>
@@ -119,4 +148,5 @@
 
     </mat-card>
   </div>
+
 </div>

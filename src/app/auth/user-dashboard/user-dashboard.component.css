@@ -23,6 +23,7 @@
   margin-top: 32px;
 }
 .inputlabel {
+  width: 100%;
   color: white;
 }
 .divPhoto{
@@ -30,4 +31,30 @@
 }
 .poppo{
   margin-top: 122px !important;
+}
+
+.buttonSub {
+  width: 100%;
+}
+
+.DividerMargin {
+  margin-top: 16px !important;
+}
+.login-btn{
+  height: 44px;
+  background-color: black;
+    color: #fff;
+}
+.font {
+  font-size: 12px;
+  color: whitesmoke;
+}
+
+.mat-icons {
+  color: whitesmoke;
+}
+
+.click{
+  cursor: pointer;
+  color: #c2185b;
 }

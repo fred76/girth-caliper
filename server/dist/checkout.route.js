@@ -19,8 +19,7 @@ async function createCheckoutSession(req, res) {
         const checkoutSessionData = {
             status: 'ongoing',
             created: firestore_1.Timestamp.now(),
-            stripeCustomerId: '',
-            pricingPlanId: ''
+            pricingPlanId: '',
         };
         checkoutSessionData.pricingPlanId = info.pricingPlanId;
         const user = await database_1.getDocData(`users/${info.userId}`);

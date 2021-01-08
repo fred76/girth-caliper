@@ -24,21 +24,14 @@ export class Utility {
 
   }
 
-  isSubscripitionOutOfDate(subDate: any): boolean {
-    var subsDate = moment(subDate.seconds * 1000);
-    var now = moment();
-    var diffDays = now.diff(subsDate, 'days');
-    console.log("subsDate " + subsDate);
-    console.log("now " + now);
-    if (diffDays <= 30) {
-      console.log("Maggior " + diffDays);
-
-      return true
+  isSubscripitionOutOfDate(current_period_endAsNumber: any): boolean {
+    var current_period_end = moment(current_period_endAsNumber.seconds * 1000);
+    const now = moment().startOf('day')
+    if (current_period_end < now) {
+      return true;
     } else {
-      console.log("Minore " + diffDays);
-      return false
+      return false;
     }
-
   }
 
   DateFormatToString(date) {

@@ -8,10 +8,17 @@ service cloud.firestore {
       return request.auth.uid == userId;
     }
 
-    // match /users/{userId} {
+  // match /users/{userId} {
     //   allow read, write, create, update: if (request.resource.data.diff(resource.data).affectedKeys()
     //   .hasOnly(['email', 'displayName', 'photoURL', 'nickname', 'givenName', 'gender', 'dateOfBirth', 'uid']));
     // }
+
+
+
+    match /stripeCustomers/{userId} {
+      allow read: if request.auth.uid == resource.data.userId;
+    }
+
 
     match /users/{userId} {
       allow read, write, create : if isUserWithId(userId);

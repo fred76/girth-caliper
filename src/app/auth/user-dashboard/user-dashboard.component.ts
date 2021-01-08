@@ -1,13 +1,15 @@
+import { Utility } from 'src/app/Utility/utility';
+import { User } from './../../interface-model/user.model';
 import { StrpieService } from './../strpie.service';
 import { Subscription } from 'rxjs';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
 import { AuthService } from './../auth.service';
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
+import { Component, OnInit, OnDestroy, AfterViewInit, ViewChild } from '@angular/core';
+import { FormGroup, Validators, FormControl } from '@angular/forms';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { MatCheckboxChange } from '@angular/material/checkbox';
-import { DatePipe } from '@angular/common';
+import { MatStepper } from '@angular/material/stepper';
 
 @Component({
   selector: 'app-user-dashboard',
@@ -16,13 +18,14 @@ import { DatePipe } from '@angular/common';
   providers: [
     { provide: STEPPER_GLOBAL_OPTIONS, useValue: { displayDefaultIndicatorType: false, showError: true } }]
 })
-export class UserDashboardComponent implements OnInit, OnDestroy {
+
+export class UserDashboardComponent implements OnInit, OnDestroy, AfterViewInit {
 
   constructor(public authService: AuthService,
     private matIconRegistry: MatIconRegistry,
     private domSanitizer: DomSanitizer,
-    private _formBuilder: FormBuilder,
-    private strpieService: StrpieService) {
+    private strpieService: StrpieService,
+    private utility: Utility) {
     this.matIconRegistry.addSvgIcon(
       "appleL",
       this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/accessory/appleL.svg")
@@ -51,13 +54,18 @@ export class UserDashboardComponent implements OnInit, OnDestroy {
   displayName: string
   isLoggedIn: boolean
   isPurchaseStrated: boolean
+  user: User
+  dueDate: boolean
+
+  @ViewChild('stepper') stepper: MatStepper
 
   ngOnInit() {
     this.userSub = this.authService.user$.subscribe(u => {
       if (u) {
+        this.user = u
         this.isLoggedIn = true
       }
-
+      this.dueDate = this.utility.isSubscripitionOutOfDate(u.current_period_end)
       u.gender ? this.gender = u.gender : this.gender = null
       u.nickname ? this.nickname = u.nickname : this.nickname = null
       u.dateOfBirth ? this.dateOfBirth = new Date(u.dateOfBirth.seconds * 1000) : this.dateOfBirth = null
@@ -73,10 +81,61 @@ export class UserDashboardComponent implements OnInit, OnDestroy {
 
     })
   }
+  subscripitonUnsubscription(event: MatCheckboxChange) {
+    console.log(event);
+
+    this.strpieService.subscripitonUnsubscription(!event.checked, this.user.subscriptionId, false, false).subscribe(
+      session => console.log(session),
+      err => {
+        console.log("Error creating checkout session", err);
+        this.isPurchaseStrated = false;
+      }
+    );
+    console.log(this.user.subscriptionId);
+
+  }
+
+  ngAfterViewInit(): void {
+    this.userSub = this.authService.user$.subscribe(u => {
+      if (u.dateOfBirth && u.gender) {
+        this.stepper.selectedIndex = 1
+      } else {
+        this.stepper.selectedIndex = 0
+      }
 
 
-  purchaseSubscription() {
-    this.strpieService.startSubscriptionCheckoutSession("price_1I5HSDBFHWy6VCCKqE4IrMcX")
+
+    })
+
+  }
+
+
+  deleteSubscripiton() {
+    this.strpieService.subscripitonUnsubscription(false, this.user.subscriptionId, true, true)
+  }
+
+  monthlySubscription() {
+    this.strpieService.startSubscriptionCheckoutSession("price_1I6exwBFHWy6VCCK42Ftalrj")
+      .subscribe(
+        session => this.strpieService.redirectToCheckout(session),
+        err => {
+          console.log("Error creating checkout session", err);
+          this.isPurchaseStrated = false;
+        }
+      );
+  }
+  quarterlySubscription() {
+    this.strpieService.startSubscriptionCheckoutSession("price_1I6exwBFHWy6VCCK42Ftalrj")
+      .subscribe(
+        session => this.strpieService.redirectToCheckout(session),
+        err => {
+          console.log("Error creating checkout session", err);
+          this.isPurchaseStrated = false;
+        }
+      );
+  }
+  yearlySubscription() {
+    this.strpieService.startSubscriptionCheckoutSession("price_1I6exwBFHWy6VCCK42Ftalrj")
       .subscribe(
         session => this.strpieService.redirectToCheckout(session),
         err => {

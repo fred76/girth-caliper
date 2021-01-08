@@ -1,4 +1,4 @@
-import { Subscription } from 'rxjs';
+import { Subscription, Observable } from 'rxjs';
 import { User } from './../../interface-model/user.model';
 import { AuthService } from '../../auth/auth.service';
 import { Component, OnInit, OnDestroy } from '@angular/core';
@@ -19,17 +19,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
       this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/accessory/logo.svg")
     );
   }
-  isUserPhoto: boolean
   user: User
   authSubscription: Subscription
   ngOnInit(): void {
     this.authSubscription = this.authService.user$.subscribe(user => {
       this.user = user
-      if (user.photoURL) {
-        this.isUserPhoto = true
-      } else {
-        this.isUserPhoto = false
-      }
     })
   }
 

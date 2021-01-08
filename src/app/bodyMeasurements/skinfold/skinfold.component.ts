@@ -33,7 +33,7 @@ export class SkinfoldComponent implements OnInit, OnDestroy {
   selectedSkinfoldsMethod: string
   measurementDate: Date
   bodyWeight: number = 90
-  userAge: number = 44
+  userAge: number
   pieBarBodyComposition: any
   userSub: Subscription
 
@@ -41,11 +41,12 @@ export class SkinfoldComponent implements OnInit, OnDestroy {
 
     this.skinfoldsService.selectedSkinfoldsMethodSubs()
     this.userSub = this.authService.user$.subscribe(user => {
-      let t = this.datePipe.transform(user.dateOfBirth.seconds * 1000, 'MM/dd/yyyy');
-      let d = new Date(t)
-      this.userAge = this.calculateAge(d)
-      user.gender == 'Male' ? this.skinfoldsMethods = this.skinfoldsService.skinfoldsMethodsMan : this.skinfoldsMethods = this.skinfoldsService.skinfoldsMethodsWoman
-
+      if (user.dateOfBirth) {
+        let t = this.datePipe.transform(user.dateOfBirth.seconds * 1000, 'MM/dd/yyyy');
+        let d = new Date(t)
+        this.userAge = this.calculateAge(d)
+        user.gender == 'Male' ? this.skinfoldsMethods = this.skinfoldsService.skinfoldsMethodsMan : this.skinfoldsMethods = this.skinfoldsService.skinfoldsMethodsWoman
+      }
     })
   }
   calculateAge(birthdate: any): number {

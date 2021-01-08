@@ -8,7 +8,7 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { Router } from '@angular/router';
 
 import { Observable, of } from 'rxjs';
-import { switchMap } from 'rxjs/Operators';
+import { switchMap, map } from 'rxjs/Operators';
 
 import firebase from 'firebase/app'
 
@@ -64,17 +64,17 @@ export class AuthService {
     })
   }
 
+
+
   isUserExtendedData(userId: string) {
     let isUserData: boolean = false
     this.afs.firestore
       .collection('users')
-      .doc(`${userId}`).get().then(p => {
+      .doc(`${userId}`).get().then(async p => {
         if (p.exists) {
           let birthday = p.get('dateOfBirth')
           let gender = p.get('gender')
-          let subsDate = p.get('created') || new Date(0)
-          console.log(subsDate);
-
+          let subsDate = p.get('current_period_end') || new Date(0)
           if (!birthday || !gender || this.utility.isSubscripitionOutOfDate(subsDate)) {
             this.router.navigate(['UserDashboard'])
           } else {

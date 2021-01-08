@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.initServer = void 0;
 const express = require("express");
 const checkout_route_1 = require("./checkout.route");
+const subscripitonUnsubscription_route_1 = require("./subscripitonUnsubscription.route");
 const get_user_middleware_1 = require("./get-user.middleware");
 const stripe_webhooks_route_1 = require("./stripe-webhooks.route");
 const cors = require("cors");
@@ -14,6 +15,7 @@ function initServer() {
         res.status(200).send("<h1>API is up and running</h1>");
     });
     app.route("/api/checkout").post(bodyParser.json(), get_user_middleware_1.getUserMiddleware, checkout_route_1.createCheckoutSession);
+    app.route("/api/subscripitonUnsubscription").post(bodyParser.json(), get_user_middleware_1.getUserMiddleware, subscripitonUnsubscription_route_1.subscripitonUnsubscription);
     app.route("/stripe-webhooks").post(bodyParser.raw({ type: 'application/json' }), stripe_webhooks_route_1.stripeWebhooks);
     const PORT = process.env.PORT || 9000;
     app.listen(PORT, () => {

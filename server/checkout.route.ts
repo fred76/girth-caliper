@@ -26,11 +26,11 @@ export async function createCheckoutSession(req: Request, res: Response) {
       return
     }
 
+
     const checkoutSessionData: any = {
       status: 'ongoing',
       created: Timestamp.now(),
-      stripeCustomerId: '',
-      pricingPlanId: ''
+      pricingPlanId: '',
     }
 
     checkoutSessionData.pricingPlanId = info.pricingPlanId
@@ -54,7 +54,6 @@ export async function createCheckoutSession(req: Request, res: Response) {
       stripeCheckoutSessionId: session.id,
       stripePublicKey: process.env.STRIPE_PUBLIC_KEY
     })
-
   }
 
   catch (error) {

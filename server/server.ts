@@ -1,6 +1,7 @@
 import * as express from 'express'
 import { Application } from "express"
 import { createCheckoutSession } from './checkout.route'
+import { subscripitonUnsubscription } from './subscripitonUnsubscription.route'
 import { getUserMiddleware } from './get-user.middleware'
 import { stripeWebhooks } from './stripe-webhooks.route'
 import * as cors from "cors";
@@ -19,6 +20,10 @@ export function initServer() {
 
   app.route("/api/checkout").post(
     bodyParser.json(), getUserMiddleware, createCheckoutSession);
+
+  app.route("/api/subscripitonUnsubscription").post(
+    bodyParser.json(), getUserMiddleware, subscripitonUnsubscription);
+
 
   app.route("/stripe-webhooks").post(bodyParser.raw({ type: 'application/json' }), stripeWebhooks)
 
