@@ -104,12 +104,12 @@ color:  #c2185b;;
 }
 
 .menuDiv{
-  padding: 16px;
-  width: 180px;
+  padding: 0px;
+  width: 220px;
 }
 .menuDivLessPad{
-  padding-left: 8px;
-  padding-right: 8px;
+  padding-left: 0px;
+  padding-right: 0px;
   margin-top: 0px;
   width: 180px;
 }

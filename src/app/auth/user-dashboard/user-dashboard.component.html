@@ -77,18 +77,18 @@
           </div>
           <div *ngIf="user.subscriptionId">
             <div class="menuDivLessPad" fxLayout="row" fxLayoutAlign="space-between">
-              <p class="caption font">Suscription plan:</p>
+              <p class="caption font">Subscription plan:</p>
               <p class="caption font">{{dueDate}}</p>
             </div>
             <div class="menuDivLessPad" fxLayout="row" fxLayoutAlign="space-between">
-              <p class="caption font">Start on:</p>
+              <p class="caption font">Subscribed on:</p>
               <p class="caption font">{{user.created.toMillis() | date:'MMM/dd/yyyy'}}</p>
             </div>
             <div class="menuDivLessPad" fxLayout="row" fxLayoutAlign="space-between">
               <p class="caption font">Next invoice:</p>
               <p class="caption font">{{user.current_period_end.toMillis() | date:'MMM/dd/yyyy'}}</p>
             </div>
-            <div *ngIf="dueDate && !user.cancel_at_period_end">
+            <div *ngIf="!dueDate">
               <div class="menuDivLessPad" fxLayout="row" fxLayoutAlign="space-between">
                 <p class="caption font">Uncheck to cancel recurring subscription:</p>
                 <mat-checkbox class="example-margin" [checked]="!user.cancel_at_period_end"

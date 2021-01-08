@@ -24,7 +24,7 @@
         <mat-icon *ngIf="!user.photoURL" >account_circle</mat-icon>
       </button>
       <mat-menu #menu="matMenu">
-        <div fxLayoutAlign="center center" fxLayout="column" fxLayoutGap="4px">
+        <div class="menuDiv" fxLayoutAlign="center center" fxLayout="column" fxLayoutGap="4px">
           <img class="circular-square" src="{{user.photoURL}}">
           <p class="div-margin caption font">{{user.displayName}}</p>
           <p class="div-margin caption font">{{user.email}}</p>
@@ -35,7 +35,7 @@
             </button>
           </div>
           <mat-divider></mat-divider>
-          <div class="menuDivLessPad" fxLayout="row" fxLayoutAlign="space-between">
+          <div class="menuDivLessPad" fxLayout="row" fxLayoutAlign="space-between" >
             <p class=" caption font">Date of birth</p>
             <p class=" caption font">{{user.dateOfBirth.toMillis() | date:'MMM/dd/yyyy'}}</p>
           </div>
