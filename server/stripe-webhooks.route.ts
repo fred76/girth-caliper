@@ -25,12 +25,12 @@ export async function stripeWebhooks(req: Request, res: Response) {
     if (event.type == "invoice.paid") {
       const session = event.data.object
       // if (session.billing_reason == "subscription_create") {
-        if (session.billing_reason == "subscription_cycle") {
-         console.log("PPAPAPPAP");
+      if (session.billing_reason == "subscription_cycle") {
+        console.log("PPAPAPPAP");
 
         const subscription = await stripe.subscriptions.retrieve(
           "sub_IilsbL0tTQZyiM"
-        //  session.subscription
+          //  session.subscription
         )
         console.log("subscription");
         console.log(subscription);
@@ -60,7 +60,7 @@ async function onSubscriptionRetreived_created(session, id) {
   const current_period_end = new Date(session.current_period_end * 1000)
   const current_period_start = new Date(session.current_period_start * 1000)
   const pricingPlanId = session.plan.id
-  await fulfillSubscriptionData_created(id, subscriptionId, cancel_at_period_end, current_period_end, current_period_start,   pricingPlanId)
+  await fulfillSubscriptionData_created(id, subscriptionId, cancel_at_period_end, current_period_end, current_period_start, pricingPlanId)
 }
 
 async function fulfillSubscriptionData_created(
@@ -106,8 +106,8 @@ async function onSubscriptionRetreived_Updated(subscription) {
   const subscriptionId = subscription.id
   const current_period_end = new Date(subscription.current_period_end * 1000)
   const current_period_start = new Date(subscription.current_period_start * 1000)
-  const stripeCustomerId =  subscription.customer
-  const pricingPlanId =  subscription.plan.id
+  const stripeCustomerId = subscription.customer
+  const pricingPlanId = subscription.plan.id
   await fulfillSubscriptionData_Update(subscriptionId, current_period_end, current_period_start, stripeCustomerId, pricingPlanId)
 }
 
@@ -139,8 +139,8 @@ async function fulfillSubscriptionData_Update(
 }
 
 async function invocePaymentFailureForUser(customerId, invoiceDate, invoiceId) {
- const batch = db.batch();
- const query = await db.collection('users').where('stripeCustomerId', '==', customerId).get()
+  const batch = db.batch();
+  const query = await db.collection('users').where('stripeCustomerId', '==', customerId).get()
   if (!query.empty) {
     const snapshot = query.docs[0];
     batch.set(snapshot.ref, {

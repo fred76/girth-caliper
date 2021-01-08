@@ -16,7 +16,6 @@
       </div>
       <mat-vertical-stepper [linear]=false #stepper>
         <mat-step [stepControl]="userDataFormGroup" state="account_circle" errorMessage="All * fields are required.">
-
           <form [formGroup]="userDataFormGroup" (ngSubmit)="onSubmit()">
             <ng-template matStepLabel>Personal data</ng-template>
             <p class="caption font">{{user.email}}</p>

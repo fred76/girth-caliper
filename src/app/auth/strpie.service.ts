@@ -24,13 +24,13 @@ export class StrpieService {
     const headers = new HttpHeaders().set("Authorization", this.jwtAuth)
     return this.http.post<CheckoutSession>("/api/checkout", {
       pricingPlanId,
-      end : true,
+      end: true,
       callbackUrl: this.buildCallcackURL()
     }, { headers })
   }
 
 
-  subscripitonUnsubscription(cancelAtPeriodEnd: boolean, subscriptionId: string, isDeleteSubscription, deleteSubscription  ) : Observable<any>{
+  subscripitonUnsubscription(cancelAtPeriodEnd: boolean, subscriptionId: string, isDeleteSubscription, deleteSubscription): Observable<any> {
     const headers = new HttpHeaders().set("Authorization", this.jwtAuth)
 
     return this.http.post("/api/subscripitonUnsubscription", {
@@ -42,12 +42,12 @@ export class StrpieService {
 
 
   }
-/*
-35,88
-32
-30
+  /*
+  35,88
+  32
+  30
 
-*/
+  */
 
 
 

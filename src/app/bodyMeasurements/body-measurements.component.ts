@@ -41,7 +41,7 @@ export class BodyMeasurementsComponent implements OnInit, OnDestroy {
   constructor(
     public authService: AuthService,
     private router: Router,
-    private utility :Utility
+    private utility: Utility
   ) {
     this.navLinks = [
       { label: 'Girths', link: './girthTab', index: 0 },
@@ -58,12 +58,12 @@ export class BodyMeasurementsComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
 
-   this.authService.user$.subscribe(p => {
-     if (this.utility.isSubscripitionOutOfDate(p.current_period_end)){
-      this.router.navigate(['/UserDashboard']);
-     }
+    this.authService.user$.subscribe(p => {
+      if (this.utility.isSubscripitionOutOfDate(p.current_period_end)) {
+        this.router.navigate(['/UserDashboard']);
+      }
 
-   })
+    })
 
     this.routerUnsubscribe1 = this.router.events.subscribe((res) => {
       this.activeLink = this.navLinks.indexOf(

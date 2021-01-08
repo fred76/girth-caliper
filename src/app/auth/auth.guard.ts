@@ -13,7 +13,7 @@ export class AuthGuard implements CanActivate, CanActivateChild {
 
   constructor(private authService: AuthService,
     private router: Router,
-    private utility:Utility) { }
+    private utility: Utility) { }
 
 
   canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
@@ -21,7 +21,7 @@ export class AuthGuard implements CanActivate, CanActivateChild {
 
     return this.authService.user$.pipe(
       take(1),
-      map(user => !!user ), // <-- map to boolean
+      map(user => !!user), // <-- map to boolean
       tap(loggedIn => {
         if (!loggedIn) {
           this.router.navigate(['/Login']);
