@@ -12,6 +12,7 @@ interface RequestInfo {
 
 export async function createCheckoutSession(req: Request, res: Response) {
 
+
   try {
 
     const info: RequestInfo = {
