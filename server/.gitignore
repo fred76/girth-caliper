@@ -1,5 +1,7 @@
 .env
 # compiled output
+dist
+/dist
 ./dist
 ./dist/service-accounts
 
