@@ -2,7 +2,6 @@ import { ChartFeederService } from './../chart-feeder.service';
 
 import { SkinfoldsForDB } from './../../../interface-model/skinfold.model';
 import { ChartContainerComponent } from './../chart-container.component';
-import { FireDatabaseService } from './../../../Services/fire-database.service';
 
 import { MatDialog } from '@angular/material/dialog';
 import { ImportExportService } from './../../../Services/import-export.service';
@@ -21,15 +20,11 @@ export class SkinfoldsChartComponent implements OnInit, OnDestroy {
     public chartFeederService: ChartFeederService,
     private importExportService: ImportExportService,
     private chartContainerComponent: ChartContainerComponent) { }
-
-
-  private toggleBoyCompChartEvent = new Subject<Event>();
   private toggleSkinfoldChartListEvent = new Subject<Event>();
   private toggleSkinfoldBodyCompeEvent = new Subject<Event>();
 
   @Input() toggleBodyCompChart: boolean = true
   @Input() selectorBodyCompDate: number = 0
-  @Input() selectorBodyCompDatePrevious: number = 0
   @Input() isShowNextBodyCompButton: boolean = false
   @Input() isToggleSkinfoldChartList: boolean = false
   @Input() toggleSkinfoldBodyComp: boolean = true;
@@ -39,6 +34,7 @@ export class SkinfoldsChartComponent implements OnInit, OnDestroy {
 
   showChart: boolean
   show: boolean = true
+  skinfoldsToAdd: number = 0
   private exchangeSubscription: Subscription
 
   SkinfoldsArray: SkinfoldsForDB[] = []
@@ -88,8 +84,12 @@ export class SkinfoldsChartComponent implements OnInit, OnDestroy {
     this.isToggleSkinfoldChartList = !this.isToggleSkinfoldChartList
   }
 
-  toggleBodyCompChartButton(event: Event) {
+  loadMoreSkinfolds() {
+    this.skinfoldsToAdd += 2
+    this.chartContainerComponent.skinfoldArraySize.next(this.skinfoldsToAdd)
+  }
 
+  toggleBodyCompChartButton(event: Event) {
     this.toggleBodyCompChart = !this.toggleBodyCompChart
     this.shiftMiniChartData()
   }
@@ -110,19 +110,6 @@ export class SkinfoldsChartComponent implements OnInit, OnDestroy {
   previousBodyCompChartButton(event: Event) {
     this.selectorBodyCompDate += 1
     this.shiftMiniChartData()
-    // this.previousBodyCompDateEvent.next(event);
-    // if (this.selectorBodyCompDate < this.SkinfoldsArray.length) {
-    //   this.selectorBodyCompDate += 1
-    //   this.createBodyCompositionTile(this.selectorBodyCompDate, this.SkinfoldsArray)
-    //   this.isShowNextBodyCompButton = true
-    // } else {
-    //   const dialogRef = this.dialog.open(LoadMoreSkinfoldComponent, {
-    //     data: { measurementDate: this.loadSkinfoldsSince }
-    //   })
-    //   dialogRef.afterClosed().subscribe(result => {
-    //     console.log(result);
-    //   })
-    // }
   }
 
   nextBodyCompChartButton(event: Event) {

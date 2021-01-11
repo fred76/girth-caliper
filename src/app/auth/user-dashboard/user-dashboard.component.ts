@@ -10,6 +10,7 @@ import { FormGroup, Validators, FormControl } from '@angular/forms';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { MatStepper } from '@angular/material/stepper';
+import { finalize } from 'rxjs/operators';
 
 @Component({
   selector: 'app-user-dashboard',
@@ -44,6 +45,8 @@ export class UserDashboardComponent implements OnInit, OnDestroy, AfterViewInit 
     );
   }
 
+  @ViewChild('stepper') stepper: MatStepper
+
   isLinear = false;
   userDataFormGroup: FormGroup;
   nickname: string
@@ -57,42 +60,39 @@ export class UserDashboardComponent implements OnInit, OnDestroy, AfterViewInit 
   user: User
   dueDate: boolean
 
-  @ViewChild('stepper') stepper: MatStepper
-
   ngOnInit() {
-    this.userSub = this.authService.user$.subscribe(u => {
-      if (u) {
-        this.user = u
-        this.isLoggedIn = true
-      }
-      this.dueDate = this.utility.isSubscripitionOutOfDate(u.current_period_end)
-      u.gender ? this.gender = u.gender : this.gender = null
-      u.nickname ? this.nickname = u.nickname : this.nickname = null
-      u.dateOfBirth ? this.dateOfBirth = new Date(u.dateOfBirth.seconds * 1000) : this.dateOfBirth = null
-      u.displayName ? this.displayName = u.displayName : this.displayName = null
 
-      this.userDataFormGroup = new FormGroup({
-        genderControl: new FormControl(this.gender, Validators.required),
-        nicknameControl: new FormControl(this.nickname),
-        userNameControl: new FormControl(this.displayName, Validators.required),
-        birthDateControl: new FormControl(this.dateOfBirth, Validators.required),
-      });
-      this.authService.userProvidersList(u.email)
+    this.userSub = this.authService.user$
+      .subscribe(u => {
+        if (u) {
+          this.user = u
+          this.isLoggedIn = true
+        }
+        this.dueDate = this.utility.isSubscripitionOutOfDate(u.current_period_end)
+        u.gender ? this.gender = u.gender : this.gender = null
+        u.nickname ? this.nickname = u.nickname : this.nickname = null
+        u.dateOfBirth ? this.dateOfBirth = new Date(u.dateOfBirth.seconds * 1000) : this.dateOfBirth = null
+        u.displayName ? this.displayName = u.displayName : this.displayName = null
 
-    })
+        this.userDataFormGroup = new FormGroup({
+          genderControl: new FormControl(this.gender, Validators.required),
+          nicknameControl: new FormControl(this.nickname),
+          userNameControl: new FormControl(this.displayName, Validators.required),
+          birthDateControl: new FormControl(this.dateOfBirth, Validators.required),
+        });
+        this.authService.userProvidersList(u.email)
+
+      })
   }
-  subscripitonUnsubscription(event: MatCheckboxChange) {
-    console.log(event);
 
+  subscripitonUnsubscription(event: MatCheckboxChange) {
     this.strpieService.subscripitonUnsubscription(!event.checked, this.user.subscriptionId, false, false).subscribe(
       session => console.log(session),
       err => {
         console.log("Error creating checkout session", err);
         this.isPurchaseStrated = false;
       }
-    );
-    console.log(this.user.subscriptionId);
-
+    )
   }
 
   ngAfterViewInit(): void {
@@ -102,13 +102,8 @@ export class UserDashboardComponent implements OnInit, OnDestroy, AfterViewInit 
       } else {
         this.stepper.selectedIndex = 0
       }
-
-
-
     })
-
   }
-
 
   deleteSubscripiton() {
     this.strpieService.subscripitonUnsubscription(false, this.user.subscriptionId, true, true)
@@ -116,14 +111,16 @@ export class UserDashboardComponent implements OnInit, OnDestroy, AfterViewInit 
 
   monthlySubscription() {
     this.strpieService.startSubscriptionCheckoutSession("price_1I6exwBFHWy6VCCK42Ftalrj")
+      .pipe(finalize(() => console.log("completed")))
       .subscribe(
         session => this.strpieService.redirectToCheckout(session),
         err => {
           console.log("Error creating checkout session", err);
           this.isPurchaseStrated = false;
         }
-      );
+      )
   }
+
   quarterlySubscription() {
     this.strpieService.startSubscriptionCheckoutSession("price_1I6exwBFHWy6VCCK42Ftalrj")
       .subscribe(
@@ -132,8 +129,9 @@ export class UserDashboardComponent implements OnInit, OnDestroy, AfterViewInit 
           console.log("Error creating checkout session", err);
           this.isPurchaseStrated = false;
         }
-      );
+      )
   }
+
   yearlySubscription() {
     this.strpieService.startSubscriptionCheckoutSession("price_1I6exwBFHWy6VCCK42Ftalrj")
       .subscribe(
@@ -142,7 +140,7 @@ export class UserDashboardComponent implements OnInit, OnDestroy, AfterViewInit 
           console.log("Error creating checkout session", err);
           this.isPurchaseStrated = false;
         }
-      );
+      )
   }
 
   googleUnlinkLink(event: MatCheckboxChange): void {

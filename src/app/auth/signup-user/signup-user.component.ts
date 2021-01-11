@@ -14,13 +14,14 @@ export class SignupUserComponent implements OnInit {
     private router: Router) {
   }
 
+  email = new FormControl('', [Validators.required, Validators.email]);
+  hide = true;
   emailUser = window.localStorage.getItem('emailForSignIn')
 
   emailCheck(email) {
     const url = this.router.url
     this.authService.insertEmailFromURL(url, email)
   }
-
 
   ngOnInit(): void {
     if (this.emailUser !== null) {
@@ -30,8 +31,6 @@ export class SignupUserComponent implements OnInit {
     }
   }
 
-  email = new FormControl('', [Validators.required, Validators.email]);
-  hide = true;
   getErrorMessage() {
     if (this.email.hasError('required')) {
       return 'You must enter a value';

@@ -8,7 +8,7 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { Router } from '@angular/router';
 
 import { Observable, of } from 'rxjs';
-import { switchMap, map } from 'rxjs/Operators';
+import { switchMap, map } from 'rxjs/operators';
 
 import firebase from 'firebase/app'
 
@@ -64,8 +64,6 @@ export class AuthService {
     })
   }
 
-
-
   isUserExtendedData(userId: string) {
     let isUserData: boolean = false
     this.afs.firestore
@@ -83,7 +81,6 @@ export class AuthService {
         }
       })
   }
-
 
   actionCodeSettings = {
     url: 'http://localhost:4200/Signup/',
@@ -289,8 +286,6 @@ export class AuthService {
 
     }
   }
-
-
 
   private updateUserData({ uid, email, displayName, photoURL }: User, isNewUser: boolean, isProviderWithPhoto: boolean) {
     const userRef: AngularFirestoreDocument<User> = this.afs.doc(`users/${uid}`)

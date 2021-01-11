@@ -1,4 +1,4 @@
-import { AppComponent } from './app.component';
+ import { AppComponent } from './app.component';
 import { environment } from './../environments/environment.prod';
 
 import { NgModule } from '@angular/core';
@@ -18,7 +18,6 @@ import { NgxAuthFirebaseUIModule } from 'ngx-auth-firebaseui'
 
 import { HeaderComponent } from './navigation/header/header.component';
 import { WelcomeComponent } from './welcome/welcome.component';
-
 @NgModule({
   declarations: [
     AppComponent,
@@ -35,7 +34,7 @@ import { WelcomeComponent } from './welcome/welcome.component';
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule,
     NgxAuthFirebaseUIModule.forRoot(environment.firebase),
-    AuthModule,
+    AuthModule
     // BodyMeasuremntsModule,
     // BodyMeasurementsChartsModule
   ],

@@ -35,7 +35,6 @@ export class SkinfoldsService {
     "Durnin & Womersley Woman"
   ]
 
-
   selectedSkinfoldsMethodSubs() {
     this.selectedSkinfoldsMethodSubscription = this.selectedSkinfoldsMethod$.subscribe(data => {
       this.skinfoldsTiles = []
@@ -240,9 +239,7 @@ export class SkinfoldsService {
   }
 
   saveSkinfoldToDB() {
-
     this.db.addSkinfoldsToDB({ ...this.skinfoldsObjectForDB })
-
   }
 
 

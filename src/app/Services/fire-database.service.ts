@@ -5,7 +5,7 @@ import { Subject, Subscription, BehaviorSubject } from 'rxjs';
 import { Girths } from './../interface-model/girths.model';
 import { SkinfoldsForDB } from './../interface-model/skinfold.model';
 import { Injectable } from '@angular/core';
-import { map } from 'rxjs/Operators';
+import { map } from 'rxjs/operators';
 import { AngularFirestore } from '@angular/fire/firestore';
 
 @Injectable({
@@ -19,16 +19,11 @@ export class FireDatabaseService {
     private authService: AuthService,
     private router: Router) { }
 
-  girthsSubj = new BehaviorSubject<Girths[]>([]);
-  girthsID = new BehaviorSubject<string[]>([]);
+  private fbSubs: Subscription[] = []
+
+  girthsSubj = new Subject<Girths[]>();
   skinfoldsSubj = new Subject<SkinfoldsForDB[]>()
   userSubscripiton: Subscription
-
-  /*
-   addSkinfoldsToDB(skinfolds: SkinfoldsForDB): Observable<any> {
-      return from(this.afs.collection(`users/${this.authService.userID}/skinfoldsData`).add(skinfolds))
-    }
-  */
 
   addSkinfoldsToDB(skinfolds: SkinfoldsForDB) {
     this.afs.collection(`users/${this.authService.userID}/skinfoldsData`).add(skinfolds)
@@ -38,10 +33,8 @@ export class FireDatabaseService {
     this.afs.collection(`users/${this.authService.userID}/girthsData`).add(girths)
   }
 
-  private fbSubs: Subscription[] = []
-
-  fetchAvailableGirths() {
-    this.fbSubs.push(this.afs.collection<Girths>(`users/${this.authService.userID}/girthsData`, ref => ref.orderBy("date", "desc").limit(10))
+  fetchAvailableGirths(n: number) {
+    this.fbSubs.push(this.afs.collection<Girths>(`users/${this.authService.userID}/girthsData`, ref => ref.orderBy("date", "desc").limit(5 + n))
       .valueChanges({ idField: 'idField' })
       .pipe(
         map((girths, ref) => girths.map(girth => {
@@ -56,8 +49,8 @@ export class FireDatabaseService {
       }))
   }
 
-  fetchAvailableSkinfolds() {
-    this.fbSubs.push(this.afs.collection<SkinfoldsForDB>(`users/${this.authService.userID}/skinfoldsData`, ref => ref.orderBy("metadata.date", "desc").limit(10))//
+  fetchAvailableSkinfolds(n: number) {
+    this.fbSubs.push(this.afs.collection<SkinfoldsForDB>(`users/${this.authService.userID}/skinfoldsData`, ref => ref.orderBy("metadata.date", "desc").limit(5 + n))//
       .valueChanges({ idField: 'idField' })
       .pipe(
         map((skinfolds, ref) => skinfolds.map(skinfold => {
@@ -75,6 +68,7 @@ export class FireDatabaseService {
   deleteGirth(id: string) {
     this.afs.collection<Girths>(`users/${this.authService.userID}/girthsData`).doc(id).delete()
   }
+
   deleteSkinfolds(id: string) {
     this.afs.collection<SkinfoldsForDB>(`users/${this.authService.userID}/skinfoldsData`).doc(id).delete()
   }
@@ -99,7 +93,6 @@ export class FireDatabaseService {
         }
       });
   }
-
 
   populateSkinfolds() {
     this.afs.firestore

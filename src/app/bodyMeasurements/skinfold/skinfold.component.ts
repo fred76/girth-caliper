@@ -52,6 +52,7 @@ export class SkinfoldComponent implements OnInit, OnDestroy {
   calculateAge(birthdate: any): number {
     return moment().diff(birthdate, 'years');
   }
+
   ngOnDestroy() {
     this.skinfoldsService.selectedSkinfoldsMethodUnsubscribe()
     this.userSub.unsubscribe()
@@ -98,8 +99,6 @@ export class SkinfoldComponent implements OnInit, OnDestroy {
           bodyDensity: this.utility.numberDecimal(foldSkin.bodyDensity, 2),
           bodyFatPercentage: this.utility.numberDecimal(foldSkin.bodyFatPerc, 2),
           sum: this.utility.numberDecimal(foldSkin.sum, 2),
-          pieBarBodyComposition: this.chartFeederService.pieChart(this.utility.numberDecimal(foldSkin.fatMass, 2), this.utility.numberDecimal(foldSkin.leanMass, 2)),
-
 
           barChartData: this.chartFeederService.barChartData(foldSkin.foldSkinValueArray),
           barChartLabels: this.chartFeederService.barChartLabels(foldSkin.foldSkinTitleArray),

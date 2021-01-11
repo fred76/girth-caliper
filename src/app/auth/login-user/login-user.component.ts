@@ -39,20 +39,19 @@ export class LoginUserComponent implements OnInit {
     );
   }
 
-
-
   isSignInWithEmail: boolean = false
+  emailF = new FormControl('', [Validators.required, Validators.email]);
+  hide = true;
+  url: string
 
   isSignInWithEmailAction() {
     this.isSignInWithEmail = !this.isSignInWithEmail
   }
-  url: string
+
   ngOnInit() {
     this.url = this.router.url;
   }
 
-  emailF = new FormControl('', [Validators.required, Validators.email]);
-  hide = true;
   getErrorMessage() {
     if (this.emailF.hasError('required')) {
       return 'You must enter a value';

@@ -5,7 +5,9 @@
   top: 0;
   z-index: 999;
   height: 70px;
-  background-color: #fd7525;
+    background-color: #fd7525;
+
+ background-color: rgba(21,24,25);
 }
 
 .login-btn{
@@ -117,3 +119,4 @@ color:  #c2185b;;
 .mat-divider {
    width: 90%;
 }
+

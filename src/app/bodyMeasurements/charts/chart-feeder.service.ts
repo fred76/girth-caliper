@@ -557,7 +557,7 @@ export class ChartFeederService {
       data: {
         datasets: s.dataSetBodyResult
       },
-      options: this.lineChartBodyDensityOption("Weight, Lean mass, Fat maas ( Kg )", "Body density ( g/cc )", "Skinfolds sum ( mm )", s.maxSumForScale + 10, s.maxWeightForScale, s.maxBodyDensityForScale, s.date)
+      options: this.lineChartBodyDensityOption("Weight, Lean mass, Fat maas ( Kg )", "Body density ( g/cc )", "Skinfolds sum ( mm )", s.maxSumForScale + 10, s.maxWeightForScale, s.maxBodyDensityForScale + 0.01, s.date)
     });
     return Linechart
   }

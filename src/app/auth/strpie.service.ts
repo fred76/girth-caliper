@@ -1,4 +1,4 @@
-import { filter, first } from 'rxjs/Operators';
+import { filter, first } from 'rxjs/operators';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { AuthService } from './auth.service';
 import { CheckoutSession } from '../interface-model/checkout-Session.model';
@@ -29,7 +29,6 @@ export class StrpieService {
     }, { headers })
   }
 
-
   subscripitonUnsubscription(cancelAtPeriodEnd: boolean, subscriptionId: string, isDeleteSubscription, deleteSubscription): Observable<any> {
     const headers = new HttpHeaders().set("Authorization", this.jwtAuth)
 
@@ -39,17 +38,7 @@ export class StrpieService {
       deleteSubscription: deleteSubscription,
       subscriptionId
     }, { headers })
-
-
   }
-  /*
-  35,88
-  32
-  30
-
-  */
-
-
 
   buildCallcackURL() {
     const protocol = window.location.protocol,

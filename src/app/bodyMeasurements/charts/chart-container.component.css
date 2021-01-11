@@ -1,23 +1,21 @@
-
- mat-drawer { width: 12%;
-
-  position: fixed;
-  position: -fixed-sticky;
-  top: 119px;
-  z-index: 999;
+.mat-drawer-container-class{
+  position: absolute;
+  right: 0px;
+  left: 0px;
+  bottom: 0px;
+  top: 118px;
 }
- mat-drawer-content {  width: 88%;
 
+.mat-drawer-content-class{
+  width: 88%;
   position: absolute;
   right: 0px;
   left: 0px;
   bottom: 0px;
   top:  0px;
- }
- mat-drawer-container{
-  position: absolute;
-  right: 0px;
-  left: 0px;
-  bottom: 0px;
-  top: 120px;
+}
+
+.mat-drawer-class{
+  width: 12%;
+  background-color: #181b1b;
  }

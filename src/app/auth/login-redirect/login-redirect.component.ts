@@ -31,6 +31,7 @@ export class LoginRedirectComponent implements OnInit {
       this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/accessory/email.svg")
     );
   }
+
   ngOnInit(): void { }
 
 }

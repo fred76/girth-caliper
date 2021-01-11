@@ -12,6 +12,10 @@ export class DummyDataService {
 
   constructor(private utility: Utility) { }
 
+  dummyArray = []
+
+  dummyArraySkinfolds = []
+
   getRandomInt(min, max) {
     min = Math.ceil(min);
     max = Math.floor(max);
@@ -115,10 +119,5 @@ export class DummyDataService {
     dateDummy.setDate(dateDummy.getDate() + d)
     return dateDummy
   }
-
-  dummyArray = []
-
-  dummyArraySkinfolds = []
-
 
 }

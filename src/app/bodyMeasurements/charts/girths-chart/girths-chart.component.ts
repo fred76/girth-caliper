@@ -10,12 +10,19 @@ import { ChartFeederService } from './../chart-feeder.service';
 @Component({
   selector: 'app-girths-chart',
   template: `
+  <div class="marginCard">
   <mat-card class="mat-elevation-z8" > <mat-card-title>
     <div fxLayout="row" fxLayout="row" fxLayout.lt-sm="column" fxLayoutAlign="space-between center">
       <p class="mat-subheading-2">Girths trend over the body weight</p>
       <div fxLayout="row" fxLayout.lt-sm="column" fxLayoutGap="16px">
 
-        <div fxLayout.lt-sm="row" fxLayoutGap="16px">
+        <div fxLayout="row" fxLayoutGap="16px">
+        <div fxLayout="row" fxLayoutGap="4px">
+          <h5 class="h5LoadMore">Load more</h5>
+          <button mat-mini-fab color="primary" (click)="loadMoreGirths()" class="button24">
+            <mat-icon   class="iconAdd">add</mat-icon>
+          </button>
+          </div>
           <button mat-mini-fab color="primary" (click)="toggleSkinfoldChartListButton($event)" class="button24">
             <mat-icon *ngIf="!isToggleSkinfoldChartList" class="icon24Bis">reorder_black</mat-icon>
             <mat-icon *ngIf="isToggleSkinfoldChartList" class="icon24Bis">timeline_black</mat-icon>
@@ -117,12 +124,17 @@ import { ChartFeederService } from './../chart-feeder.service';
         <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
       </mat-table>
     </div>
-</mat-card>`,
+</mat-card>
+</div>`,
 
-  styles: [`
-   .mat-elevation-z8 { margin: 10px; padding: 10px; }  .mat-elevation-z4 { margin: 10px; padding: 10px; }
-   .icon24Bis { font-family: "Material Icons" !important; font-size: 16px; margin-top: -10px; margin-left: 3px;}
-   .button24 { width: 24px;  height: 24px;}`],
+  styles: [
+    `.mat-elevation-z8 { margin: 10px; padding: 10px; }`,
+    `.mat-elevation-z4 { margin: 10px; padding: 10px; }`,
+    `.icon24Bis { font-family: "Material Icons" !important; font-size: 16px; margin-top: -10px; margin-left: 3px;}`,
+    `.button24 { width: 24px;  height: 24px;}`,
+    `.iconAdd{ font-family: "Material Icons" !important; font-size: 20px; margin-top: -14px; }`,
+    `.marginCard{ padding: 16px; margin: 16px }`,
+    `.h5LoadMore { margin-top: 2px }`],
   encapsulation: ViewEncapsulation.None
 })
 
@@ -134,10 +146,28 @@ export class GirthsChartComponent implements OnInit, OnDestroy {
     private chartContainerComponent: ChartContainerComponent) { }
 
   private toggleSkinfoldChartListEvent = new Subject<Event>();
+  private exchangeSubscription: Subscription
+
+  public chartClicked({ event, active }: { event: MouseEvent, active: {}[] }): void { }
+  public chartHovered({ event, active }: { event: MouseEvent, active: {}[] }): void { }
+
   @Input() isToggleSkinfoldChartList: boolean = false
+
+  @ViewChild(BaseChartDirective, { static: true }) chart: BaseChartDirective;
+
   dataSource = new MatTableDataSource<Girths>()
   displayedColumns = ["Date", "Body weight", "Neck", "Chest", "Bicep Rigth", "Bicep Left", "Bicep Relaxed Rigth", "Bicep Relaxed Left", "Forearm Rigth", "Forearm Left", "Wrist", "Waist", "Hips", "Thigt Rigth", "Thigt Left", "Calf Rigth", "Calf Left", "Option"]
   girths: Girths[]
+  girthsToAdd: number = 0
+  lineChartGirths: any
+
+  ngOnInit(): void {
+    this.exchangeSubscription = this.chartContainerComponent.girthsSubj.subscribe((g: Girths[]) => {
+      this.girths = g
+      this.dataSource.data = g
+      this.lineChartGirths = this.chartFeederService.lineChartGirths(g)
+    })
+  }
 
   toggleSkinfoldChartListButton(event: Event) {
     this.toggleSkinfoldChartListEvent.next(event);
@@ -151,24 +181,13 @@ export class GirthsChartComponent implements OnInit, OnDestroy {
     this.chartContainerComponent.deleteGirth(id)
   }
 
-  @ViewChild(BaseChartDirective, { static: true }) chart: BaseChartDirective;
-  private exchangeSubscription: Subscription
-  lineChartGirths: any
+  loadMoreGirths() {
+    this.girthsToAdd += 2
+    this.chartContainerComponent.girthsArraySize.next(this.girthsToAdd)
+  }
 
   clickExportSkinfolds() {
     this.importExportService.flatGirthsForDB(this.girths)
-  }
-  // events
-  public chartClicked({ event, active }: { event: MouseEvent, active: {}[] }): void { }
-
-  public chartHovered({ event, active }: { event: MouseEvent, active: {}[] }): void { }
-
-  ngOnInit(): void {
-    this.exchangeSubscription = this.chartContainerComponent.girthsSubj.subscribe((g: Girths[]) => {
-      this.girths = g
-      this.dataSource.data = g
-      this.lineChartGirths = this.chartFeederService.lineChartGirths(g)
-    })
   }
 
   ngOnDestroy(): void {

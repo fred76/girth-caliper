@@ -1,28 +1,30 @@
+import { Subscription } from 'rxjs';
 import { Utility } from 'src/app/Utility/utility';
-import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 @Component({
   selector: 'app-btn-sidenav-animated',
   templateUrl: './btn-sidenav-animated.component.html',
   styleUrls: ['./btn-sidenav-animated.component.css']
 })
-export class BtnSidenavAnimatedComponent implements OnInit {
+export class BtnSidenavAnimatedComponent implements OnInit, OnDestroy {
 
-  navLinks: any[]
-  activeLink = 0
+
   constructor(private router: Router, private route: ActivatedRoute, private utility: Utility) { }
 
   @Input() text: string
   @Input() btnStatus: string
-  oldStatus: string = "btn-Girth"
 
   @Output() click = new EventEmitter<string>()
+
   @ViewChild('btnAnimationGirth', { static: false }) btnAnimationGirth: ElementRef
   @ViewChild('btnAnimationSkinfold', { static: false }) btnAnimationSkinfold: ElementRef
   @ViewChild('btnAnimationBody', { static: false }) btnAnimationBody: ElementRef
   @ViewChild('bckgAnimation', { static: false }) bckgAnimation: ElementRef
 
-
+  oldStatus: string = "btn-Girth"
+  navLinks: any[]
+  activeLink = 0
   color: string
   morphingGirth: string
   morphingSkinfold: string
@@ -38,6 +40,7 @@ export class BtnSidenavAnimatedComponent implements OnInit {
   circleBody = "M132.3,533.9a53.17,53.17,0,0,1-53.15,53.15h0a53.15,53.15,0,0,1,0-106.3h0A53.17,53.17,0,0,1,132.3,533.9Z"
   yMotion: string
   yInitialPosition: string
+  routerSub: Subscription
 
   onClick(btn: string) {
 
@@ -96,7 +99,7 @@ export class BtnSidenavAnimatedComponent implements OnInit {
 
   ngOnInit() {
 
-    this.router.events.subscribe((evt) => {
+    this.routerSub = this.router.events.subscribe((evt) => {
       if (!(evt instanceof NavigationEnd)) {
         return;
       }
@@ -121,5 +124,9 @@ export class BtnSidenavAnimatedComponent implements OnInit {
         return this.initialShapeBody = this.circleBody,
           this.yInitialPosition = "translate(0 428.8)"
     }
+  }
+
+  ngOnDestroy(): void {
+    this.routerSub.unsubscribe()
   }
 }

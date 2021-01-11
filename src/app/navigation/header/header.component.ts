@@ -19,8 +19,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
       this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/accessory/logo.svg")
     );
   }
+
   user: User
   authSubscription: Subscription
+
   ngOnInit(): void {
     this.authSubscription = this.authService.user$.subscribe(user => {
       this.user = user
@@ -30,7 +32,5 @@ export class HeaderComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.authSubscription.unsubscribe()
   }
-
-  onToggleSidenav() { }
 
 }

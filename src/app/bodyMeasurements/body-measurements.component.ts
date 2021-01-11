@@ -51,6 +51,7 @@ export class BodyMeasurementsComponent implements OnInit, OnDestroy {
     ]
   }
 
+  userUnsubscribe: Subscription
   routerUnsubscribe1: Subscription
   routerUnsubscribe2: Subscription
   navLinks: any[]
@@ -58,7 +59,7 @@ export class BodyMeasurementsComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
 
-    this.authService.user$.subscribe(p => {
+    this.userUnsubscribe = this.authService.user$.subscribe(p => {
       if (this.utility.isSubscripitionOutOfDate(p.current_period_end)) {
         this.router.navigate(['/UserDashboard']);
       }
@@ -80,5 +81,6 @@ export class BodyMeasurementsComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.routerUnsubscribe1.unsubscribe()
     this.routerUnsubscribe2.unsubscribe()
+    this.userUnsubscribe.unsubscribe()
   }
 }

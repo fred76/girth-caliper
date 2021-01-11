@@ -3,7 +3,7 @@ import { Girths } from './../../../interface-model/girths.model';
 import { SkinfoldsForDB } from './../../../interface-model/skinfold.model';
 import { Subscription } from 'rxjs';
 import { ChartContainerComponent } from './../chart-container.component';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 
 @Component({
   selector: 'app-body-chart',
@@ -11,26 +11,23 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./body-chart.component.css']
 })
 
-export class BodyChartComponent implements OnInit {
+export class BodyChartComponent implements OnInit, OnDestroy {
 
   constructor(
     private chartsFeederService: ChartFeederService,
     private chartContainerComponent: ChartContainerComponent) { }
 
-  lineChartGirthsOverSkinfolds: Chart
-
-  // events
-  public chartClicked({ event, active }: { event: MouseEvent, active: {}[] }): void { }
-
-  public chartHovered({ event, active }: { event: MouseEvent, active: {}[] }): void { }
-
-  data: any
-
   private exchangeSubscriptionGirth: Subscription
   private exchangeSubscriptionSkinfold: Subscription
 
+  public chartClicked({ event, active }: { event: MouseEvent, active: {}[] }): void { }
+  public chartHovered({ event, active }: { event: MouseEvent, active: {}[] }): void { }
+
+  data: any
+  lineChartGirthsOverSkinfolds: Chart
   girths: Girths[]
   skinfolds: SkinfoldsForDB[]
+  selected_girth_skinfold_id: any;
 
   ngOnInit() {
     this.exchangeSubscriptionGirth = this.chartContainerComponent.girthsSubj.subscribe((g: Girths[]) => {
@@ -44,11 +41,6 @@ export class BodyChartComponent implements OnInit {
     this.lineChartGirthsOverSkinfolds = this.chartsFeederService.lineChartSkinfoldsOverGirths(this.skinfolds, this.girths, this.selected_girth_skinfold_id)
   }
 
-  ngOnDestroy(): void {
-    this.exchangeSubscriptionGirth.unsubscribe()
-    this.exchangeSubscriptionSkinfold.unsubscribe()
-  }
-
   girth_skinfold: any[] = [
     { name: 'Arm - girth & skinfold', id: 1 },
     { name: 'Chest - girth & skinfold', id: 2 },
@@ -57,8 +49,6 @@ export class BodyChartComponent implements OnInit {
     { name: 'Calf - girth & skinfold', id: 5 }
   ];
 
-  selected_girth_skinfold_id: any;
-
   selectChart(girth_skinfold) {
     this.selected_girth_skinfold_id = girth_skinfold.id;
     let a = []
@@ -66,6 +56,11 @@ export class BodyChartComponent implements OnInit {
     this.lineChartGirthsOverSkinfolds.destroy()
     this.lineChartGirthsOverSkinfolds = this.chartsFeederService.lineChartSkinfoldsOverGirths(this.skinfolds, this.girths, this.selected_girth_skinfold_id)
 
+  }
+
+  ngOnDestroy(): void {
+    this.exchangeSubscriptionGirth.unsubscribe()
+    this.exchangeSubscriptionSkinfold.unsubscribe()
   }
 }
 
