@@ -1,9 +1,6 @@
- server/**
-server/**/*.js
-server/**/*.js.map
-client/**/*.js
-client/**/*.js.map
-/npm-debug.lo
+dist
+./dist
+/dist
 
 .env
 
