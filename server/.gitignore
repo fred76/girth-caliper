@@ -1,6 +1,8 @@
-dist
-./dist
-/dist
-
 .env
+# compiled output
+/dist
+/dist-server
+
+# dependencies
+/node_modules
 
