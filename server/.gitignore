@@ -1,12 +1,9 @@
+ server/**
+server/**/*.js
+server/**/*.js.map
+client/**/*.js
+client/**/*.js.map
+/npm-debug.lo
+
 .env
-# compiled output
-dist
-/dist
-./dist
-./dist/service-accounts
 
-# dependencies
-/node_modules
-
-
-girthcaliperweb-19d84b17121f.json
