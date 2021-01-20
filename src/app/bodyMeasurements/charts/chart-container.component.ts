@@ -1,6 +1,6 @@
 import { SkinfoldsForDB } from './../../interface-model/skinfold.model';
 import { FireDatabaseService } from 'src/app/Services/fire-database.service';
-import { BehaviorSubject, Subscription } from 'rxjs';
+import { BehaviorSubject, Subscription, Observable } from 'rxjs';
 import { Girths } from './../../interface-model/girths.model';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 
@@ -14,7 +14,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
     </app-btn-sidenav-animated>
     </mat-drawer >
     <mat-drawer-content class="mat-drawer-content-class"  autosize=true >
-      <div class="ddd">
+      <div >
     <router-outlet ></router-outlet>
   </div>
     </mat-drawer-content>
@@ -34,7 +34,6 @@ export class ChartContainerComponent implements OnInit, OnDestroy {
   skinfoldsSubj = new BehaviorSubject<SkinfoldsForDB[]>([])
   skinfoldArraySize = new BehaviorSubject<number>(0)
   girthsArraySize = new BehaviorSubject<number>(0)
-
   ngOnInit() {
     this.fireDatabaseService.populateSkinfolds()
     this.fireDatabaseService.populateGirths()

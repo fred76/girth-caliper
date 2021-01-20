@@ -1,3 +1,74 @@
-.AAA{
-margin-top: 120px;}
+.mainDiv {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
 
+/* First Div */
+.textTitle {
+  color: whitesmoke;
+  font-size: 6vw;
+  line-height: 6vw;
+  text-align: center;
+}
+.textSubtitle {
+  margin-top: 24px;
+  color: whitesmoke;
+  font-size: 3vw;
+  text-align: center;
+}
+.parallaxFirstDiv {
+  height: 100%;
+  background-image: url("../../../src/assets/abs.jpg");
+  /* Create the parallax scrolling effect */
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+
+/* second Div */
+
+.parallaxSecondDiv {
+  background-color: #1f2326;
+  /* Create the parallax scrolling effect */
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.divTitle {
+  margin-top: 112px;
+  color: whitesmoke;
+  font-size: 3vw;
+  text-align: center;
+}
+
+.divider{
+  margin-top: 24px;
+  margin-bottom: 24px;
+  width: 100px;
+}
+.devices{
+  height: 200px;
+  aspect-ratio: 1;
+}
+
+.textBox{
+  font-family: "Open Sans";
+  font-size: 15px; font-style: normal;
+   font-variant: normal;
+   font-weight: 400; line-height: 25px;
+  font-family: Arial, Helvetica, sans-serif;
+  padding: 16px;
+  color: whitesmoke;
+  margin: 24px;
+  border-color: whitesmoke;
+  border-radius: 10px;
+  border-width: thin;
+  border-style: solid;
+}

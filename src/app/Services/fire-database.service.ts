@@ -1,11 +1,13 @@
+import { Photo } from './../interface-model/photo-user';
+
 import { Router } from '@angular/router';
 import { DummyDataService } from './../Utility/dummyData.service';
 import { AuthService } from '../auth/auth.service';
-import { Subject, Subscription, BehaviorSubject } from 'rxjs';
+import { Subject, Subscription, Observable, from } from 'rxjs';
 import { Girths } from './../interface-model/girths.model';
 import { SkinfoldsForDB } from './../interface-model/skinfold.model';
 import { Injectable } from '@angular/core';
-import { map } from 'rxjs/operators';
+import { map, first } from 'rxjs/operators';
 import { AngularFirestore } from '@angular/fire/firestore';
 
 @Injectable({
@@ -22,6 +24,7 @@ export class FireDatabaseService {
   private fbSubs: Subscription[] = []
 
   girthsSubj = new Subject<Girths[]>();
+  photoSubj = new Subject<Photo[]>();
   skinfoldsSubj = new Subject<SkinfoldsForDB[]>()
   userSubscripiton: Subscription
 
@@ -31,6 +34,16 @@ export class FireDatabaseService {
 
   addGirthsToDB(girths: Girths) {
     this.afs.collection(`users/${this.authService.userID}/girthsData`).add(girths)
+  }
+
+  addPhoto(url: string, date: Date | any, viewSide: string): Observable<any> {
+    return from(this.afs.collection(`users/${this.authService.userID}/bodyPhotos`).add({ url, date, viewSide }))
+  }
+
+  fetchAvailablePhoto(n: number) {
+    return this.afs.collection<Photo>(`users/${this.authService.userID}/bodyPhotos`, ref => ref.orderBy("date", "asc").limit(12 + n))
+      .valueChanges({ idField: 'idField' })
+
   }
 
   fetchAvailableGirths(n: number) {
@@ -64,6 +77,7 @@ export class FireDatabaseService {
       }, error => {
       }))
   }
+
 
   deleteGirth(id: string) {
     this.afs.collection<Girths>(`users/${this.authService.userID}/girthsData`).doc(id).delete()
@@ -110,4 +124,13 @@ export class FireDatabaseService {
       });
   }
 
+}
+export function convertSnaps<T>(snaps) {
+  return <T[]>snaps.map(snap => {
+    return {
+      id: snap.payload.doc.id,
+      ...snap.payload.doc.data()
+    };
+
+  });
 }

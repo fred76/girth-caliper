@@ -1,4 +1,5 @@
- import { AppComponent } from './app.component';
+import { AnimateModule } from './animation-utility/animate.module';
+import { AppComponent } from './app.component';
 import { environment } from './../environments/environment.prod';
 
 import { NgModule } from '@angular/core';
@@ -15,9 +16,12 @@ import { Utility } from './Utility/utility';
 import { AngularFireModule } from '@angular/fire';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { NgxAuthFirebaseUIModule } from 'ngx-auth-firebaseui'
+import { AngularFireStorageModule } from '@angular/fire/storage';
+
 
 import { HeaderComponent } from './navigation/header/header.component';
 import { WelcomeComponent } from './welcome/welcome.component';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -34,12 +38,18 @@ import { WelcomeComponent } from './welcome/welcome.component';
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule,
     NgxAuthFirebaseUIModule.forRoot(environment.firebase),
-    AuthModule
+    AuthModule,
+    AnimateModule,
+    AngularFireStorageModule
     // BodyMeasuremntsModule,
     // BodyMeasurementsChartsModule
   ],
 
-  providers: [Utility],
+  providers: [
+    Utility
+    //,
+    // { provide: BUCKET, useValue: 'my-bucket-name' }
+  ],
   bootstrap: [AppComponent]
 })
 

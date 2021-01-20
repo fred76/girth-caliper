@@ -5,7 +5,7 @@ import { ChartContainerComponent } from './../chart-container.component';
 
 import { MatDialog } from '@angular/material/dialog';
 import { ImportExportService } from './../../../Services/import-export.service';
-import { Subject, Subscription } from 'rxjs';
+import { Subject, Subscription, Observable } from 'rxjs';
 import { MatTableDataSource } from '@angular/material/table';
 import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 @Component({
@@ -63,8 +63,8 @@ export class SkinfoldsChartComponent implements OnInit, OnDestroy {
     }
 
   }
-
   ngOnInit(): void {
+
     this.exchangeSubscription = this.chartContainerComponent.skinfoldsSubj.subscribe((s: SkinfoldsForDB[]) => {
       this.show = false
       let localSkinfoldObject = [...s].sort((d2, d1) => new Date(d1.metadata.date).getTime() - new Date(d2.metadata.date).getTime())

@@ -1,0 +1,25 @@
+<div >
+ <!-- <span fxLayoutAlign="start">
+    <button class="buttonSticky" (click)="fileInput.click()" mat-raised-button color="primary">Photo session</button>
+    <input #fileInput type="file" multiple  type="file" (change)="fileUpload($event)" >
+  </span> (click)="nav()"-->
+  <span fxLayoutAlign="start">
+    <button class="buttonSticky" (click)="navigateToPhotoSession()" mat-raised-button color="primary">Photo session</button>
+ </span>
+  <!-- <div *ngIf="(uploadPercentage$ | async) as percentage">
+    <mat-progress-bar mode="determinate" [value]="percentage"></mat-progress-bar>
+    <span>{{percentage / 100 | percent}}</span>
+  </div> -->
+
+  <div class="content" fxLayout="row wrap" fxLayoutGap="16px grid">
+    <div fxFlex="33%" fxFlex.xs="100%" fxFlex.sm="33%" *ngFor="let photo of photos$ | async  ">
+      <mat-card class="mat-elevation-z8">
+        <mat-card-header>
+          <mat-card-title>{{photo.viewSide}}</mat-card-title>
+          <mat-card-title>{{photo.date.seconds * 1000 | date:'d MMM yyyy'}}</mat-card-title>
+        </mat-card-header>
+        <img mat-card-image src="{{photo.url}}">
+      </mat-card>
+    </div>
+  </div>
+</div>

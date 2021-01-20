@@ -46,7 +46,7 @@ export class BodyMeasurementsComponent implements OnInit, OnDestroy {
     this.navLinks = [
       { label: 'Girths', link: './girthTab', index: 0 },
       { label: 'Skinfolds', link: './skinfoldTab', index: 1 },
-      { label: 'Photo', link: './photoTab', index: 2 },
+      { label: 'Photo', link: './photoTab/userPhoto', index: 2 },
       { label: 'Insight', link: './insightTab/ghirthsChart', index: 3 }
     ]
   }
@@ -76,6 +76,9 @@ export class BodyMeasurementsComponent implements OnInit, OnDestroy {
       }
       window.scrollTo(0, 0)
     })
+
+
+
   }
 
   ngOnDestroy(): void {

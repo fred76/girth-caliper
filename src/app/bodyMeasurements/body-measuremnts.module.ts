@@ -1,3 +1,5 @@
+import { PhotoSessionComponent } from './history/photo-session/photo-session/photo-session.component';
+import { UserPhotoComponent } from './history/user-photo/user-photo/user-photo.component';
 import { SkinfoldsService } from './skinfolds.service';
 import { GirthsService } from './girths.service';
 import { BodyMeasurementRoutesModule } from './body-measurement-routes.module';
@@ -12,6 +14,8 @@ import { GirthsComponent } from './girths/girths.component';
 import { BodyMeasurementsComponent } from './body-measurements.component';
 import { NgModule } from '@angular/core';
 import { BodyMeasurementsChartsModule } from './charts/body-measurements-charts.module';
+import { ImageCropperModule } from 'ngx-image-cropper';
+
 
 @NgModule({
   declarations: [
@@ -20,13 +24,17 @@ import { BodyMeasurementsChartsModule } from './charts/body-measurements-charts.
     ConfirmGirthsComponent,
     SkinfoldComponent,
     HistoryComponent,
-    ConfirmSkinfoldComponent],
+    UserPhotoComponent,
+    PhotoSessionComponent,
+    ConfirmSkinfoldComponent,
+  ],
   imports: [
     SharedModule,
     RouterModule,
     NgxMatStepLazyLoadModule,
     BodyMeasurementRoutesModule,
     BodyMeasurementsChartsModule,
+    ImageCropperModule
   ],
   exports: [],
   providers: [GirthsService, SkinfoldsService]

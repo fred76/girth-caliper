@@ -1,0 +1,15 @@
+.mainDiv {
+  margin-top: 150px;
+}
+.content {
+  padding: 20px;
+  margin-top: 160px !important;
+  height: auto !important;
+}
+.buttonSticky {
+  z-index: 999;
+  position: fixed !important;
+  margin: 10px;
+  margin-top: 130px !important;
+  aspect-ratio: 1;
+}

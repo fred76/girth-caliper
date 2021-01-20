@@ -1,0 +1,23 @@
+<div class="content" fxFlex="33%" fxLayoutAlign="space-around center" fxLayout="row" fxLayoutGap="16px grid">
+
+<div  fxFlex="33%" fxLayout="column" fxLayoutGap="16px grid">
+  <span fxLayoutAlign="start">
+    <button (click)="fileInput.click()" mat-raised-button color="primary">Photo session</button>
+    <input #fileInput hidden type="file" multiple (change)="loadFrontImage($event)">
+  </span>
+  <image-cropper
+  [imageChangedEvent]="frontImageChangedEvent"
+  [maintainAspectRatio]="true"
+  [aspectRatio]="2 / 3" format="png"
+  (imageCropped)="frontImageCropped($event)"
+  (imageLoaded)="frontImageLoaded()"
+  (cropperReady)="frontCropperReady()"
+  (loadImageFailed)="frontLoadImageFailed()"
+    ></image-cropper>
+
+    <img [src]="frontCroppedImage" />
+</div>
+
+
+
+</div>

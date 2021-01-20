@@ -29,6 +29,9 @@ service cloud.firestore {
       match /skinfoldsData/{skinfoldsDataId} {
         allow read, write, create: if isUserWithId(userId);
       }
+      match /bodyPhotos/{bodyPhotosId} {
+        allow read, write, create: if isUserWithId(userId);
+      }
 
     }
 

@@ -2,7 +2,6 @@ import { ChartFeederService } from './chart-feeder.service';
 import { BtnSidenavAnimatedComponent } from './sideBar/btn-sidenav-animated.component';
 import { ChartsModule } from 'ng2-charts';
 import { RouterModule } from '@angular/router';
-import { LoadMoreSkinfoldComponent } from './skinfolds-chart/loadMoreSkinfold';
 import { BodyChartComponent } from './body-chart/body-chart.component';
 import { GirthsChartComponent } from './girths-chart/girths-chart.component';
 import { SkinfoldsChartComponent } from './skinfolds-chart/skinfolds-chart.component';
@@ -17,8 +16,7 @@ import { SharedModule } from '../../Shared/shared.module';
     ChartContainerComponent,
     SkinfoldsChartComponent,
     GirthsChartComponent,
-    BodyChartComponent,
-    LoadMoreSkinfoldComponent
+    BodyChartComponent
   ],
   imports: [
     SharedModule,

@@ -1,3 +1,5 @@
+import { UserPhotoComponent } from './history/user-photo/user-photo/user-photo.component';
+import { PhotoSessionComponent } from './history/photo-session/photo-session/photo-session.component';
 import { BodyChartComponent } from './charts/body-chart/body-chart.component';
 import { SkinfoldsChartComponent } from './charts/skinfolds-chart/skinfolds-chart.component';
 import { GirthsChartComponent } from './charts/girths-chart/girths-chart.component';
@@ -11,12 +13,19 @@ import { Routes, RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';
 
 const routes: Routes = [
-  // { path: 'Body&Measurements', redirectTo: '/Body&Measurements', pathMatch: 'full' },
   {
     path: 'Body&Measurements', component: BodyMeasurementsComponent, canActivate: [AuthGuard], children: [
       { path: 'skinfoldTab', component: SkinfoldComponent, canActivate: [AuthGuard] },
       { path: 'girthTab', component: GirthsComponent, canActivate: [AuthGuard] },
-      { path: 'photoTab', component: HistoryComponent, canActivate: [AuthGuard] },
+
+      {
+        path: 'photoTab', component: HistoryComponent, canActivate: [AuthGuard], children:
+          [
+            { path: 'userPhoto', component: UserPhotoComponent },
+            { path: 'photoSession', component: PhotoSessionComponent },
+          ],
+      },
+      // { path: 'photoSession', component: PhotoSessionComponent, canActivate: [AuthGuard] },
       {
         path: 'insightTab', component: ChartContainerComponent, children: [
           { path: '', component: GirthsChartComponent },
