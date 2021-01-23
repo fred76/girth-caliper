@@ -1,23 +1,78 @@
-<div class="content" fxFlex="33%" fxLayoutAlign="space-around center" fxLayout="row" fxLayoutGap="16px grid">
+<div class="imageDiv" fxLayoutAlign="space-around start" fxLayout="row wrap">
 
-<div  fxFlex="33%" fxLayout="column" fxLayoutGap="16px grid">
-  <span fxLayoutAlign="start">
-    <button (click)="fileInput.click()" mat-raised-button color="primary">Photo session</button>
-    <input #fileInput hidden type="file" multiple (change)="loadFrontImage($event)">
-  </span>
-  <image-cropper
-  [imageChangedEvent]="frontImageChangedEvent"
-  [maintainAspectRatio]="true"
-  [aspectRatio]="2 / 3" format="png"
-  (imageCropped)="frontImageCropped($event)"
-  (imageLoaded)="frontImageLoaded()"
-  (cropperReady)="frontCropperReady()"
-  (loadImageFailed)="frontLoadImageFailed()"
-    ></image-cropper>
+  <div fxFlex.gt-sm="33%" fxFlex="100%">
+    <div fxLayout="column" fxLayoutGap="16px grid" fxLayoutAlign="start center">
+      <span fxLayoutAlign="start">
+        <button (click)="fileInput1.click()" mat-raised-button color="primary">Select front photo</button>
+        <input #fileInput1 hidden type="file" multiple (change)="loadFrontImage($event)">
+      </span>
+      <div class="imgset">
+        <img *ngIf="!showFrontCropper" class="imgset" src="/assets//accessory/frontman.jpg">
+        <image-cropper [imageChangedEvent]="frontImageChangedEvent" [maintainAspectRatio]="true" [aspectRatio]="2 / 3"
+          format="png" (imageCropped)="frontImageCropped($event)" (imageLoaded)="frontImageLoaded()"
+          (cropperReady)="frontCropperReady()" (loadImageFailed)="frontLoadImageFailed()"
+          [style.display]="showFrontCropper ? null : 'none'"></image-cropper>
+      </div>
+     </div>
+      <div class="bar"  *ngIf="(frontUploadPercentage$ | async) as percentage">
+        <mat-progress-bar mode="determinate" [value]="percentage"></mat-progress-bar>
+        <span>{{percentage / 100 | percent}}</span>
+      </div>
 
-    <img [src]="frontCroppedImage" />
-</div>
+  </div>
 
+  <div fxFlex.gt-sm="33%" fxFlex="100%">
+    <div fxLayout="column" fxLayoutGap="16px grid" fxLayoutAlign="start center">
+      <span fxLayoutAlign="start">
+        <button (click)="fileInput2.click()" mat-raised-button color="primary">Select side photo</button>
+        <input #fileInput2 hidden type="file" multiple (change)="loadSideImage($event)">
+      </span>
+      <div class="imgset">
+        <img *ngIf="!showSideCropper" class="imgset" src="/assets//accessory/sideman.jpg">
+        <image-cropper [imageChangedEvent]="sideImageChangedEvent" [maintainAspectRatio]="true" [aspectRatio]="2 / 3"
+          format="png" (imageCropped)="sideImageCropped($event)" (imageLoaded)="sideImageLoaded()"
+          (cropperReady)="sideCropperReady()" (loadImageFailed)="sideLoadImageFailed()"
+          [style.display]="showSideCropper ? null : 'none'"></image-cropper>
+      </div></div>
+      <div class="bar"  *ngIf="(sideUploadPercentage$ | async) as percentage">
+        <mat-progress-bar mode="determinate" [value]="percentage"></mat-progress-bar>
+        <span>{{percentage / 100 | percent}}</span>
+      </div>
 
+  </div>
 
+  <div fxFlex.gt-sm="33%" fxFlex="100%">
+    <div fxLayout="column" fxLayoutGap="16px grid" fxLayoutAlign="start center">
+      <span fxLayoutAlign="start">
+        <button (click)="fileInput3.click()" mat-raised-button color="primary">Select back photo</button>
+        <input #fileInput3 hidden type="file" multiple (change)="loadBackImage($event)">
+      </span>
+      <div class="imgset">
+        <img *ngIf="!showBackCropper" class="imgset" src="/assets//accessory/backman.jpg">
+        <image-cropper [imageChangedEvent]="backImageChangedEvent" [maintainAspectRatio]="true" [aspectRatio]="2 / 3"
+          format="png" (imageCropped)="backImageCropped($event)" (imageLoaded)="backImageLoaded()"
+          (cropperReady)="backCropperReady()" (loadImageFailed)="backLoadImageFailed()"
+          [style.display]="showBackCropper ? null : 'none'"></image-cropper>
+      </div></div>
+      <div class="bar" *ngIf="(backUploadPercentage$ | async) as percentage">
+        <mat-progress-bar mode="determinate" [value]="percentage"></mat-progress-bar>
+        <span>{{percentage / 100 | percent}}</span>
+      </div>
+
+  </div>
+
+  <div *ngIf="showBackCropper || showSideCropper || showFrontCropper" class="margin" fxLayout="column" fxLayoutGap="16px grid" fxLayoutAlign="center center">
+    <mat-divider class="margin"></mat-divider>
+    <mat-form-field class="inputlabel"  appearance="standard">
+      <mat-label>Choose a date</mat-label>
+
+      <input matInput placeholder="Measurement date" [matDatepicker]="picker"
+      [(ngModel)]="photoDate" name="photoDate" required>
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker required></mat-datepicker>
+    </mat-form-field>
+    <span fxLayoutAlign="start">
+      <button [disabled]="!photoDate" (click)="uploadPhotoSet()" mat-raised-button color="primary">Upload photo set</button>
+    </span>
+  </div>
 </div>

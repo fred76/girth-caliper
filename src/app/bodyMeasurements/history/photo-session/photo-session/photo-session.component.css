@@ -1,8 +1,8 @@
-.mainDiv {
-  margin-top: 150px;
+.imageDiv {
+  margin-top: 130px;
 }
 .content {
-  padding: 20px;
+  padding: 130px;
   margin-top: 160px !important;
   height: auto !important;
 }
@@ -12,4 +12,29 @@
   margin: 10px;
   margin-top: 130px !important;
   aspect-ratio: 1;
+}
+
+.margin{
+  margin-top: 24px;
+}
+
+.mat-divider {
+  width: 90%;
+}
+
+image-cropper{
+    --cropper-outline-color: rgba(48,48,48,0.3 );
+   --cropper-overlay-color: rgba(48,48,48);
+}
+.imgSet{
+  object-fit: contain;
+  height: 90%;
+}
+
+.bar{
+  margin: 16px;
+}
+.inputlabel {
+  width: 100%;
+  color: white;
 }

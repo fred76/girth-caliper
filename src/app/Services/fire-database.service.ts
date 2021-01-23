@@ -1,4 +1,5 @@
-import { Photo } from './../interface-model/photo-user';
+
+import { Photo, PhotoSession } from './../interface-model/photo-user';
 
 import { Router } from '@angular/router';
 import { DummyDataService } from './../Utility/dummyData.service';
@@ -40,8 +41,12 @@ export class FireDatabaseService {
     return from(this.afs.collection(`users/${this.authService.userID}/bodyPhotos`).add({ url, date, viewSide }))
   }
 
+  addPhoto2(photoSet: PhotoSession): Observable<any> {
+    return from(this.afs.collection(`users/${this.authService.userID}/bodyPhotos`).add(photoSet))
+  }
+
   fetchAvailablePhoto(n: number) {
-    return this.afs.collection<Photo>(`users/${this.authService.userID}/bodyPhotos`, ref => ref.orderBy("date", "asc").limit(12 + n))
+    return this.afs.collection<PhotoSession>(`users/${this.authService.userID}/bodyPhotos`, ref => ref.orderBy("date", "asc").limit(12 + n))
       .valueChanges({ idField: 'idField' })
 
   }

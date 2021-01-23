@@ -2,9 +2,7 @@
   margin-top: 150px;
 }
 .content {
-  padding: 20px;
-  margin-top: 160px !important;
-  height: auto !important;
+  margin-top: 180px !important;
 }
 .buttonSticky {
   z-index: 999;
@@ -13,3 +11,19 @@
   margin-top: 130px !important;
   aspect-ratio: 1;
 }
+
+.card-div{
+  margin-top: 16px;
+}
+
+.imgSet{
+  width: 90%;
+  margin: 16px;
+}
+
+
+.card-center{
+  margin-left: 16px;
+  margin-right: 16px;
+}
+
