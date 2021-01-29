@@ -1,6 +1,5 @@
 import { Girths } from './../interface-model/girths.model';
 import { SkinfoldsForDB } from './../interface-model/skinfold.model';
-import { DummyDataService } from './../Utility/dummyData.service';
 import { Injectable } from '@angular/core';
 
 import * as XLSX from 'xlsx';
@@ -14,7 +13,7 @@ const EXCEL_EXTENSION = '.xlsx';
 })
 export class ImportExportService {
 
-  constructor(private dummyDataService: DummyDataService) { }
+  constructor() { }
 
   public exportAsExcelFile(json: any[], excelFileName: string): void {
     const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(json);
@@ -29,7 +28,6 @@ export class ImportExportService {
   }
 
   flatSkinfoldsForDB(s: SkinfoldsForDB[]) {
-    let i = this.dummyDataService.dummyArraySkinfolds
     let e: any[] = []
     s.map((element) => {
       let o = { ...element.metadata, ...element.fold, ...element.bodyResult }

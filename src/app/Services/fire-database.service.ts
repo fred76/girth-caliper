@@ -1,7 +1,5 @@
 
-import { Photo, PhotoSession } from './../interface-model/photo-user';
-
-import { Router } from '@angular/router';
+import { PhotoSession } from './../interface-model/photo-user';
 import { DummyDataService } from './../Utility/dummyData.service';
 import { AuthService } from '../auth/auth.service';
 import { Subject, Subscription, Observable, from } from 'rxjs';
@@ -19,13 +17,11 @@ export class FireDatabaseService {
   constructor(
     private dum: DummyDataService,
     private afs: AngularFirestore,
-    private authService: AuthService,
-    private router: Router) { }
+    private authService: AuthService ) { }
 
   private fbSubs: Subscription[] = []
 
   girthsSubj = new Subject<Girths[]>();
-  photoSubj = new Subject<Photo[]>();
   skinfoldsSubj = new Subject<SkinfoldsForDB[]>()
   userSubscripiton: Subscription
 
@@ -37,9 +33,6 @@ export class FireDatabaseService {
     this.afs.collection(`users/${this.authService.userID}/girthsData`).add(girths)
   }
 
-  addPhoto(url: string, date: Date | any, viewSide: string): Observable<any> {
-    return from(this.afs.collection(`users/${this.authService.userID}/bodyPhotos`).add({ url, date, viewSide }))
-  }
 
   addPhoto2(photoSet: PhotoSession): Observable<any> {
     return from(this.afs.collection(`users/${this.authService.userID}/bodyPhotos`).add(photoSet))
@@ -48,7 +41,6 @@ export class FireDatabaseService {
   fetchAvailablePhoto(n: number) {
     return this.afs.collection<PhotoSession>(`users/${this.authService.userID}/bodyPhotos`, ref => ref.orderBy("date", "asc").limit(12 + n))
       .valueChanges({ idField: 'idField' })
-
   }
 
   fetchAvailableGirths(n: number) {
@@ -83,13 +75,15 @@ export class FireDatabaseService {
       }))
   }
 
-
   deleteGirth(id: string) {
     this.afs.collection<Girths>(`users/${this.authService.userID}/girthsData`).doc(id).delete()
   }
 
   deleteSkinfolds(id: string) {
     this.afs.collection<SkinfoldsForDB>(`users/${this.authService.userID}/skinfoldsData`).doc(id).delete()
+  }
+  deletePhotoSet(id: string) {
+    this.afs.collection<SkinfoldsForDB>(`users/${this.authService.userID}/bodyPhotos`).doc(id).delete()
   }
 
   cancelSubscription() {
@@ -130,12 +124,4 @@ export class FireDatabaseService {
   }
 
 }
-export function convertSnaps<T>(snaps) {
-  return <T[]>snaps.map(snap => {
-    return {
-      id: snap.payload.doc.id,
-      ...snap.payload.doc.data()
-    };
 
-  });
-}

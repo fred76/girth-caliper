@@ -12,3 +12,7 @@ export async function getDocData(docPath) {
   return snap.data()
 }
 
+// STRIPE_WEBHOOK_SECRET="whsec_cAXnAsfzFA3JR0PtcX0B4U8ff5zM0QYx"
+
+
+//STRIPE_WEBHOOK_SECRET="whsec_MHGm0N6KW6rvOjq3VS5ZRI0R6hAHvwl9" CLI

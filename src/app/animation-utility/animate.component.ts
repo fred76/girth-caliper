@@ -83,12 +83,9 @@ export class AnimateComponent implements OnInit, OnDestroy {
 
   @Input('xGap') set xGapSet(xGap: string) {
     // Coerces the input into a number first
-    console.log(xGap);
 
     let value = coerceNumberProperty(xGap, 0);
     if (value) {
-      console.log(value);
-
       this.xGap = `${value}px`;
 
     }

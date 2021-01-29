@@ -26,15 +26,11 @@ export async function stripeWebhooks(req: Request, res: Response) {
       const session = event.data.object
       // if (session.billing_reason == "subscription_create") {
       if (session.billing_reason == "subscription_cycle") {
-        console.log("PPAPAPPAP");
 
         const subscription = await stripe.subscriptions.retrieve(
           "sub_IilsbL0tTQZyiM"
           //  session.subscription
         )
-        console.log("subscription");
-        console.log(subscription);
-
         await onSubscriptionRetreived_Updated(subscription)
       }
     }

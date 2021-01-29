@@ -1,3 +1,4 @@
+import { AddressContact } from './athlete';
 export interface User {
   uid: string
   email: string;
@@ -15,6 +16,11 @@ export interface User {
   cancel_at_period_end?: boolean
   current_period_end?: Date | any
   current_period_start?: Date | any
+  userCategory?: string // athlete or trainer
+  athletesID?: string[]
+  trainerID?: string
+  address?: AddressContact
+
 }
 
 

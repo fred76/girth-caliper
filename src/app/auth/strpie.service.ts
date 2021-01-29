@@ -1,3 +1,4 @@
+import { environment } from './../../environments/environment.prod';
 import { filter, first } from 'rxjs/operators';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { AuthService } from './auth.service';
@@ -20,10 +21,12 @@ export class StrpieService {
     authService.returnUserIdToken().subscribe(jwt => this.jwtAuth = jwt);
   }
 
-  startSubscriptionCheckoutSession(pricingPlanId: string): Observable<CheckoutSession> {
+  startSubscriptionCheckoutSession(pricingPlanId: string, userCategory): Observable<CheckoutSession> {
     const headers = new HttpHeaders().set("Authorization", this.jwtAuth)
     return this.http.post<CheckoutSession>("/api/checkout", {
+      //  return this.http.post<CheckoutSession> (environment.api.baseUrl + "/api/checkout", {
       pricingPlanId,
+      userCategory,
       end: true,
       callbackUrl: this.buildCallcackURL()
     }, { headers })
@@ -31,8 +34,10 @@ export class StrpieService {
 
   subscripitonUnsubscription(cancelAtPeriodEnd: boolean, subscriptionId: string, isDeleteSubscription, deleteSubscription): Observable<any> {
     const headers = new HttpHeaders().set("Authorization", this.jwtAuth)
+    console.log(headers);
 
     return this.http.post("/api/subscripitonUnsubscription", {
+      // return this.http.post(environment.api.baseUrl + "/api/subscripitonUnsubscription", {
       isDeleteSubscription: isDeleteSubscription,
       cancelAtPeriodEnd: cancelAtPeriodEnd,
       deleteSubscription: deleteSubscription,

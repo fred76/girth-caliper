@@ -1,3 +1,4 @@
+import { AddressContact } from './../../interface-model/athlete';
 import { Utility } from 'src/app/Utility/utility';
 import { User } from './../../interface-model/user.model';
 import { StrpieService } from './../strpie.service';
@@ -48,7 +49,11 @@ export class UserDashboardComponent implements OnInit, OnDestroy, AfterViewInit 
   @ViewChild('stepper') stepper: MatStepper
 
   isLinear = false;
+
   userDataFormGroup: FormGroup;
+
+  // USERS INFO
+
   nickname: string
   dateOfBirth: Date
   gender: string
@@ -59,30 +64,96 @@ export class UserDashboardComponent implements OnInit, OnDestroy, AfterViewInit 
   isPurchaseStrated: boolean
   user: User
   dueDate: boolean
+  selectUserTypeId: any;
+
+  // TRAINESRS INFO
+
+  trainerDataFormGroup: FormGroup;
+  companyName: string
+  address1: string
+  address2: string
+  country: string
+  state_province_region: string
+  city: string
+  zip_postalCode: string
+  phone: number
+  mobile: number
+  emailBusiness: string
+  web: string
+
+
+
+  userTypes: any[] = [
+    { name: "I'm an Athlete", id: 1 },
+    { name: "I'm a trainer", id: 2 }
+  ];
+
+  selectUserTypes(userTypes) {
+    this.selectUserTypeId = userTypes.id
+  }
 
   ngOnInit() {
-
     this.userSub = this.authService.user$
       .subscribe(u => {
         if (u) {
           this.user = u
           this.isLoggedIn = true
         }
-        this.dueDate = this.utility.isSubscripitionOutOfDate(u.current_period_end)
+        if (u.current_period_end) {
+          this.dueDate = this.utility.isSubscripitionOutOfDate(u.current_period_end)
+        }
         u.gender ? this.gender = u.gender : this.gender = null
         u.nickname ? this.nickname = u.nickname : this.nickname = null
         u.dateOfBirth ? this.dateOfBirth = new Date(u.dateOfBirth.seconds * 1000) : this.dateOfBirth = null
         u.displayName ? this.displayName = u.displayName : this.displayName = null
 
         this.userDataFormGroup = new FormGroup({
-          genderControl: new FormControl(this.gender, Validators.required),
-          nicknameControl: new FormControl(this.nickname),
-          userNameControl: new FormControl(this.displayName, Validators.required),
-          birthDateControl: new FormControl(this.dateOfBirth, Validators.required),
+          gender: new FormControl(this.gender, Validators.required),
+          nickname: new FormControl(this.nickname),
+          displayName: new FormControl(this.displayName, Validators.required),
+          dateOfBirth: new FormControl(this.dateOfBirth, Validators.required),
         });
+
+        if (u.userCategory == 'trainer') {
+          if (u.address) {
+            u.address.companyName ? this.companyName = u.address.companyName : this.companyName = undefined
+            u.address.phone ? this.phone = u.address.phone : this.phone = undefined
+            u.address.mobile ? this.mobile = u.address.mobile : this.mobile = undefined
+            u.address.emailBusiness ? this.emailBusiness = u.address.emailBusiness : this.emailBusiness = undefined
+            u.address.web ? this.web = u.address.web : this.web = undefined
+            u.address.address1 ? this.address1 = u.address.address1 : this.address1 = undefined
+            u.address.address2 ? this.address2 = u.address.address2 : this.address2 = undefined
+            u.address.country ? this.country = u.address.country : this.country = undefined
+            u.address.state_province_region ? this.state_province_region = u.address.state_province_region : this.state_province_region = undefined
+            u.address.city ? this.city = u.address.city : this.city = undefined
+            u.address.zip_postalCode ? this.zip_postalCode = u.address.zip_postalCode : this.zip_postalCode = undefined
+          }
+
+          this.trainerDataFormGroup = new FormGroup({
+
+            companyName: new FormControl(this.companyName, Validators.required),
+            phone: new FormControl(this.phone, Validators.required),
+            mobile: new FormControl(this.mobile, Validators.required),
+            emailBusiness: new FormControl(this.emailBusiness, Validators.required),
+            web: new FormControl(this.web, Validators.required),
+            address1: new FormControl(this.address1, Validators.required),
+            address2: new FormControl(this.address2, Validators.required),
+            country: new FormControl(this.country, Validators.required),
+            state_province_region: new FormControl(this.state_province_region, Validators.required),
+            city: new FormControl(this.city, Validators.required),
+            zip_postalCode: new FormControl(this.zip_postalCode, Validators.required),
+          });
+
+        }
+
+
+
+
         this.authService.userProvidersList(u.email)
 
       })
+
+
   }
 
   subscripitonUnsubscription(event: MatCheckboxChange) {
@@ -110,7 +181,11 @@ export class UserDashboardComponent implements OnInit, OnDestroy, AfterViewInit 
   }
 
   monthlySubscription() {
-    this.strpieService.startSubscriptionCheckoutSession("price_1I6exwBFHWy6VCCK42Ftalrj")
+    let userCategory = ""
+
+    this.selectUserTypeId == 1 ? userCategory = "athlete" : userCategory = "trainer"
+
+    this.strpieService.startSubscriptionCheckoutSession("price_1I6exwBFHWy6VCCK42Ftalrj", userCategory)
       .pipe(finalize(() => console.log("completed")))
       .subscribe(
         session => this.strpieService.redirectToCheckout(session),
@@ -122,7 +197,9 @@ export class UserDashboardComponent implements OnInit, OnDestroy, AfterViewInit 
   }
 
   quarterlySubscription() {
-    this.strpieService.startSubscriptionCheckoutSession("price_1I6exwBFHWy6VCCK42Ftalrj")
+    let userCategory = ""
+    this.selectUserTypeId == 1 ? userCategory = "athlete" : userCategory = "trainer"
+    this.strpieService.startSubscriptionCheckoutSession("price_1I6exwBFHWy6VCCK42Ftalrj", userCategory)
       .subscribe(
         session => this.strpieService.redirectToCheckout(session),
         err => {
@@ -133,7 +210,9 @@ export class UserDashboardComponent implements OnInit, OnDestroy, AfterViewInit 
   }
 
   yearlySubscription() {
-    this.strpieService.startSubscriptionCheckoutSession("price_1I6exwBFHWy6VCCK42Ftalrj")
+    let userCategory = ""
+    this.selectUserTypeId == 1 ? userCategory = "athlete" : userCategory = "trainer"
+    this.strpieService.startSubscriptionCheckoutSession("price_1I6exwBFHWy6VCCK42Ftalrj", userCategory)
       .subscribe(
         session => this.strpieService.redirectToCheckout(session),
         err => {
@@ -156,10 +235,29 @@ export class UserDashboardComponent implements OnInit, OnDestroy, AfterViewInit 
   }
 
   onSubmit() {
-    this.authService.addGender(this.authService.userID, this.userDataFormGroup.value.genderControl)
-    this.authService.addDateOfBirth(this.authService.userID, this.userDataFormGroup.value.birthDateControl)
-    this.authService.addNickname(this.authService.userID, this.userDataFormGroup.value.nicknameControl)
-    this.authService.addGiveName(this.authService.userID, this.userDataFormGroup.value.userNameControl)
+    const userInfo = this.getDirtyValues(this.userDataFormGroup)
+    this.authService.addUserInfo(this.authService.userID, userInfo)
+  }
+
+
+  getDirtyValues(form: any) {
+    let dirtyValues = {};
+    Object.keys(form.controls)
+      .forEach(key => {
+        const currentControl = form.controls[key];
+
+        if (currentControl.dirty) {
+          if (currentControl.controls)
+            dirtyValues[key] = this.getDirtyValues(currentControl);
+          else
+            dirtyValues[key] = currentControl.value;
+        }
+      });
+    return dirtyValues;
+  }
+  onSubmitTrainerContacts() {
+    const trainerContat = this.getDirtyValues(this.trainerDataFormGroup)
+    this.authService.addTrainerContacts(this.authService.userID, trainerContat)
   }
 
   ngOnDestroy() {

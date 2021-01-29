@@ -30,9 +30,14 @@ export async function subscripitonUnsubscription(req: Request, res: Response) {
       res.status(403).json({ message })
       return
     }
+    console.log(info);
 
     if (!info.isDeleteSubscription) {
+      console.log("a 1");
+
       const unsuscribeData: any = {
+
+
         cancel_at_period_end: false
       }
       unsuscribeData.cancel_at_period_end = info.cancelAtPeriodEnd
@@ -41,15 +46,20 @@ export async function subscripitonUnsubscription(req: Request, res: Response) {
 
       await userRef.set(unsuscribeData, { merge: true })
 
+      console.log("a 2");
       const subscription = await stripe.subscriptions.update(
         info.subscriptionId,
         { cancel_at_period_end: info.cancelAtPeriodEnd }
       );
     } else {
+
+      console.log("a 3");
       const deleted = await stripe.subscriptions.del(
         info.subscriptionId,
       );
       if (deleted) {
+
+        console.log("a 4");
         const userRef = db.doc(`users/${info.userId}`);
         await userRef.set({ status: "cancelled" }, { merge: true })
       }

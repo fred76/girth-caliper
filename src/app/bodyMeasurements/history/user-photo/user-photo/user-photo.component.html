@@ -5,10 +5,22 @@
 
  <div class="content" >
  <div class="card-div" *ngFor="let photo of photos$ | async  ">
+   <mat-card class="card-header">
+     <mat-card-title >
+       <div fxLayout="row" fxLayoutGap="16px" fxLayoutAlign="space-between center" >
+       <p class="mat-subheading-2">{{photo.date.seconds*1000 | date:'d MMM yy'}}</p>
+       <button mat-icon-button  (click)="deletePhotoSet(photo.idField, photo)">
+        <mat-icon>delete</mat-icon>
+      </button>
+      </div>
+      </mat-card-title>
+   </mat-card>
         <div class="card-center" fxLayout="row wrap"  fxLayoutGap="16px"  fxLayoutAlign="space-around center" >
           <mat-card  fxFlex.gt-sm="30%" fxFlex="100%"  class="mat-elevation-z8">
-            <mat-card-header>
-              <mat-card-title>{{photo.front.viewName}}</mat-card-title>
+            <mat-card-header >
+              <mat-card-title>
+                <p class="mat-subheading-2">{{photo.front.viewName }}</p>
+              </mat-card-title>
             </mat-card-header>
             <mat-card-content>
             <img class="imgSet" mat-card-image src="{{photo.front.urlFront}}">
@@ -17,7 +29,9 @@
           <mat-card fxFlex.gt-sm="30%" fxFlex="100%"class="mat-elevation-z8">
             <mat-card-header>
               <mat-card-content>
-              <mat-card-title>{{photo.side.viewName}}</mat-card-title>
+                <mat-card-title>
+                  <p class="mat-subheading-2">{{photo.side.viewName }}</p>
+                </mat-card-title>
               </mat-card-content>
             </mat-card-header>
             <img class="imgSet" mat-card-image src="{{photo.side.urlSide}}">
@@ -25,7 +39,9 @@
           <mat-card  fxFlex.gt-sm="30%" fxFlex="100%"  class="mat-elevation-z8">
             <mat-card-header>
             <mat-card-content>
-              <mat-card-title>{{photo.back.viewName}}</mat-card-title>
+              <mat-card-title>
+                <p class="mat-subheading-2">{{photo.back.viewName }}</p>
+              </mat-card-title>
             </mat-card-content>
             </mat-card-header>
             <img class="imgSet" mat-card-image src="{{photo.back.urlBack}}">

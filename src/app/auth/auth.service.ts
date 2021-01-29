@@ -1,3 +1,4 @@
+import { AddressContact } from './../interface-model/athlete';
 import { Utility } from './../Utility/utility';
 import { User } from './../interface-model/user.model';
 import { Injectable } from '@angular/core';
@@ -46,7 +47,6 @@ export class AuthService {
           })
           return userChanges
         } else {
-          console.log("No user");
           return of(null)
         }
       })
@@ -100,6 +100,22 @@ export class AuthService {
   addDateOfBirth(uid: string, dateOfBirth: string) {
     this.afs.collection<User>(`users`).doc(uid).update({ dateOfBirth: dateOfBirth })
   }
+
+
+  addUserInfo(uid: string, userInfo  ) {
+
+    const userRef: AngularFirestoreDocument  = this.afs.doc(`users/${uid}`)
+    return userRef.set(  userInfo  , { merge: true })
+
+  }
+
+  addTrainerContacts(uid: string, addressContact: AddressContact ) {
+
+    const userRef: AngularFirestoreDocument  = this.afs.doc(`users/${uid}`)
+    return userRef.set( {address:addressContact} , { merge: true })
+
+  }
+
 
   async googleSignup() {
     const provider = new firebase.auth.GoogleAuthProvider()

@@ -7,7 +7,8 @@ const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 interface RequestInfo {
   callbackUrl: string,
   userId: string,
-  pricingPlanId: String
+  pricingPlanId: String,
+  userCategory
 }
 
 export async function createCheckoutSession(req: Request, res: Response) {
@@ -18,7 +19,8 @@ export async function createCheckoutSession(req: Request, res: Response) {
     const info: RequestInfo = {
       pricingPlanId: req.body.pricingPlanId,
       callbackUrl: req.body.callbackUrl,
-      userId: req['uid']
+      userId: req['uid'],
+      userCategory: req.body.userCategory
     }
 
     if (!info.userId) {
@@ -32,9 +34,12 @@ export async function createCheckoutSession(req: Request, res: Response) {
       status: 'ongoing',
       created: Timestamp.now(),
       pricingPlanId: '',
+      userCategory: ""
     }
 
     checkoutSessionData.pricingPlanId = info.pricingPlanId
+
+    checkoutSessionData.userCategory = info.userCategory
 
     const user = await getDocData(`users/${info.userId}`)
 
@@ -44,8 +49,9 @@ export async function createCheckoutSession(req: Request, res: Response) {
 
     let sessionConfig, stripeCustomerId = user ? user.stripeCustomerId : undefined;
 
-
     if (info.pricingPlanId) {
+
+
       sessionConfig = setupSubscriptionSession(info, info.userId, stripeCustomerId, info.pricingPlanId)
     }
 

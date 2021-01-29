@@ -2,7 +2,7 @@ import { Utility } from 'src/app/Utility/utility';
 import { Subscription } from 'rxjs';
 import { AuthService } from '../auth/auth.service';
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { NavigationEnd, Router } from '@angular/router';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-body-measurements',
@@ -43,12 +43,23 @@ export class BodyMeasurementsComponent implements OnInit, OnDestroy {
     private router: Router,
     private utility: Utility
   ) {
-    this.navLinks = [
-      { label: 'Girths', link: './girthTab', index: 0 },
-      { label: 'Skinfolds', link: './skinfoldTab', index: 1 },
-      { label: 'Photo', link: './photoTab/userPhoto', index: 2 },
-      { label: 'Insight', link: './insightTab/ghirthsChart', index: 3 }
-    ]
+    this.authService.user$.subscribe(u => {
+      if (u.userCategory == "athlete") {
+        this.navLinks = [
+          { label: 'Girths', link: './girthTab', index: 0 },
+          { label: 'Skinfolds', link: './skinfoldTab', index: 1 },
+          { label: 'Photo', link: './photoTab/userPhoto', index: 2 },
+          { label: 'Insight', link: './insightTab/ghirthsChart', index: 3 },
+          { label: 'Personal trainer', link: './trainerForUser', index: 4 }
+        ]
+      } else {
+        this.navLinks = [
+          { label: 'my BIO', link: './trainer/trainerBio', index: 0 },
+          { label: 'Athletes', link: './trainer/athleteList', index: 1 }
+        ]
+      }
+    })
+
   }
 
   userUnsubscribe: Subscription
@@ -63,27 +74,20 @@ export class BodyMeasurementsComponent implements OnInit, OnDestroy {
       if (this.utility.isSubscripitionOutOfDate(p.current_period_end)) {
         this.router.navigate(['/UserDashboard']);
       }
-
     })
 
     this.routerUnsubscribe1 = this.router.events.subscribe((res) => {
       this.activeLink = this.navLinks.indexOf(
-        this.navLinks.find(tab => tab.link === '.' + this.router.url))
-    })
-    this.routerUnsubscribe2 = this.router.events.subscribe((evt) => {
-      if (!(evt instanceof NavigationEnd)) {
-        return;
-      }
-      window.scrollTo(0, 0)
+        this.navLinks.find(tab => tab.link === '.' + this.router.url),)
     })
 
+console.log(this.navLinks);
 
 
   }
 
   ngOnDestroy(): void {
     this.routerUnsubscribe1.unsubscribe()
-    this.routerUnsubscribe2.unsubscribe()
     this.userUnsubscribe.unsubscribe()
   }
 }

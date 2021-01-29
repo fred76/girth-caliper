@@ -103,71 +103,57 @@ export class PhotoSessionComponent implements OnInit {
   sideDownloadURL$: Observable<string>
   backDownloadURL$: Observable<string>
 
-    preparePhotoSession():  Observable<any>  {
+  preparePhotoSession(): Observable<any> {
     const date = Date()
 
     let URLArray = []
 
-      const fileFrontCroppedImage: File = this.frontCroppedImage
-      const filePathFront = `${this.authService.userID}/bodyPhotos/${date}/front`
-      const taskFront = this.storage.upload(filePathFront, fileFrontCroppedImage)
-      this.frontUploadPercentage$ = taskFront.percentageChanges()
-      this.frontDownloadURL$ = taskFront.snapshotChanges()
-        .pipe(
-          last(),
-          concatMap(() => this.storage.ref(filePathFront).getDownloadURL())
-        )
-          URLArray.push(this.frontDownloadURL$)
+    const fileFrontCroppedImage: File = this.frontCroppedImage
+    const filePathFront = `${this.authService.userID}/bodyPhotos/${date}/front`
+    const taskFront = this.storage.upload(filePathFront, fileFrontCroppedImage)
+    this.frontUploadPercentage$ = taskFront.percentageChanges()
+    this.frontDownloadURL$ = taskFront.snapshotChanges()
+      .pipe(
+        last(),
+        concatMap(() => this.storage.ref(filePathFront).getDownloadURL())
+      )
+    URLArray.push(this.frontDownloadURL$)
 
 
-      const fileBackCroppedImage: File = this.backCroppedImage
-      const filePathBack = `${this.authService.userID}/bodyPhotos/${date}/back`
-      const taskBack = this.storage.upload(filePathBack, fileBackCroppedImage)
-      this.backUploadPercentage$ = taskBack.percentageChanges()
-      this.backDownloadURL$ = taskBack.snapshotChanges()
-        .pipe(
-          last(),
-          concatMap(() => this.storage.ref(filePathBack).getDownloadURL())
-        )
-          URLArray.push(this.backDownloadURL$)
+    const fileBackCroppedImage: File = this.backCroppedImage
+    const filePathBack = `${this.authService.userID}/bodyPhotos/${date}/back`
+    const taskBack = this.storage.upload(filePathBack, fileBackCroppedImage)
+    this.backUploadPercentage$ = taskBack.percentageChanges()
+    this.backDownloadURL$ = taskBack.snapshotChanges()
+      .pipe(
+        last(),
+        concatMap(() => this.storage.ref(filePathBack).getDownloadURL())
+      )
+    URLArray.push(this.backDownloadURL$)
 
 
-      const fileSideCroppedImage: File = this.sideCroppedImage
-      const filePathSide = `${this.authService.userID}/bodyPhotos/${date}/side`
-      const taskSide = this.storage.upload(filePathSide, fileSideCroppedImage)
-      this.sideUploadPercentage$ = taskSide.percentageChanges()
-      this.sideDownloadURL$ = taskSide.snapshotChanges()
-        .pipe(
-          last(),
-          concatMap(() => this.storage.ref(filePathSide).getDownloadURL())
-        )
-        console.log(this.sideDownloadURL$ );
-          console.log(this.sideDownloadURL$ );
-
-            URLArray.push(this.sideDownloadURL$)
+    const fileSideCroppedImage: File = this.sideCroppedImage
+    const filePathSide = `${this.authService.userID}/bodyPhotos/${date}/side`
+    const taskSide = this.storage.upload(filePathSide, fileSideCroppedImage)
+    this.sideUploadPercentage$ = taskSide.percentageChanges()
+    this.sideDownloadURL$ = taskSide.snapshotChanges()
+      .pipe(
+        last(),
+        concatMap(() => this.storage.ref(filePathSide).getDownloadURL())
+      )
+    URLArray.push(this.sideDownloadURL$)
 
 
-const p = forkJoin(URLArray).subscribe(data => {
-  console.log(data);
-
-}
-
-)
 
     const session$ = forkJoin(
       URLArray
     ).pipe(
-      map(([frontDownloadURL, backDownloadURL ,sideDownloadURL]) => {
-        console.log(URLArray.length);
-
-        this.showFrontCropper ? console.log(frontDownloadURL + " frontDownloadURL") : "/assets//accessory/frontman.jpg"
-        this.showBackCropper ? console.log(backDownloadURL + " backDownloadURL") : "/assets//accessory/backman.jpg"
-        this.showSideCropper ? console.log(sideDownloadURL + " sideDownloadURL") : "/assets//accessory/sideman.jpg"
+      map(([frontDownloadURL, backDownloadURL, sideDownloadURL]) => {
         return {
           front: { urlFront: this.showFrontCropper ? frontDownloadURL : "/assets//accessory/frontman.jpg", viewName: "Front" },
           back: { urlBack: this.showBackCropper ? backDownloadURL : "/assets//accessory/backman.jpg", viewName: "Back" },
           side: { urlSide: this.showSideCropper ? sideDownloadURL : "/assets//accessory/sideman.jpg", viewName: "Side" },
-          date: Date()
+          date: this.photoDate
         }
       })
     );
@@ -175,13 +161,15 @@ const p = forkJoin(URLArray).subscribe(data => {
     return session$
   }
 
+
+
   async uploadPhotoSet() {
-console.log("piipo");
 
-   ( await this.preparePhotoSession()).subscribe(p =>
-   { console.log(p) ,
+    (await this.preparePhotoSession()).subscribe(p => {
+      console.log(p),
 
-      this.fireDatabaseService.addPhoto2(p)})
+        this.fireDatabaseService.addPhoto2(p)
+    })
   }
 }
 

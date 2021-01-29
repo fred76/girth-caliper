@@ -1,3 +1,5 @@
+import { TrainerContainerComponent } from './trainer/trainerContainer.component';
+import { TrainerForUserComponent } from './trainer-for-user/trainer-for-user.component';
 import { PhotoSessionComponent } from './history/photo-session/photo-session/photo-session.component';
 import { UserPhotoComponent } from './history/user-photo/user-photo/user-photo.component';
 import { SkinfoldsService } from './skinfolds.service';
@@ -12,10 +14,10 @@ import { SkinfoldComponent } from './skinfold/skinfold.component';
 import { ConfirmGirthsComponent } from './girths/confirmGirths';
 import { GirthsComponent } from './girths/girths.component';
 import { BodyMeasurementsComponent } from './body-measurements.component';
-import { NgModule } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { BodyMeasurementsChartsModule } from './charts/body-measurements-charts.module';
 import { ImageCropperModule } from 'ngx-image-cropper';
-
+import { TrainerBioComponent } from './trainer/trainer-bio/trainer-bio.component';
 
 @NgModule({
   declarations: [
@@ -27,6 +29,9 @@ import { ImageCropperModule } from 'ngx-image-cropper';
     UserPhotoComponent,
     PhotoSessionComponent,
     ConfirmSkinfoldComponent,
+    TrainerForUserComponent,
+    TrainerContainerComponent,
+    TrainerBioComponent,
   ],
   imports: [
     SharedModule,
@@ -34,8 +39,8 @@ import { ImageCropperModule } from 'ngx-image-cropper';
     NgxMatStepLazyLoadModule,
     BodyMeasurementRoutesModule,
     BodyMeasurementsChartsModule,
-    ImageCropperModule
-  ],
+    ImageCropperModule,
+	],
   exports: [],
   providers: [GirthsService, SkinfoldsService]
 })
