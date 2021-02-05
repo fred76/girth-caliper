@@ -1,10 +1,12 @@
+import { stripeInfoGC } from './../interface-model/stripeInfoG_C';
+import { CheckoutSessionConnectedAccount } from './../interface-model/checkout-Session.model';
 import { environment } from './../../environments/environment.prod';
 import { filter, first } from 'rxjs/operators';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { AuthService } from './auth.service';
 import { CheckoutSession } from '../interface-model/checkout-Session.model';
-import { Observable, Subscription } from 'rxjs';
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
 declare const Stripe
@@ -28,24 +30,52 @@ export class StrpieService {
       pricingPlanId,
       userCategory,
       end: true,
-      callbackUrl: this.buildCallcackURL()
+      callbackUrl: this.buildCallcackURL("/stripe-checkout")
     }, { headers })
   }
 
-  subscripitonUnsubscription(cancelAtPeriodEnd: boolean, subscriptionId: string, isDeleteSubscription, deleteSubscription): Observable<any> {
+  startCheckoutConnectedAccount(
+    stripeAccountTrainer: string,
+    // trainerID: string,
+    // productName: string,
+    // productPrice: string
+    ): Observable<CheckoutSessionConnectedAccount> {
     const headers = new HttpHeaders().set("Authorization", this.jwtAuth)
-    console.log(headers);
+    return this.http.post<CheckoutSessionConnectedAccount>("/api/checkoutConnectedAccount", {
+      //  return this.http.post<CheckoutSession> (environment.api.baseUrl + "/api/checkout", {
+      stripeAccountTrainer,
+      callbackUrl: this.buildCallcackURL("/stripe-checkout")
+    }, { headers })
+  }
+
+  trainerCreateStripeAccount(): Observable<any> {
+    const headers = new HttpHeaders().set("Authorization", this.jwtAuth)
+    return this.http.post("/api/get-oauth-link", {
+    }, { headers })
+  }
+
+  trainerOAuthaccount(code: string): Observable<any> {
+    const headers = new HttpHeaders().set("Authorization", this.jwtAuth)
+    return this.http.post("/api/authorize-oauth", {
+      //  return this.http.post<CheckoutSession> (environment.api.baseUrl + "/api/checkout", {
+      code
+    }, { headers })
+  }
+
+  subscripitonUnsubscription(cancelAtPeriodEnd: boolean, subscriptionId: string, isDeleteSubscription, deleteSubscription, stripeInfoGC: stripeInfoGC): Observable<any> {
+    const headers = new HttpHeaders().set("Authorization", this.jwtAuth)
 
     return this.http.post("/api/subscripitonUnsubscription", {
       // return this.http.post(environment.api.baseUrl + "/api/subscripitonUnsubscription", {
       isDeleteSubscription: isDeleteSubscription,
       cancelAtPeriodEnd: cancelAtPeriodEnd,
       deleteSubscription: deleteSubscription,
-      subscriptionId
+      subscriptionId,
+      stripeInfoGC
     }, { headers })
   }
 
-  buildCallcackURL() {
+  buildCallcackURL(callBackURL: string) {
     const protocol = window.location.protocol,
       hostname = window.location.hostname,
       port = window.location.port
@@ -53,7 +83,7 @@ export class StrpieService {
     if (port) {
       callBackUrl += ":" + port
     }
-    callBackUrl += "/stripe-checkout"
+    callBackUrl += callBackURL
     return callBackUrl
   }
 
@@ -63,12 +93,25 @@ export class StrpieService {
       sessionId: session.stripeCheckoutSessionId
     })
   }
+  redirectToCheckout2(session: CheckoutSessionConnectedAccount) {
+    console.log("session c c");
+    console.log(session);
+    const stripe = Stripe(session.stripePublicKey, {
+      stripeAccount: session.account_id
+    });
+    stripe.redirectToCheckout({
+      sessionId: session.stripeCheckoutSessionId
+    })
+  }
+
+
+
 
   waitForPurchaseCompleted(ongoingPurchaseSessionId: string): Observable<any> {
     return this.afs.doc<any>(`users/${ongoingPurchaseSessionId}`)
       .valueChanges()
       .pipe(
-        filter(purchase => (purchase.status == "completed")),
+        filter(purchase => (purchase.stripeInfoGC.status == "completed")),
         first(),
       )
   }

@@ -1,4 +1,6 @@
-import { AddressContact } from './athlete';
+import { stripeInfoGC } from './stripeInfoG_C';
+import { AddressContact, Athlete } from './athlete';
+import { Trainer } from './trainer';
 export interface User {
   uid: string
   email: string;
@@ -8,19 +10,13 @@ export interface User {
   givenName?: string
   gender?: string
   dateOfBirth?: Date | any
-  pricingPlanId?: string
-  stripeCustomerId?: string
-  subscriptionId?: string
-  created?: Date | any
-  status?: string
-  cancel_at_period_end?: boolean
-  current_period_end?: Date | any
-  current_period_start?: Date | any
-  userCategory?: string // athlete or trainer
   athletesID?: string[]
+  athletes?: Athlete[]
   trainerID?: string
+  trainer?: Trainer
   address?: AddressContact
-
+  userCategory?: string
+  stripeInfoGC?: stripeInfoGC
 }
 
 

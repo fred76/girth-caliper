@@ -23,8 +23,8 @@ export class StripeCheckoutComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
 
-    const reuslt = this.route.snapshot.queryParamMap.get("purchaseResult")
-    if (reuslt == "success") {
+    const result = this.route.snapshot.queryParamMap.get("purchaseResult")
+    if (result == "success") {
       const ongoingPurchaseSessionId = this.route.snapshot.queryParamMap.get("ongoingPurchaseSessionId")
       this.unsub = this.strpieService.waitForPurchaseCompleted(ongoingPurchaseSessionId)
         .subscribe(

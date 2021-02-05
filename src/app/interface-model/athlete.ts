@@ -11,6 +11,7 @@ export interface Athlete {
   currentTraining?: Training
   pastTraining?: Training[]
   athleteBio?: AthleteBio
+  productPurchased: {}
 
 }
 

@@ -4,7 +4,10 @@ import { createCheckoutSession } from './checkout.route'
 import { subscripitonUnsubscription } from './subscripitonUnsubscription.route'
 import { getUserMiddleware } from './get-user.middleware'
 import { stripeWebhooks } from './stripe-webhooks.route'
+import { trainerCreateStripeAccount, trainerOAuthaccount } from './connected-account-routes'
+import { createCheckoutConnectedAccount } from './checkout-connected-account.route'
 import * as cors from "cors";
+import { stripeWebhooksConnected } from './stripe-webhooks-connected.route'
 
 export function initServer() {
 
@@ -24,8 +27,19 @@ export function initServer() {
   app.route("/api/subscripitonUnsubscription").post(
     bodyParser.json(), getUserMiddleware, subscripitonUnsubscription);
 
+  app.route("/api/get-oauth-link").post(
+    bodyParser.json(), getUserMiddleware, trainerCreateStripeAccount);
+
+  app.route("/api/authorize-oauth").post(
+    bodyParser.json(), getUserMiddleware, trainerOAuthaccount);
+
+  app.route("/api/checkoutConnectedAccount").post(
+    bodyParser.json(), getUserMiddleware, createCheckoutConnectedAccount);
 
   app.route("/stripe-webhooks").post(bodyParser.raw({ type: 'application/json' }), stripeWebhooks)
+
+  // app.route("/stripe-webhooks/connect").post(bodyParser.raw({ type: 'application/json' }), stripeWebhooksConnected)
+
 
   const PORT = process.env.PORT || 9000
 

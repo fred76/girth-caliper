@@ -7,12 +7,10 @@ const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 interface RequestInfo {
   callbackUrl: string,
   userId: string,
-  pricingPlanId: String,
-  userCategory
+  pricingPlanId: String
 }
 
 export async function createCheckoutSession(req: Request, res: Response) {
-
 
   try {
 
@@ -20,8 +18,8 @@ export async function createCheckoutSession(req: Request, res: Response) {
       pricingPlanId: req.body.pricingPlanId,
       callbackUrl: req.body.callbackUrl,
       userId: req['uid'],
-      userCategory: req.body.userCategory
     }
+
 
     if (!info.userId) {
       const message = 'User must be authenticated'
@@ -33,29 +31,28 @@ export async function createCheckoutSession(req: Request, res: Response) {
     const checkoutSessionData: any = {
       status: 'ongoing',
       created: Timestamp.now(),
-      pricingPlanId: '',
-      userCategory: ""
+      pricingPlanId: ''
     }
 
     checkoutSessionData.pricingPlanId = info.pricingPlanId
 
-    checkoutSessionData.userCategory = info.userCategory
 
     const user = await getDocData(`users/${info.userId}`)
 
     const userRef = db.doc(`users/${info.userId}`);
 
-    await userRef.set(checkoutSessionData, { merge: true })
+    await userRef.set({stripeInfoGC : checkoutSessionData }, { merge: true })
+    await userRef.set({userCategory : req.body.userCategory }, { merge: true })
 
     let sessionConfig, stripeCustomerId = user ? user.stripeCustomerId : undefined;
 
     if (info.pricingPlanId) {
-
-
       sessionConfig = setupSubscriptionSession(info, info.userId, stripeCustomerId, info.pricingPlanId)
     }
 
     const session = await stripe.checkout.sessions.create(sessionConfig);
+
+
 
     res.status(200).json({
       stripeCheckoutSessionId: session.id,

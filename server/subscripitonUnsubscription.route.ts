@@ -5,23 +5,23 @@ import { db } from "./database";
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 interface RequestInfo {
-  callbackUrl: string,
   userId: string,
   cancelAtPeriodEnd: boolean,
   subscriptionId: string,
   isDeleteSubscription: boolean,
   deleteSubscription: boolean,
+  stripeInfoGC
 }
 
 export async function subscripitonUnsubscription(req: Request, res: Response) {
   try {
     const info: RequestInfo = {
       cancelAtPeriodEnd: req.body.cancelAtPeriodEnd,
-      callbackUrl: req.body.callbackUrl,
       userId: req['uid'],
       subscriptionId: req.body.subscriptionId,
       isDeleteSubscription: req.body.isDeleteSubscription,
       deleteSubscription: req.body.deleteSubscription,
+      stripeInfoGC: req.body.stripeInfoGC
     }
 
 
@@ -30,45 +30,39 @@ export async function subscripitonUnsubscription(req: Request, res: Response) {
       res.status(403).json({ message })
       return
     }
-    console.log(info);
 
     if (!info.isDeleteSubscription) {
-      console.log("a 1");
 
-      const unsuscribeData: any = {
-
-
-        cancel_at_period_end: false
-      }
-      unsuscribeData.cancel_at_period_end = info.cancelAtPeriodEnd
-
+      info.stripeInfoGC.created = new Date(info.stripeInfoGC.created.seconds * 1000)
+      info.stripeInfoGC.current_period_end = new Date(info.stripeInfoGC.current_period_end.seconds * 1000)
+      info.stripeInfoGC.current_period_start = new Date(info.stripeInfoGC.current_period_start.seconds * 1000)
+      info.stripeInfoGC.cancel_at_period_end = info.cancelAtPeriodEnd
       const userRef = db.doc(`users/${info.userId}`);
 
-      await userRef.set(unsuscribeData, { merge: true })
+      await userRef.set({ stripeInfoGC:  info.stripeInfoGC}, { merge: true })
 
-      console.log("a 2");
       const subscription = await stripe.subscriptions.update(
         info.subscriptionId,
         { cancel_at_period_end: info.cancelAtPeriodEnd }
       );
     } else {
-
-      console.log("a 3");
       const deleted = await stripe.subscriptions.del(
         info.subscriptionId,
       );
       if (deleted) {
-
-        console.log("a 4");
+      info.stripeInfoGC.created = new Date(info.stripeInfoGC.created.seconds * 1000)
+      info.stripeInfoGC.current_period_end = new Date(info.stripeInfoGC.current_period_end.seconds * 1000)
+      info.stripeInfoGC.current_period_start = new Date(info.stripeInfoGC.current_period_start.seconds * 1000)
+      info.stripeInfoGC.cancel_at_period_end = true
+      info.stripeInfoGC.status = "cancelled"
+      info.stripeInfoGC.subscriptionId = "cancelled"
         const userRef = db.doc(`users/${info.userId}`);
-        await userRef.set({ status: "cancelled" }, { merge: true })
+        await userRef.set({ stripeInfoGC:  info.stripeInfoGC}, { merge: true })
       }
 
     }
 
-    const subscriptions = await stripe.subscriptions.list({
-      status: "all"
-    });
+
     res.status(200)
 
   }

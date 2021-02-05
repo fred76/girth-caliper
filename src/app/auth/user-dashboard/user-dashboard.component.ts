@@ -11,7 +11,7 @@ import { FormGroup, Validators, FormControl } from '@angular/forms';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { MatStepper } from '@angular/material/stepper';
-import { finalize } from 'rxjs/operators';
+import { finalize, switchMapTo, map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-user-dashboard',
@@ -50,114 +50,101 @@ export class UserDashboardComponent implements OnInit, OnDestroy, AfterViewInit 
 
   isLinear = false;
 
-  userDataFormGroup: FormGroup;
-
-  // USERS INFO
-
-  nickname: string
-  dateOfBirth: Date
-  gender: string
   genders: string[] = ["Male", "Female"]
   userSub: Subscription
-  displayName: string
-  isLoggedIn: boolean
+  isLoggedIn: boolean = true
   isPurchaseStrated: boolean
   user: User
   dueDate: boolean
   selectUserTypeId: any;
 
-  // TRAINESRS INFO
-
-  trainerDataFormGroup: FormGroup;
-  companyName: string
-  address1: string
-  address2: string
-  country: string
-  state_province_region: string
-  city: string
-  zip_postalCode: string
-  phone: number
-  mobile: number
-  emailBusiness: string
-  web: string
-
-
 
   userTypes: any[] = [
     { name: "I'm an Athlete", id: 1 },
-    { name: "I'm a trainer", id: 2 }
+    { name: "I'm a Trainer", id: 2 }
   ];
+
+  subscriptionPlaneForUserCategories: { pricePlan: string, price: string, cadence : string }[]
 
   selectUserTypes(userTypes) {
     this.selectUserTypeId = userTypes.id
   }
 
+  userDataFormGroup: FormGroup = new FormGroup({
+    displayName: new FormControl('', Validators.required),
+    nickname: new FormControl(''),
+    dateOfBirth: new FormControl('', Validators.required),
+    gender: new FormControl('', Validators.required)
+  })
+
+  trainerDataFormGroup: FormGroup = new FormGroup({
+    companyName: new FormControl('', Validators.required),
+    address1: new FormControl('', Validators.required),
+    address2: new FormControl(''),
+    country: new FormControl('', Validators.required),
+    state_province_region: new FormControl('', Validators.required),
+    city: new FormControl('', Validators.required),
+    zip_postalCode: new FormControl('', Validators.required),
+    phone: new FormControl('', Validators.required),
+    mobile: new FormControl('', Validators.required),
+    emailBusiness: new FormControl('', [Validators.required, Validators.email]),
+    web: new FormControl('')
+  })
+
+  initUserDataFormGroup(u: User) {
+    this.userDataFormGroup.patchValue({
+      displayName: u.displayName,
+      nickname: u.nickname,
+      dateOfBirth: u.dateOfBirth ? new Date(u.dateOfBirth.seconds * 1000) : null,
+      gender: u.gender,
+    })
+  }
+
+  initTrainerDataFormGroup(u: User) {
+
+    this.trainerDataFormGroup.patchValue({
+      companyName: u.address?.companyName,
+      address1: u.address?.address1,
+      address2: u.address?.address2,
+      country: u.address?.country,
+      state_province_region: u.address?.state_province_region,
+      city: u.address?.city,
+      zip_postalCode: u.address?.zip_postalCode,
+      phone: u.address?.phone,
+      mobile: u.address?.mobile,
+      emailBusiness: u.address?.emailBusiness,
+      web: u.address?.web,
+    })
+  }
   ngOnInit() {
-    this.userSub = this.authService.user$
-      .subscribe(u => {
-        if (u) {
-          this.user = u
-          this.isLoggedIn = true
+    this.userSub = this.authService.user$.pipe(
+      map(p => {
+        this.initUserDataFormGroup(p),
+          this.initTrainerDataFormGroup(p),
+          this.authService.userProvidersList(p.email)
+        this.user = p
+        this.isLoggedIn = true
+        this.seletctSubscriptionPlaneForUserCategory(p)
+        console.log(this.subscriptionPlaneForUserCategories[0]);
+
+        if (p.stripeInfoGC !== undefined && p.stripeInfoGC.current_period_end) {
+          this.dueDate = this.utility.isSubscripitionOutOfDate(p.stripeInfoGC.current_period_end)
         }
-        if (u.current_period_end) {
-          this.dueDate = this.utility.isSubscripitionOutOfDate(u.current_period_end)
-        }
-        u.gender ? this.gender = u.gender : this.gender = null
-        u.nickname ? this.nickname = u.nickname : this.nickname = null
-        u.dateOfBirth ? this.dateOfBirth = new Date(u.dateOfBirth.seconds * 1000) : this.dateOfBirth = null
-        u.displayName ? this.displayName = u.displayName : this.displayName = null
-
-        this.userDataFormGroup = new FormGroup({
-          gender: new FormControl(this.gender, Validators.required),
-          nickname: new FormControl(this.nickname),
-          displayName: new FormControl(this.displayName, Validators.required),
-          dateOfBirth: new FormControl(this.dateOfBirth, Validators.required),
-        });
-
-        if (u.userCategory == 'trainer') {
-          if (u.address) {
-            u.address.companyName ? this.companyName = u.address.companyName : this.companyName = undefined
-            u.address.phone ? this.phone = u.address.phone : this.phone = undefined
-            u.address.mobile ? this.mobile = u.address.mobile : this.mobile = undefined
-            u.address.emailBusiness ? this.emailBusiness = u.address.emailBusiness : this.emailBusiness = undefined
-            u.address.web ? this.web = u.address.web : this.web = undefined
-            u.address.address1 ? this.address1 = u.address.address1 : this.address1 = undefined
-            u.address.address2 ? this.address2 = u.address.address2 : this.address2 = undefined
-            u.address.country ? this.country = u.address.country : this.country = undefined
-            u.address.state_province_region ? this.state_province_region = u.address.state_province_region : this.state_province_region = undefined
-            u.address.city ? this.city = u.address.city : this.city = undefined
-            u.address.zip_postalCode ? this.zip_postalCode = u.address.zip_postalCode : this.zip_postalCode = undefined
-          }
-
-          this.trainerDataFormGroup = new FormGroup({
-
-            companyName: new FormControl(this.companyName, Validators.required),
-            phone: new FormControl(this.phone, Validators.required),
-            mobile: new FormControl(this.mobile, Validators.required),
-            emailBusiness: new FormControl(this.emailBusiness, Validators.required),
-            web: new FormControl(this.web, Validators.required),
-            address1: new FormControl(this.address1, Validators.required),
-            address2: new FormControl(this.address2, Validators.required),
-            country: new FormControl(this.country, Validators.required),
-            state_province_region: new FormControl(this.state_province_region, Validators.required),
-            city: new FormControl(this.city, Validators.required),
-            zip_postalCode: new FormControl(this.zip_postalCode, Validators.required),
-          });
-
-        }
-
-
-
-
-        this.authService.userProvidersList(u.email)
 
       })
+    ).subscribe()
+  }
 
-
+  seletctSubscriptionPlaneForUserCategory(u: User) {
+    if (u.userCategory == "trainer") {
+      this.subscriptionPlaneForUserCategories = [{ pricePlan: "price_1IHNLhBFHWy6VCCKf3wFDojY", price: "112,22$", cadence : "Monthly" }, { pricePlan: "price_1IHNLhBFHWy6VCCKf3wFDojY", price: "115,22$", cadence : "Quartely" }, { pricePlan: "price_1IHNLhBFHWy6VCCKf3wFDojY", price: "118,22$" , cadence : "Yearly"}]
+    } else {
+      this.subscriptionPlaneForUserCategories = [{ pricePlan: "price_1IHNLhBFHWy6VCCKf3wFDojY", price: "2,22$", cadence : "Monthly" }, { pricePlan: "price_1IHNLhBFHWy6VCCKf3wFDojY", price: "5,22$" , cadence : "Quartely"}, { pricePlan: "price_1IHNLhBFHWy6VCCKf3wFDojY", price: "8,22$" , cadence : "Yearly"}]
+    }
   }
 
   subscripitonUnsubscription(event: MatCheckboxChange) {
-    this.strpieService.subscripitonUnsubscription(!event.checked, this.user.subscriptionId, false, false).subscribe(
+    this.strpieService.subscripitonUnsubscription(!event.checked, this.user.stripeInfoGC.subscriptionId, false, false, this.user.stripeInfoGC).subscribe(
       session => console.log(session),
       err => {
         console.log("Error creating checkout session", err);
@@ -177,18 +164,27 @@ export class UserDashboardComponent implements OnInit, OnDestroy, AfterViewInit 
   }
 
   deleteSubscripiton() {
-    this.strpieService.subscripitonUnsubscription(false, this.user.subscriptionId, true, true)
+    this.strpieService.subscripitonUnsubscription(false, this.user.stripeInfoGC.subscriptionId, true, true, this.user.stripeInfoGC).subscribe(
+      session => console.log(session),
+      err => {
+        console.log("Error creating checkout session", err);
+        this.isPurchaseStrated = false;
+      }
+    )
   }
 
-  monthlySubscription() {
+  monthlySubscription(event) {
+    console.log("event");
+    console.log(event);
+
     let userCategory = ""
-
     this.selectUserTypeId == 1 ? userCategory = "athlete" : userCategory = "trainer"
-
-    this.strpieService.startSubscriptionCheckoutSession("price_1I6exwBFHWy6VCCK42Ftalrj", userCategory)
+    this.strpieService.startSubscriptionCheckoutSession(event, userCategory)
       .pipe(finalize(() => console.log("completed")))
       .subscribe(
-        session => this.strpieService.redirectToCheckout(session),
+        session => {
+          this.strpieService.redirectToCheckout(session)
+        },
         err => {
           console.log("Error creating checkout session", err);
           this.isPurchaseStrated = false;
@@ -199,7 +195,7 @@ export class UserDashboardComponent implements OnInit, OnDestroy, AfterViewInit 
   quarterlySubscription() {
     let userCategory = ""
     this.selectUserTypeId == 1 ? userCategory = "athlete" : userCategory = "trainer"
-    this.strpieService.startSubscriptionCheckoutSession("price_1I6exwBFHWy6VCCK42Ftalrj", userCategory)
+    this.strpieService.startSubscriptionCheckoutSession(this.subscriptionPlaneForUserCategories[1].pricePlan, userCategory)
       .subscribe(
         session => this.strpieService.redirectToCheckout(session),
         err => {
@@ -212,7 +208,7 @@ export class UserDashboardComponent implements OnInit, OnDestroy, AfterViewInit 
   yearlySubscription() {
     let userCategory = ""
     this.selectUserTypeId == 1 ? userCategory = "athlete" : userCategory = "trainer"
-    this.strpieService.startSubscriptionCheckoutSession("price_1I6exwBFHWy6VCCK42Ftalrj", userCategory)
+    this.strpieService.startSubscriptionCheckoutSession(this.subscriptionPlaneForUserCategories[2].pricePlan, userCategory)
       .subscribe(
         session => this.strpieService.redirectToCheckout(session),
         err => {
@@ -256,7 +252,9 @@ export class UserDashboardComponent implements OnInit, OnDestroy, AfterViewInit 
     return dirtyValues;
   }
   onSubmitTrainerContacts() {
+
     const trainerContat = this.getDirtyValues(this.trainerDataFormGroup)
+    console.log(trainerContat);
     this.authService.addTrainerContacts(this.authService.userID, trainerContat)
   }
 

@@ -1,4 +1,4 @@
-const Firestore = require('@google-cloud/firestore')
+ const Firestore = require('@google-cloud/firestore')
 
 const serviceAccountPath = `./service-accounts/${process.env.SERVICE_ACCOUNT_FILE_NAME}`
 
@@ -11,6 +11,16 @@ export async function getDocData(docPath) {
   const snap = await db.doc(docPath).get()
   return snap.data()
 }
+export async function getDocDatas(docPath) {
+  const snap = await db.doc(docPath).get()
+  return snap.data()
+}
+export async function getDoc(docPath) {
+  const snap = await db.collection(docPath)
+
+  return snap
+}
+
 
 // STRIPE_WEBHOOK_SECRET="whsec_cAXnAsfzFA3JR0PtcX0B4U8ff5zM0QYx"
 

@@ -71,7 +71,7 @@ export class BodyMeasurementsComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
 
     this.userUnsubscribe = this.authService.user$.subscribe(p => {
-      if (this.utility.isSubscripitionOutOfDate(p.current_period_end)) {
+      if (this.utility.isSubscripitionOutOfDate(p.stripeInfoGC.current_period_end)) {
         this.router.navigate(['/UserDashboard']);
       }
     })
