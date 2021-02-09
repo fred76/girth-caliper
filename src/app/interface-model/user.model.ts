@@ -17,6 +17,7 @@ export interface User {
   address?: AddressContact
   userCategory?: string
   stripeInfoGC?: stripeInfoGC
+  trainerStripeConnected?: string
 }
 
 

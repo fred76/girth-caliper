@@ -526,7 +526,7 @@ export class ChartFeederService {
 
   }
 
-  lineChartGirths(t: Girths[]) : any{
+  lineChartGirths(t: Girths[]): any {
     let s = this.girthsDataSet(t)
     let Linechart = new Chart('LineChartGirths', {
       type: 'line',

@@ -24,7 +24,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
-
+import {MatRadioModule} from '@angular/material/radio';
 
 // import { MatSelectModule } from '@angular/material/select';
 // import { MatChipsModule } from '@angular/material/chips';
@@ -60,7 +60,8 @@ let p: any[] = [
   MatMenuModule,
   MatCheckboxModule,
   MatStepperModule,
-  MatProgressBarModule
+  MatProgressBarModule,
+  MatRadioModule
   // MatSelectModule,
   // MatChipsModule,
   // MatCheckboxModule,

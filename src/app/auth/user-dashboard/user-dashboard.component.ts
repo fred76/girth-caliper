@@ -64,7 +64,7 @@ export class UserDashboardComponent implements OnInit, OnDestroy, AfterViewInit 
     { name: "I'm a Trainer", id: 2 }
   ];
 
-  subscriptionPlaneForUserCategories: { pricePlan: string, price: string, cadence : string }[]
+  subscriptionPlaneForUserCategories: { pricePlan: string, price: string, cadence: string }[]
 
   selectUserTypes(userTypes) {
     this.selectUserTypeId = userTypes.id
@@ -137,9 +137,9 @@ export class UserDashboardComponent implements OnInit, OnDestroy, AfterViewInit 
 
   seletctSubscriptionPlaneForUserCategory(u: User) {
     if (u.userCategory == "trainer") {
-      this.subscriptionPlaneForUserCategories = [{ pricePlan: "price_1IHNLhBFHWy6VCCKf3wFDojY", price: "112,22$", cadence : "Monthly" }, { pricePlan: "price_1IHNLhBFHWy6VCCKf3wFDojY", price: "115,22$", cadence : "Quartely" }, { pricePlan: "price_1IHNLhBFHWy6VCCKf3wFDojY", price: "118,22$" , cadence : "Yearly"}]
+      this.subscriptionPlaneForUserCategories = [{ pricePlan: "price_1IHNLhBFHWy6VCCKf3wFDojY", price: "112,22$", cadence: "Monthly" }, { pricePlan: "price_1IHNLhBFHWy6VCCKf3wFDojY", price: "115,22$", cadence: "Quartely" }, { pricePlan: "price_1IHNLhBFHWy6VCCKf3wFDojY", price: "118,22$", cadence: "Yearly" }]
     } else {
-      this.subscriptionPlaneForUserCategories = [{ pricePlan: "price_1IHNLhBFHWy6VCCKf3wFDojY", price: "2,22$", cadence : "Monthly" }, { pricePlan: "price_1IHNLhBFHWy6VCCKf3wFDojY", price: "5,22$" , cadence : "Quartely"}, { pricePlan: "price_1IHNLhBFHWy6VCCKf3wFDojY", price: "8,22$" , cadence : "Yearly"}]
+      this.subscriptionPlaneForUserCategories = [{ pricePlan: "price_1IHNLhBFHWy6VCCKf3wFDojY", price: "2,22$", cadence: "Monthly" }, { pricePlan: "price_1IHNLhBFHWy6VCCKf3wFDojY", price: "5,22$", cadence: "Quartely" }, { pricePlan: "price_1IHNLhBFHWy6VCCKf3wFDojY", price: "8,22$", cadence: "Yearly" }]
     }
   }
 

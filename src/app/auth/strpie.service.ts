@@ -36,31 +36,45 @@ export class StrpieService {
 
   startCheckoutConnectedAccount(
     stripeAccountTrainer: string,
-    // trainerID: string,
-    // productName: string,
-    // productPrice: string
-    ): Observable<CheckoutSessionConnectedAccount> {
+    productName: string,
+    productPrice: string
+  ): Observable<CheckoutSessionConnectedAccount> {
     const headers = new HttpHeaders().set("Authorization", this.jwtAuth)
     return this.http.post<CheckoutSessionConnectedAccount>("/api/checkoutConnectedAccount", {
       //  return this.http.post<CheckoutSession> (environment.api.baseUrl + "/api/checkout", {
+      stripeAccountTrainer,
+      productName,
+      productPrice,
+      callbackUrl: this.buildCallcackURL("/trainer/trainerBio")
+    }, { headers })
+  }
+
+  trainerCreateStripeAccount(athleteAdmission: string): Observable<any> {
+    const headers = new HttpHeaders().set("Authorization", this.jwtAuth)
+    return this.http.post("/api/account-link", {
+      athleteAdmission,
+      callbackUrl: this.buildCallcackURL("/stripe-checkout")
+    }, { headers })
+  }
+
+  trainerUdateStripeAccount(stripeAccountTrainer: string): Observable<any> {
+    const headers = new HttpHeaders().set("Authorization", this.jwtAuth)
+    return this.http.post("/api/account-update", {
       stripeAccountTrainer,
       callbackUrl: this.buildCallcackURL("/stripe-checkout")
     }, { headers })
   }
 
-  trainerCreateStripeAccount(): Observable<any> {
+  trainerRetreiveStripeAccount(stripeAccountTrainer: string): Observable<any> {
     const headers = new HttpHeaders().set("Authorization", this.jwtAuth)
-    return this.http.post("/api/get-oauth-link", {
+    return this.http.post("/api/account-retreive", {
+      stripeAccountTrainer
     }, { headers })
   }
 
-  trainerOAuthaccount(code: string): Observable<any> {
-    const headers = new HttpHeaders().set("Authorization", this.jwtAuth)
-    return this.http.post("/api/authorize-oauth", {
-      //  return this.http.post<CheckoutSession> (environment.api.baseUrl + "/api/checkout", {
-      code
-    }, { headers })
-  }
+
+
+
 
   subscripitonUnsubscription(cancelAtPeriodEnd: boolean, subscriptionId: string, isDeleteSubscription, deleteSubscription, stripeInfoGC: stripeInfoGC): Observable<any> {
     const headers = new HttpHeaders().set("Authorization", this.jwtAuth)
@@ -112,6 +126,15 @@ export class StrpieService {
       .valueChanges()
       .pipe(
         filter(purchase => (purchase.stripeInfoGC.status == "completed")),
+        first(),
+      )
+  }
+
+  waitForConnectedAccountCompleted(ongoingPurchaseSessionId: string): Observable<any> {
+    return this.afs.doc<any>(`users/${ongoingPurchaseSessionId}`)
+      .valueChanges()
+      .pipe(
+        filter(purchase => (purchase)),
         first(),
       )
   }

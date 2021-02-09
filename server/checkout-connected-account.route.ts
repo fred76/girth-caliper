@@ -6,12 +6,10 @@ interface RequestInfo {
   callbackUrl: string,
   userId: string,
   stripeAccountTrainer: string,
-  trainerID: string,
   productName: string,
   productPrice
 
 }
-
 export async function createCheckoutConnectedAccount(req: Request, res: Response) {
 
   try {
@@ -20,11 +18,12 @@ export async function createCheckoutConnectedAccount(req: Request, res: Response
     const info: RequestInfo = {
       callbackUrl: req.body.callbackUrl,
       userId: req['uid'],
-      stripeAccountTrainer: req.body.stripeAccountConnected,
-      trainerID: req.body.trainerID,
+      stripeAccountTrainer: req.body.stripeAccountTrainer,
       productName: req.body.productName,
       productPrice: req.body.productPrice
     }
+
+    console.log(info);
 
     if (!info.userId) {
       const message = 'User must be authenticated'
@@ -56,8 +55,8 @@ export async function createCheckoutConnectedAccount(req: Request, res: Response
       stripeAccount: info.stripeAccountTrainer,
     });
 
-    console.log("process.env.pippo");
-    console.log(session);
+    console.log("stripeCheckoutSessionId");
+    console.log(session.id);
 
 
     res.status(200).json({

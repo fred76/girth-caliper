@@ -54,7 +54,7 @@ export class BodyMeasurementsComponent implements OnInit, OnDestroy {
         ]
       } else {
         this.navLinks = [
-          { label: 'my BIO', link: './trainer/trainerBio', index: 0 },
+          { label: 'My Dashboard', link: './trainer/trainerBio', index: 0 },
           { label: 'Athletes', link: './trainer/athleteList', index: 1 }
         ]
       }
@@ -78,10 +78,10 @@ export class BodyMeasurementsComponent implements OnInit, OnDestroy {
 
     this.routerUnsubscribe1 = this.router.events.subscribe((res) => {
       this.activeLink = this.navLinks.indexOf(
-        this.navLinks.find(tab => tab.link === '.' + this.router.url),)
+        this.navLinks.find(tab => tab.link === '.' + this.router.url))
     })
 
-console.log(this.navLinks);
+    console.log(this.navLinks);
 
 
   }

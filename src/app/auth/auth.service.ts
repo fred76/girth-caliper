@@ -30,6 +30,8 @@ export class AuthService {
   userPhoto: string
   providerId: string
 
+
+
   constructor(
     private afAuth: AngularFireAuth,
     private afs: AngularFirestore,
@@ -102,17 +104,17 @@ export class AuthService {
   }
 
 
-  addUserInfo(uid: string, userInfo  ) {
+  addUserInfo(uid: string, userInfo) {
 
-    const userRef: AngularFirestoreDocument  = this.afs.doc(`users/${uid}`)
-    return userRef.set(  userInfo  , { merge: true })
+    const userRef: AngularFirestoreDocument = this.afs.doc(`users/${uid}`)
+    return userRef.set(userInfo, { merge: true })
 
   }
 
-  addTrainerContacts(uid: string, addressContact: AddressContact ) {
+  addTrainerContacts(uid: string, addressContact: AddressContact) {
 
-    const userRef: AngularFirestoreDocument  = this.afs.doc(`users/${uid}`)
-    return userRef.set( {address:addressContact} , { merge: true })
+    const userRef: AngularFirestoreDocument = this.afs.doc(`users/${uid}`)
+    return userRef.set({ address: addressContact }, { merge: true })
 
   }
 

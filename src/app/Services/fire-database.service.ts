@@ -17,7 +17,7 @@ export class FireDatabaseService {
   constructor(
     private dum: DummyDataService,
     private afs: AngularFirestore,
-    private authService: AuthService ) { }
+    private authService: AuthService) { }
 
   private fbSubs: Subscription[] = []
 

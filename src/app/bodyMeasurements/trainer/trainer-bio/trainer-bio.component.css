@@ -1,16 +1,70 @@
 .content {
-
   padding: 8px;
-  margin-top: 160px !important;
+  margin-top: 90px !important;
   height: auto !important;
 }
 
-.card-address{
+.card-address {
+  margin-top: 16px;
   padding: 16px;
 }
 
-.formly-form {
-  font-size: 12px;
+.headline {
   color: whitesmoke;
 }
 
+.icon {
+  padding-right: 8px;
+  font-size: 20px;
+}
+
+.font14 {
+  font-size: 3vw;
+  margin-top: 8px;
+  margin-bottom: 8px;
+  font-size: 14px;
+  color: whitesmoke;
+}
+
+.buttonDiv{
+  margin-top: 24px;
+}
+
+.radioDiv {
+  width: 100%;
+  margin-top: 16px;
+}
+
+.mat-radio-group {
+  padding-bottom: 8px;
+  padding-top: 8px;
+}
+
+.font12 {
+  white-space: normal;
+  font-family: "Open Sans";
+  font-size: 12px;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: 400;
+  line-height: 14px;
+  font-family: Arial, Helvetica, sans-serif;
+  color: whitesmoke;
+}
+
+.font10 {
+  padding-left: 32px;
+  padding-top: 8px;
+  font-family: "Open Sans";
+  font-size: 10px;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: 400;
+  line-height: 14px;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.stripe-button {
+  width: 160px;
+  cursor: pointer;
+}

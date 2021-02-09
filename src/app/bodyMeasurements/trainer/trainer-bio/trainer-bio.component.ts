@@ -1,52 +1,86 @@
-import { ActivatedRoute } from '@angular/router';
-import { finalize } from 'rxjs/operators';
+import { Trainer } from './../../../interface-model/trainer';
+import { AuthService } from './../../../auth/auth.service';
+import { ActivatedRoute, Router } from '@angular/router';
+import { finalize, map, filter, find } from 'rxjs/operators';
 import { StrpieService } from './../../../auth/strpie.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { User } from 'src/app/interface-model/user.model';
+import { Observable, Subscription } from 'rxjs';
+
 @Component({
   selector: 'app-trainer-bio',
   templateUrl: './trainer-bio.component.html',
   styleUrls: ['./trainer-bio.component.css'],
-
+  encapsulation: ViewEncapsulation.None
 })
 
 
 export class TrainerBioComponent implements OnInit {
 
-  constructor(private strpieService: StrpieService, private route: ActivatedRoute,) { }
+  constructor(
+    public strpieService: StrpieService,
+    private route: ActivatedRoute,
+    private router: Router,
+    public authService: AuthService) { }
 
-  code : string
+  message = "Waiting for purchase to complete...";
 
+  showStripe = false
+  user: User
+  unsub: Subscription
+  accountJson: Observable<any>
+  selectTarinerOption: string
+  waiting = false
   ngOnInit() {
 
-    const reuslt = this.route.snapshot.queryParamMap.get("code")
-    console.log("reuslt c c  c c c c");
-    console.log(reuslt);
+    this.authService.user$.pipe(
+      map(user => {
+        this.user = user
+        if (user.trainerStripeConnected) {
+          this.accountJson = this.strpieService.trainerRetreiveStripeAccount(user.trainerStripeConnected)
+          this.strpieService.trainerRetreiveStripeAccount(user.trainerStripeConnected).subscribe(p => console.log(p))
+        }
+        if (user.trainer) {
+          this.selectTarinerOption = user.trainer.athleteAdmission
+        }
 
-    if (reuslt ){
-      console.log("PASSO   C C C C C C  C C");
+      })
+    ).subscribe()
 
-      this.code = reuslt
-      console.log("FATTA   C C C C C C  C C");
-
+    const result = this.route.snapshot.queryParamMap.get("purchaseResult")
+    if (result == "success") {
+      const ongoingPurchaseSessionId = this.route.snapshot.queryParamMap.get("ongoingPurchaseSessionId")
+      this.unsub = this.strpieService.waitForPurchaseCompleted(ongoingPurchaseSessionId)
+        .subscribe(
+          () => {
+            this.waiting = true
+            setTimeout(() => this.router.navigateByUrl("/Body&Measurements/trainer/trainerBio"), 3000);
+          }
+        )
+    } else {
+      this.waiting = true
+      setTimeout(() => this.router.navigateByUrl("/Body&Measurements/trainer/trainerBio"), 3000)
     }
-   }
 
-   redir() {
-    this.strpieService.trainerOAuthaccount(this.code).pipe(finalize(() => console.log("completed")))
-      .subscribe(
-        session => {
-          console.log(session);
 
-        },
-        err => {
-          console.log("Error createConnectedAccountSession", err);
-        },
-      )
+    // da usare athlete checkout
+    // const result = this.route.snapshot.queryParamMap.get("trainerCreation")
+    // if (result == "success") {
+    //   const ongoingPurchaseSessionId = this.route.snapshot.queryParamMap.get("ongoingTrainerSessionId")
+    //   this.strpieService.waitForPurchaseCompleted(ongoingPurchaseSessionId)
+    //     .subscribe(
+    //       () => {
+    //         this.message = "Purchase Successful, redirecting ..."
+    //       }
+    //     )
+    // } else {
+    //   this.message = "Purchase Cancelled or Failed, redirecting ..."
+    // }
   }
 
 
-  pippo() {
-    this.strpieService.trainerCreateStripeAccount().pipe(finalize(() => console.log("completed")))
+  updateAccount(accountID: string) {
+    this.strpieService.trainerUdateStripeAccount(accountID).pipe(finalize(() => console.log("completed")))
       .subscribe(
         session => {
           document.location.href = session.url
@@ -57,8 +91,30 @@ export class TrainerBioComponent implements OnInit {
       )
   }
 
+
+  setTarinerOption() {
+    this.showStripe = true
+    console.log(this.selectTarinerOption)
+
+  }
+
+  trainerCreateStripeAccount() {
+    this.strpieService.trainerCreateStripeAccount(this.selectTarinerOption).pipe(finalize(() => console.log("completed")))
+      .subscribe(
+        session => {
+          document.location.href = session.url
+        },
+        err => {
+          console.log("Error createConnectedAccountSession", err);
+        },
+      )
+  }
+  redir(trainerStripeConnected) {
+
+  }
+
   paga() {
-    this.strpieService.startCheckoutConnectedAccount('acct_1IG0ziBQloJ2jgKR').pipe(finalize(() => console.log("completed")))
+    this.strpieService.startCheckoutConnectedAccount('acct_1IHyj0K4NHDpWWQY', 'DDDD', 'DCCCC').pipe(finalize(() => console.log("completed")))
       .subscribe(
         session => {
           this.strpieService.redirectToCheckout2(session)

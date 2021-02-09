@@ -1,4 +1,4 @@
- const Firestore = require('@google-cloud/firestore')
+const Firestore = require('@google-cloud/firestore')
 
 const serviceAccountPath = `./service-accounts/${process.env.SERVICE_ACCOUNT_FILE_NAME}`
 

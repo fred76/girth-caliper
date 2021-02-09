@@ -1,86 +1,88 @@
+import { async } from '@angular/core/testing';
 import { Request, Response } from "express"
 import { v4 as uuidv4 } from 'uuid';
+import { db, getDocData } from './database';
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 interface RequestInfo {
   callbackUrl: string,
+  userId: string,
+  athleteAdmission: string
 }
 export async function trainerCreateStripeAccount(req: Request, res: Response) {
-
-  const state = uuidv4()
-
   const info: RequestInfo = {
-    callbackUrl: req.body.callbackUrl
+    callbackUrl: req.body.callbackUrl,
+    userId: req['uid'],
+    athleteAdmission: req.body.athleteAdmission
   }
-  const account = await stripe.accounts.create({ type: "standard" });
-  const accountID = account.id;
-  const accountLinkURL = await stripe.accountLinks.create({
-    type: "account_onboarding",
-    account: accountID,
-    refresh_url: `http://localhost:4200/Body&Measurements/trainer/trainerBio`,
-    return_url: `http://localhost:4200/Body&Measurements/trainer/trainerBio`,
+  console.log(info.userId);
 
-  })
-    .then((link) => {
+
+
+  const account = await stripe.accounts.create({ type: "standard" });
+  const userRef = db.doc(`users/${info.userId}`);
+  await userRef.set({ trainerStripeConnected: account.id }, { merge: true })
+  await userRef.set({ trainer: { athleteAdmission: info.athleteAdmission } }, { merge: true })
+  const sessionConfig = await stripeAccountLinksCreate(info, account.id, info.userId)
+  await stripe.accountLinks.create(sessionConfig).
+    then((link) => {
       link.url
       res.status(200).json({
         url: link.url
       })
-    });
+    })
 }
 
-
-interface RequestedCode {
-  code: string
+interface RequestInfoUpdate {
+  callbackUrl: string,
+  userId: string,
+  stripeAccountTrainer: string
 }
 
-export async function trainerOAuthaccount(req: Request, res: Response) {
-
-  const info: RequestedCode = {
-    code: req.body.code
+export async function trainerUdateStripeAccount(req: Request, res: Response) {
+  const info: RequestInfoUpdate = {
+    stripeAccountTrainer: req.body.stripeAccountTrainer,
+    callbackUrl: req.body.callbackUrl,
+    userId: req['uid']
   }
 
-  const code = info.code
-
-  const resp = await stripe.oauth.token({
-    grant_type: 'authorization_code',
-    code
-  })
-
-  console.log("resp");
-  console.log(resp);
-  console.log("resp");
-
-
-  stripe.oauth.token({
-    grant_type: 'authorization_code',
-    code
-  }).then(
-    (response) => {
-      var connected_account_id = response.stripe_user_id;
-      console.log("response");
-      console.log(response);
-
-      console.log("connected_account_id");
-      console.log(connected_account_id);
-
-
-      // Render some HTML or redirect to a different page.
-      return res.redirect(301, '/success.html')
-    },
-    (err) => {
-      if (err.type === 'StripeInvalidGrantError') {
-        return res.status(400).json({ error: 'Invalid authorization code: ' + code });
-      } else {
-        return res.status(500).json({ error: 'An unknown error occurred.' });
-      }
-    }
-  );
-
-
-
-
+  const sessionConfig = await stripeAccountLinksCreate(info, info.stripeAccountTrainer, info.userId)
+  await stripe.accountLinks.create(sessionConfig).
+    then((link) => {
+      link.url
+      console.log(link.url);
+      res.status(200).json({
+        url: link.url
+      })
+    })
 }
 
 
 
+function stripeAccountLinksCreate(info, accountID: string, sessionId: string) {
+
+  const config: any = {
+    type: "account_onboarding",
+    account: accountID,
+    refresh_url: `${info.callbackUrl}/?purchaseResult=failed&ongoingTrainerSessionId`,
+    return_url: `${info.callbackUrl}/?purchaseResult=accountSuccess&ongoingPurchaseSessionId=${sessionId}`,
+
+  }
+  return config;
+}
+
+
+
+export async function trainerRetreiveStripeAccount(req: Request, res: Response) {
+  console.log(req.body.stripeAccountTrainer);
+  if (req.body.stripeAccountTrainer) {
+    const account = await stripe.accounts.retrieve(req.body.stripeAccountTrainer)
+
+    res.status(200).json({
+      account
+    })
+  }
+
+
+
+}

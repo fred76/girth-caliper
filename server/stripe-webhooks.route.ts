@@ -9,6 +9,9 @@ export async function stripeWebhooks(req: Request, res: Response) {
 
   try {
 
+    console.log(" p p p p pp D D D D  D D D D D D D ");
+
+
     const signature = req.headers["stripe-signature"]
 
     const event = stripe.webhooks.constructEvent(
@@ -34,9 +37,9 @@ export async function stripeWebhooks(req: Request, res: Response) {
       const session = event.data.object
 
       //  if (session.billing_reason == "subscription_create") {
-     if (session.billing_reason == "subscription_cycle") {
+      if (session.billing_reason == "subscription_cycle") {
         const subscription = await stripe.subscriptions.retrieve(
-            session.subscription
+          session.subscription
         )
         await onSubscriptionRetreived_Updated(subscription)
       }
@@ -68,27 +71,29 @@ async function onSubscriptionRetreived_created(session, id) {
 }
 
 async function fulfillSubscriptionData_created(
-  stripeCustomerId:string,
+  stripeCustomerId: string,
   userId: string,
   subscriptionId: string,
   cancel_at_period_end: boolean,
   current_period_end: Date,
   current_period_start: Date,
   pricingPlanId: string,
-  ) {
+) {
   const batch = db.batch();
   const stripeCustomers = await db.doc(`users/${userId}`);
 
- const stripeInfoGC = {stripeInfoGC : {
-  subscriptionId: subscriptionId,
-  stripeCustomerId: stripeCustomerId,
-  cancel_at_period_end: cancel_at_period_end,
-  current_period_end: current_period_end,
-  current_period_start: current_period_start,
-  pricingPlanId: pricingPlanId,
-  status: "completed"
-}}
-console.log(stripeInfoGC);
+  const stripeInfoGC = {
+    stripeInfoGC: {
+      subscriptionId: subscriptionId,
+      stripeCustomerId: stripeCustomerId,
+      cancel_at_period_end: cancel_at_period_end,
+      current_period_end: current_period_end,
+      current_period_start: current_period_start,
+      pricingPlanId: pricingPlanId,
+      status: "completed"
+    }
+  }
+  console.log(stripeInfoGC);
 
   batch.set(stripeCustomers, stripeInfoGC, { merge: true });
   return batch.commit();
@@ -115,31 +120,33 @@ async function fulfillSubscriptionData_Update(
   pricingPlanId: string) {
 
   const batch = db.batch();
-  const query = await db.collection('users').where('stripeInfoGC.stripeCustomerId', '==', stripeCustomerId).get().then(p=> {
+  const query = await db.collection('users').where('stripeInfoGC.stripeCustomerId', '==', stripeCustomerId).get().then(p => {
 
     return p
-      })
-console.log("query");
-console.log(query);
+  })
+  console.log("query");
+  console.log(query);
 
 
   if (!query.empty) {
     const snap = query.docs[0].data();
-console.log("snap");
-console.log(snap);
+    console.log("snap");
+    console.log(snap);
 
-    const stripeInfoGC = {stripeInfoGC : {
-      subscriptionId: subscriptionId,
-      stripeCustomerId: snap.stripeInfoGC.stripeCustomerId,
-      cancel_at_period_end: snap.stripeInfoGC.cancel_at_period_end,
-      current_period_end: current_period_end,
-      current_period_start: current_period_start,
-      pricingPlanId: pricingPlanId,
-      status: "completed",
-      invoiceIdFailed: "",
-      invoiceDateFailed: "",
-      invoiceStatus: "",
-    }}
+    const stripeInfoGC = {
+      stripeInfoGC: {
+        subscriptionId: subscriptionId,
+        stripeCustomerId: snap.stripeInfoGC.stripeCustomerId,
+        cancel_at_period_end: snap.stripeInfoGC.cancel_at_period_end,
+        current_period_end: current_period_end,
+        current_period_start: current_period_start,
+        pricingPlanId: pricingPlanId,
+        status: "completed",
+        invoiceIdFailed: "",
+        invoiceDateFailed: "",
+        invoiceStatus: "",
+      }
+    }
     console.log("stripeInfoGC");
     console.log(stripeInfoGC);
     batch.set(query.docs[0].ref, stripeInfoGC, { merge: true })
@@ -150,26 +157,28 @@ console.log(snap);
 
 async function invocePaymentFailureForUser(customerId, invoiceDate, invoiceId) {
   const batch = db.batch();
-  const query = await db.collection('users').where('stripeInfoGC.stripeCustomerId', '==', 'cus_Ise6KcCOpzKsxr').get().then(p=> {
-return p
+  const query = await db.collection('users').where('stripeInfoGC.stripeCustomerId', '==', 'cus_Ise6KcCOpzKsxr').get().then(p => {
+    return p
   })
 
   if (!query.empty) {
 
     const snap = query.docs[0].data();
 
-    const stripeInfoGC = {stripeInfoGC : {
-      subscriptionId: snap.stripeInfoGC.subscriptionId,
-      stripeCustomerId: snap.stripeInfoGC.stripeCustomerId,
-      cancel_at_period_end: snap.stripeInfoGC.cancel_at_period_end,
-      current_period_end: new Date(snap.stripeInfoGC.current_period_end.seconds * 1000),
-      current_period_start: new Date(snap.stripeInfoGC.current_period_start.seconds * 1000),
-      pricingPlanId: snap.stripeInfoGC.pricingPlanId,
-      status: "completed",
-      invoiceIdFailed: invoiceId,
-      invoiceDateFailed: new Date(invoiceDate * 1000),
-      invoiceStatus: "payment_failed",
-    }}
+    const stripeInfoGC = {
+      stripeInfoGC: {
+        subscriptionId: snap.stripeInfoGC.subscriptionId,
+        stripeCustomerId: snap.stripeInfoGC.stripeCustomerId,
+        cancel_at_period_end: snap.stripeInfoGC.cancel_at_period_end,
+        current_period_end: new Date(snap.stripeInfoGC.current_period_end.seconds * 1000),
+        current_period_start: new Date(snap.stripeInfoGC.current_period_start.seconds * 1000),
+        pricingPlanId: snap.stripeInfoGC.pricingPlanId,
+        status: "completed",
+        invoiceIdFailed: invoiceId,
+        invoiceDateFailed: new Date(invoiceDate * 1000),
+        invoiceStatus: "payment_failed",
+      }
+    }
     batch.set(query.docs[0].ref, stripeInfoGC, { merge: true })
     return batch.commit();
   }

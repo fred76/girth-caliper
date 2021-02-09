@@ -39,7 +39,7 @@ export async function subscripitonUnsubscription(req: Request, res: Response) {
       info.stripeInfoGC.cancel_at_period_end = info.cancelAtPeriodEnd
       const userRef = db.doc(`users/${info.userId}`);
 
-      await userRef.set({ stripeInfoGC:  info.stripeInfoGC}, { merge: true })
+      await userRef.set({ stripeInfoGC: info.stripeInfoGC }, { merge: true })
 
       const subscription = await stripe.subscriptions.update(
         info.subscriptionId,
@@ -50,14 +50,14 @@ export async function subscripitonUnsubscription(req: Request, res: Response) {
         info.subscriptionId,
       );
       if (deleted) {
-      info.stripeInfoGC.created = new Date(info.stripeInfoGC.created.seconds * 1000)
-      info.stripeInfoGC.current_period_end = new Date(info.stripeInfoGC.current_period_end.seconds * 1000)
-      info.stripeInfoGC.current_period_start = new Date(info.stripeInfoGC.current_period_start.seconds * 1000)
-      info.stripeInfoGC.cancel_at_period_end = true
-      info.stripeInfoGC.status = "cancelled"
-      info.stripeInfoGC.subscriptionId = "cancelled"
+        info.stripeInfoGC.created = new Date(info.stripeInfoGC.created.seconds * 1000)
+        info.stripeInfoGC.current_period_end = new Date(info.stripeInfoGC.current_period_end.seconds * 1000)
+        info.stripeInfoGC.current_period_start = new Date(info.stripeInfoGC.current_period_start.seconds * 1000)
+        info.stripeInfoGC.cancel_at_period_end = true
+        info.stripeInfoGC.status = "cancelled"
+        info.stripeInfoGC.subscriptionId = "cancelled"
         const userRef = db.doc(`users/${info.userId}`);
-        await userRef.set({ stripeInfoGC:  info.stripeInfoGC}, { merge: true })
+        await userRef.set({ stripeInfoGC: info.stripeInfoGC }, { merge: true })
       }
 
     }

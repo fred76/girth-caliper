@@ -10,7 +10,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class StripeCheckoutComponent implements OnInit, OnDestroy {
 
-  message = "Waiting for purchase to complete...";
+  message = "Waiting to be redirect...";
   waiting = true;
   unsub: Subscription
 
@@ -39,6 +39,26 @@ export class StripeCheckoutComponent implements OnInit, OnDestroy {
       this.waiting = false
       this.message = "Purchase Cancelled or Failed, redirecting ..."
       setTimeout(() => this.router.navigateByUrl("/"), 3000)
+    }
+
+    if (result == "accountSuccess") {
+      const ongoingPurchaseSessionId = this.route.snapshot.queryParamMap.get("ongoingPurchaseSessionId")
+      console.log("ongoingPurchaseSessionIdongoingPurchaseSessionId");
+      console.log(ongoingPurchaseSessionId);
+
+      this.unsub = this.strpieService.waitForConnectedAccountCompleted(ongoingPurchaseSessionId)
+        .subscribe(
+          () => {
+            this.waiting = true
+            this.message = "Account Successful Created, redirecting ..."
+            setTimeout(() => this.router.navigateByUrl("/Body&Measurements/trainer/trainerBio"), 3000);
+          }
+        )
+
+    } else {
+      this.waiting = false
+      this.message = "Account Cancelled or Failed, redirecting ..."
+      setTimeout(() => this.router.navigateByUrl("/Body&Measurements/trainer/trainerBio"), 3000)
     }
   }
 

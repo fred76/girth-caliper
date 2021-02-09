@@ -40,7 +40,7 @@ import { TrainerBioComponent } from './trainer/trainer-bio/trainer-bio.component
     BodyMeasurementRoutesModule,
     BodyMeasurementsChartsModule,
     ImageCropperModule,
-	],
+  ],
   exports: [],
   providers: [GirthsService, SkinfoldsService]
 })

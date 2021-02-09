@@ -11,9 +11,9 @@ describe('AthletesOverviewComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ AthletesOverviewComponent ]
+      declarations: [AthletesOverviewComponent]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {
