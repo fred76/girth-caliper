@@ -1,7 +1,7 @@
 <div fxLayoutAlign="center center" class="content">
   <ng-container *ngIf='authService.user$ | async as userd'>
     <mat-card fxLayout="row wrap" fxLayoutGap="64px" fxFlex="90%" fxLayoutAlign="center stretch">
-      <div  *ngIf="!userd.trainerStripeConnected || !userd.trainer" fxFlex.lt-md="100%" fxFlex="40%" class="divIntro">
+      <div *ngIf="!userd.trainerStripeConnected || !userd.trainer" fxFlex.lt-md="100%" fxFlex="40%" class="divIntro">
         <h1 class="headline">Girth & Caliper</h1>
         <div fxLayout="row" fxLayoutAlign="start start">
           <mat-icon color="primary" class="icon">check_circle</mat-icon>
@@ -28,7 +28,8 @@
         <div fxLayout="row" fxLayoutAlign="start start">
           <mat-icon color="primary" class="icon">check_circle</mat-icon>
           <div fxLayout="column" fxLayoutAlign="start start">
-            <p class="caption font14">Start earn money Propose up to five training or evaluation plan</p>
+            <p class="caption font14">Start earn money</p>
+            <p class="caption font12">Propose up to five training or evaluation plan</p>
           </div>
         </div>
         <div fxLayout="row" fxLayoutAlign="start start">
@@ -40,70 +41,95 @@
         </div>
 
       </div>
-      <mat-card class="mat-elevation-z8 card-address" fxFlex="48%" fxFlex.lt-md="100%" xLayoutAlign="start stretch">
+      <mat-card *ngIf="userd.trainer?.athleteAdmission != 'fromGC' && userd.trainer?.athleteAdmission != 'withContact'"
+        class="mat-elevation-z8 card-address" fxFlex="48%" fxFlex.lt-md="100%" xLayoutAlign="start stretch">
         <div *ngIf="waiting">
-        <div fxLayout="column" fxLayoutAlign="start start">
-          <h1 class="headline">Athlete checkin</h1>
-          <p class="caption font14">How do You like admit the athletes in your team?</p>
-          <div class="radioDiv">
-            <mat-radio-group [(ngModel)]="selectTarinerOption" (ngModelChange)="setTarinerOption()" color="primary" aria-label="Select an option">
-              <mat-radio-button value="fromGC"><span class="font12">Athletes connect with me directly from G&C
-                  platform</span></mat-radio-button>
-              <p class="caption font10">By selecting "Join {{userd.displayName}} team" athlete will be connected to you
-                then he can buy one of your taining solution plan or you can training him for free</p>
-              <p class="caption font10"></p>
-              <mat-radio-button class="font12" value="withContact"><span class="font12">Athletes should send a joining request
-                  before to be admited on my team</span></mat-radio-button>
-              <p class="caption font10">By selecting "Ask {{userd.displayName}} to admit me" you will be notified about
-                new request</p>
-            </mat-radio-group>
+          <div fxLayout="column" fxLayoutAlign="start start">
+            <h1 class="headline">Athlete checkin</h1>
+            <p class="caption font14">How do You like admit the athletes in your team?</p>
+            <div class="radioDiv">
+              <mat-radio-group [(ngModel)]="selectTarinerOption" (ngModelChange)="setTarinerOption()" color="primary"
+                aria-label="Select an option">
+                <mat-radio-button value="fromGC"><span class="font12">Athletes connect with me directly from G&C
+                    platform</span></mat-radio-button>
+                <p class="caption font10">By selecting "Join {{userd.displayName}} team" athlete will be connected to
+                  you
+                  then he can buy one of your taining solution plan or you can training him for free</p>
+                <p class="caption font10"></p>
+                <mat-radio-button class="font12" value="withContact"><span class="font12">Athletes should send a
+                    joining request before to be admited on my team</span></mat-radio-button>
+                <p class="caption font10">By selecting "Ask {{userd.displayName}} to admit me" you will be notified
+                  about new request</p>
+              </mat-radio-group>
+            </div>
           </div>
-        </div>
 
-        <div *ngIf="showStripe">
-          <div class="buttonDiv">
-            <p class="font12">Girth & Caliper collaborate with Stripe platform to keep secure money transfer</p>
-            <div>
-              <img class="stripe-button" src="../assets/accessory/stripe-button.png"
-                (click)="trainerCreateStripeAccount()" />
+          <div *ngIf="showStripe">
+            <div class="buttonDiv">
+              <p class="font12">Girth & Caliper collaborate with Stripe platform to keep secure money transfer</p>
+              <div>
+                <img class="stripe-button" src="../assets/accessory/stripe-button.png"
+                  (click)="trainerCreateStripeAccount()" />
+              </div>
             </div>
           </div>
         </div>
-      </div>
-      <div *ngIf='accountJson | async as userConnected '>
+      </mat-card>
+      <div *ngIf='accountJson | async as userConnected'>
+
         <div *ngIf="!userConnected.account.details_submitted ; else trainerCatalog">
           <p>Complete Stripe Account</p>
           <p>{{userConnected.account.id}}</p>
           <button (click)="updateAccount(  userConnected.account.id) ">lllllll</button>
         </div>
         <ng-template #trainerCatalog>
-          <div>Ready to set product</div>
-        </ng-template>
-      </div>
 
-      </mat-card>
+          <div fxLayout="row wrap" fxLayoutGap="64px" fxFlex="90%" fxLayoutAlign="start start">
+            <mat-card class="mat-elevation-z8 ">
+              <h2 class="headline">Build and publish your catalogue</h2>
+              <div fxLayout="row" fxLayoutAlign="start start">
+                <mat-icon color="primary" class="icon">check_circle</mat-icon>
+                <div fxLayout="column" fxLayoutAlign="start start">
+                  <p *ngIf="userd.trainer?.athleteAdmission == 'fromGC'" class="font12">Athletes can join your team by
+                    submiting button</p>
+                  <p *ngIf="userd.trainer?.athleteAdmission == 'withContact'" class="font12">Athletes can join your team
+                    only after your acceptance</p>
+                </div>
+              </div>
+              <div class="buttonDiv" fxLayoutAlign="center stretch">
+                <button mat-raised-button color="primary">
+                  <div fxLayout="row" fxLayoutAlign="center center">
+                    <mat-icon class="plus_icon">add_circle_outline</mat-icon>
+                    <p class="caption font14Button">Add product</p>
+                  </div>
+                </button>
+              </div>
+            </mat-card>
+            <div class="outer-frame" fxLayout="column" fxLayoutGap="8px" fxFlex="48%" fxLayoutAlign="start center">
+              <p class="caption font14Button">Title</p>
+              <div class="top-frame">
+                <div>
+                  <p class="font12">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem
+                    Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took
+                    a galley of type and scrambled it to make a type specimen book. It has survived not only five
+                    centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was
+                    popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and
+                    more recently with desktop publishing software like Aldus PageMaker including versions of Lorem
+                    Ipsum.</p>
+                </div>
+              </div>
+              <div class="bottom-frame" fxLayoutAlign="center center">
+                <img class="xxx" src="/assets//accessory/pliche_girth.jpg">
+                <img class="qqq" src="/assets//accessory/frontman.jpg">
+                <img class="eee" src="/assets//accessory/frontman.jpg">
+              </div>
+              <button mat-raised-button color="primary">Join this program fore XXX Euro</button>
+
+            </div>
+          </div>
+
+        </ng-template>
+
+      </div>
 
     </mat-card>
-    <!-- <div fxLayout="row" fxLayoutGap="16px" fxLayoutAlign="center start">
-
-
-
-
-</div> -->
-
-    <!-- <div *ngIf='accountJson | async as userConnected '>
-        <div *ngIf="!userConnected.account.details_submitted ; else trainerCatalog">
-          <p>Complete Stripe Account</p>
-          <p>{{userConnected.account.id}}</p>
-          <button (click)="updateAccount(  userConnected.account.id) ">lllllll</button>
-        </div>
-        <ng-template #trainerCatalog>
-          <div>Ready to set product</div>
-        </ng-template>
-      </div>
-    </div>
-    <div *ngIf="message">
-      <p>{{message}}</p>
-    </div>
-  </ng-container>
- -->

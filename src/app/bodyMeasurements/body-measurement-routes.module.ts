@@ -1,3 +1,4 @@
+import { TrainerCatalogueTempalteComponent } from './trainer/trainer-catalogue-tempalte/trainer-catalogue-tempalte/trainer-catalogue-tempalte.component';
 import { TrainingCreationComponent } from './trainer/training-creation/training-creation.component';
 import { AthletesOverviewComponent } from './trainer/athletes-overview/athletes-overview.component';
 import { TrainerBioComponent } from './trainer/trainer-bio/trainer-bio.component';
@@ -29,6 +30,7 @@ const routes: Routes = [
       {
         path: 'trainer', component: TrainerContainerComponent, children: [
           { path: 'trainerBio', component: TrainerBioComponent },
+          { path: 'trainerPage', component: TrainerCatalogueTempalteComponent },
           { path: 'athleteList', component: AthletesOverviewComponent },
           { path: 'athleteDetails', component: AthleteDetailComponent },
           { path: 'trainingCreation', component: TrainingCreationComponent },

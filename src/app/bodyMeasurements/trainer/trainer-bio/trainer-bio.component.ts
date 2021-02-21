@@ -1,7 +1,7 @@
 import { Trainer } from './../../../interface-model/trainer';
 import { AuthService } from './../../../auth/auth.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { finalize, map, filter, find } from 'rxjs/operators';
+import { finalize, map, filter, find, tap } from 'rxjs/operators';
 import { StrpieService } from './../../../auth/strpie.service';
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { User } from 'src/app/interface-model/user.model';
@@ -27,9 +27,10 @@ export class TrainerBioComponent implements OnInit {
 
   showStripe = false
   user: User
+  trainer: Trainer
   unsub: Subscription
   accountJson: Observable<any>
-  selectTarinerOption: string
+  selectTarinerOption: string = ''
   waiting = false
   ngOnInit() {
 
@@ -38,12 +39,11 @@ export class TrainerBioComponent implements OnInit {
         this.user = user
         if (user.trainerStripeConnected) {
           this.accountJson = this.strpieService.trainerRetreiveStripeAccount(user.trainerStripeConnected)
-          this.strpieService.trainerRetreiveStripeAccount(user.trainerStripeConnected).subscribe(p => console.log(p))
         }
+
         if (user.trainer) {
           this.selectTarinerOption = user.trainer.athleteAdmission
         }
-
       })
     ).subscribe()
 

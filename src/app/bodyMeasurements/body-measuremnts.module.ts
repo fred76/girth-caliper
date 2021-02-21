@@ -1,3 +1,4 @@
+import { TrainerCatalogueTempalteComponent } from './trainer/trainer-catalogue-tempalte/trainer-catalogue-tempalte/trainer-catalogue-tempalte.component';
 import { TrainerContainerComponent } from './trainer/trainerContainer.component';
 import { TrainerForUserComponent } from './trainer-for-user/trainer-for-user.component';
 import { PhotoSessionComponent } from './history/photo-session/photo-session/photo-session.component';
@@ -32,6 +33,7 @@ import { TrainerBioComponent } from './trainer/trainer-bio/trainer-bio.component
     TrainerForUserComponent,
     TrainerContainerComponent,
     TrainerBioComponent,
+    TrainerCatalogueTempalteComponent
   ],
   imports: [
     SharedModule,

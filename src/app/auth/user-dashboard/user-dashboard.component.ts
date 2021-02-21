@@ -92,6 +92,9 @@ export class UserDashboardComponent implements OnInit, OnDestroy, AfterViewInit 
   })
 
   initUserDataFormGroup(u: User) {
+    console.log("eeeeeee");
+    console.log(u);
+
     this.userDataFormGroup.patchValue({
       displayName: u.displayName,
       nickname: u.nickname,

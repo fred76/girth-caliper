@@ -1,20 +1,19 @@
 /* ::ng-deep */
- .mat-toolbar {
+.mat-toolbar {
   position: fixed;
   position: -fixed-sticky;
   top: 0;
   z-index: 999;
   height: 70px;
 
-    background-color: rgba(21,24,25, 0.9);
+  background-color: rgba(21, 24, 25, 0.9);
 }
 
-.login-btn{
+.login-btn {
   height: 44px;
   background-color: black;
-    color: #fff;
+  color: #fff;
 }
-
 
 .nav-caption {
   position: -webkit-sticky;
@@ -46,14 +45,14 @@ a {
   width: 220px;
 }
 .provider-icon {
-  fill:  #c2185b;
+  fill: #c2185b;
   margin-left: 8px;
   width: 20px !important;
   aspect-ratio: 1;
 }
 
 .span-text {
-  color:  #c2185b;;
+  color: #c2185b;
   font-size: 12px !important;
   padding-left: 8px;
 }
@@ -72,23 +71,22 @@ a:active {
   width: 80%;
   border-radius: 50%;
 }
-.div-margin{
+.div-margin {
   margin-left: 8px;
   margin-right: 8px;
 }
 
 .button24 {
-  background-color: rgb(0, 0, 0, 0.0);
+  background-color: rgb(0, 0, 0, 0);
   border-radius: 50%;
   width: 24px;
   height: 24px;
 }
 .icon24 {
-color:  #c2185b;;
+  color: #c2185b;
   font-size: 16px;
   margin-top: -8px;
 }
-
 
 .font {
   font-size: 12px;
@@ -99,21 +97,18 @@ color:  #c2185b;;
   color: whitesmoke;
 }
 
-.click{
+.click {
   cursor: pointer;
   color: #c2185b;
 }
 
-.menuDiv{
+.menuDiv {
   padding: 0px;
   width: 220px;
 }
-.menuDivLessPad{
+.menuDivLessPad {
   padding-left: 0px;
   padding-right: 0px;
   margin-top: 0px;
   width: 180px;
 }
-
-
-

@@ -44,6 +44,8 @@ export class AuthService {
         if (user) {
           const userChanges = this.afs.doc<User>(`users/${user.uid}`).valueChanges()
           this.userID = user.uid
+          console.log(user.uid);
+
           user.providerData.map(profile => {
             this.providerId = profile.providerId
           })

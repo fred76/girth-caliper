@@ -5,13 +5,13 @@
 export const environment = {
   production: false,
   firebase: {
-    apiKey: "AIzaSyDqgdWZm8oiRIolWxW_wPSYY8DaYwudqvs",
-    authDomain: "girthcaliperweb.firebaseapp.com",
-    databaseURL: "https://girthcaliperweb.firebaseio.com",
-    projectId: "girthcaliperweb",
-    storageBucket: "girthcaliperweb.appspot.com",
-    messagingSenderId: "973285654397",
-    appId: "1:973285654397:web:2a7db614241d55230f5614"
+    apiKey: "AIzaSyBQHQMq_jLB-tn77W4iU0S93JVKxFNrGLM",
+    authDomain: "girthcalipertest.firebaseapp.com",
+    databaseURL: "https://girthcalipertest.firebaseio.com",
+    projectId: "girthcalipertest",
+    storageBucket: "girthcalipertest.appspot.com",
+    messagingSenderId: "892870214210",
+    appId: "1:892870214210:web:6e866528d0a772124d63db",
   },
   api: {
     baseUrl: ""

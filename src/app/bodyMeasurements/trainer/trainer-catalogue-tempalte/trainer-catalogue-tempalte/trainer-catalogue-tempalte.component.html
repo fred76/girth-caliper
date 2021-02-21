@@ -1,0 +1,94 @@
+<div class="mainDiv">
+
+  <!-- <div class="parallaxFirstDiv" fxLayout="column" [style.backgroundImage]="'url(' + url + ')'"
+    fxLayoutAlign="start start"> -->
+  <div class="parallaxFirstDiv" fxLayout="column"
+    [style.backgroundImage]="'linear-gradient(to right,rgba(0,0,0,1), rgba(0,0,0,0.9), rgba(0,0,0,0), rgba(0,0,0,0)),  url(' + url + ')'"
+    fxLayoutAlign="start start">
+    <div class="intro">
+
+      <h1 class="introTitle">Certified fitness professional
+        <button mat-mini-fab class="button24" color="primary" aria-label="Example icon button with a plus one icon">
+          <mat-icon class="icon24">mode_edit</mat-icon>
+        </button>
+      </h1>
+      <h1 class="introTitleBig">Take control of your health
+        <button mat-mini-fab class="button24" color="primary" aria-label="Example icon button with a plus one icon">
+          <mat-icon class="icon24">mode_edit</mat-icon>
+        </button>
+      </h1>
+      <img class="introWave" src="/assets//accessory/wave.png">
+      <h1 class="introText ">Curabitur non nulla sit amet nisl tempus convallis quis ac lectus dolor sit amet.
+        <button mat-mini-fab class="button24" color="primary" aria-label="Example icon button with a plus one icon">
+          <mat-icon class="icon24">mode_edit</mat-icon>
+        </button>
+      </h1>
+      <button mat-raised-button color="primary">Join my team today</button>
+      <div fxLayoutAlign="end center">
+        <button mat-mini-fab class="button24" color="primary" aria-label="Example icon button with a plus one icon">
+          <mat-icon class="icon24">image</mat-icon>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="divBio" fxLayout="column" fxLayoutAlign="center center">
+    <p class="bioTitle">About Me <button mat-mini-fab class="button24" color="primary"
+        aria-label="Example icon button with a plus one icon">
+        <mat-icon class="icon24">mode_edit</mat-icon>
+      </button></p>
+    <p class="bioSubitle">Personal trainer <button mat-mini-fab class="button24" color="primary"
+        aria-label="Example icon button with a plus one icon">
+        <mat-icon class="icon24">mode_edit</mat-icon>
+      </button></p>
+
+    <mat-divider>
+    </mat-divider>
+    <div class="divText" fxFlex="90%">
+      <span class="bioText">{{myForm.value.reason}}</span>
+    </div>
+    <button mat-mini-fab class="button24" color="primary" aria-label="Example icon button with a plus one icon">
+      <mat-icon class="icon24">mode_edit</mat-icon>
+    </button>
+  </div>
+
+  <form [formGroup]="myForm">
+    <textarea class="textArea" placeholder="reason" formControlName="reason" required></textarea>
+  </form>
+
+  <div class="divBio" fxLayout="column" fxLayoutAlign="center center">
+    <p class="bioTitle">My training program <button mat-mini-fab class="button24" color="primary"
+        aria-label="Example icon button with a plus one icon">
+        <mat-icon class="icon24">mode_edit</mat-icon>
+      </button></p>
+    <p class="bioSubitle">taylored on you <button mat-mini-fab class="button24" color="primary"
+        aria-label="Example icon button with a plus one icon">
+        <mat-icon class="icon24">mode_edit</mat-icon>
+      </button></p>
+
+    <mat-divider>
+    </mat-divider>
+    <div>
+      <p class="bioSubitle">Add up to six training programs</p>
+      <button mat-mini-fab class="button24" color="primary" aria-label="Example icon button with a plus one icon">
+        <mat-icon class="icon24">add</mat-icon>
+      </button>
+    </div>
+
+    <div class="divCatalogue" fxLayoutGap="40px grid" fxLayoutAlign="center center" fxLayout="row wrap">
+      <div fxFlex="33%" *ngFor="let pippo of cataloguTemplateArray">
+        <div fxLayoutAlign="start end" class="parent">
+          <img class="image" src={{pippo.imgURL}}>
+          <div class="imageCard">
+            <img src="/assets//accessory/wave.png">
+          </div>
+          <div class="titleCard">{{pippo.titleCard}}</div>
+          <div class="subTitleCard">{{pippo.subTitleCard}}</div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

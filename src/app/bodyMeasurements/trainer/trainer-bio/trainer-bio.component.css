@@ -1,6 +1,6 @@
 .content {
   padding: 8px;
-  margin-top: 90px !important;
+  margin-top: 70px !important;
   height: auto !important;
 }
 
@@ -26,7 +26,18 @@
   color: whitesmoke;
 }
 
-.buttonDiv{
+.plus_icon {
+  padding-right: 8px;
+  font-size: 24px;
+}
+
+.font14Button {
+  padding-top: 14px;
+  font-size: 14px;
+  color: whitesmoke;
+}
+
+.buttonDiv {
   margin-top: 24px;
 }
 
@@ -67,4 +78,43 @@
 .stripe-button {
   width: 160px;
   cursor: pointer;
+}
+
+.outer-frame {
+  padding: 16px;
+  border-color: whitesmoke;
+  border-radius: 10px;
+  border-width: thin;
+  border-style: solid;
+}
+.bottom-frame {
+  width: 100%;
+  padding: 8px;
+}
+
+.xxx {
+  border-radius: 10px;
+  position:relative;
+  z-index: 4;
+  width: 36%;
+  left: 3%;
+  -webkit-filter: drop-shadow(6px 6px 6px #222);
+  filter: drop-shadow(6px 6px 6px #222);
+}
+.qqq {
+
+  border-radius: 10px;
+  z-index: 3;
+  width: 36%;
+  -webkit-filter: drop-shadow(6px 6px 6px #222);
+  filter: drop-shadow(6px 6px 6px #222);
+}
+.eee {
+  border-radius: 10px;
+  position:relative;
+  z-index: 1;
+  width: 36%;
+  right: 3%;
+  -webkit-filter: drop-shadow(6px 6px 6px #222);
+  filter: drop-shadow(6px 6px 6px #222);
 }

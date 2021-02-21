@@ -6,8 +6,16 @@ export interface Trainer {
   blogID?: [String]
   bio?: string
 }
-export interface TrainerBio {
-
+export interface TrainerPage {
+  backgroundImageURL?: string,
+  introTitle?: string,
+  introTitleBig?: string,
+  introText?: string,
+  bioTitle?: string,
+  bioSubitle?: string,
+  bioText?: string,
+  TrainerProducts?: TrainerProduct[]
+  cratedON?: Date | any
 }
 
 export interface Blog {
@@ -20,9 +28,11 @@ export interface Blog {
 }
 
 export interface TrainerProduct {
-  productID?: string
-  description?: string
-  price?: string
-  quantity?: number
+  imgURL?: string,
+  titleCard?: string,
+  subTitleCard?: string,
+  textCard?: string,
+  price?: number,
+  currency?: string
 }
 
