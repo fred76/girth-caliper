@@ -72,10 +72,6 @@ export class StrpieService {
     }, { headers })
   }
 
-
-
-
-
   subscripitonUnsubscription(cancelAtPeriodEnd: boolean, subscriptionId: string, isDeleteSubscription, deleteSubscription, stripeInfoGC: stripeInfoGC): Observable<any> {
     const headers = new HttpHeaders().set("Authorization", this.jwtAuth)
 

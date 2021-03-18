@@ -9,3 +9,17 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif }
 html { background-color: #303030}
 
 
+  @media screen and (max-width: 540px) {
+    .custom-modalbox {
+        width: 100%
+    }
+}
+
+/* For Tablets */
+@media screen and (min-width: 540px) and (max-width: 780px) {
+    .custom-modalbox {
+        width: 80%
+    }
+}
+
+

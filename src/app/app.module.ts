@@ -46,9 +46,9 @@ import { WelcomeComponent } from './welcome/welcome.component';
   ],
 
   providers: [
-    Utility
-    //,
-    // { provide: BUCKET, useValue: 'my-bucket-name' }
+    Utility,
+
+
   ],
   bootstrap: [AppComponent]
 })

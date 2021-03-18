@@ -1,0 +1,70 @@
+<h2 mat-dialog-title>Program {{index}} of 6</h2>
+
+
+<mat-dialog-content [formGroup]="form">
+  <app-image-loader #imageLoader [index]=index (imgURL)=imgURLAssigned($event)></app-image-loader>
+  <div *ngIf="imgURL">
+    <mat-form-field>
+
+      <input matInput placeholder="Title card (Crossfit workout)" formControlName="titleCard">
+
+    </mat-form-field>
+
+    <mat-form-field>
+
+      <input matInput placeholder="Sub Title (Push your limit)" formControlName="subTitleCard">
+
+    </mat-form-field>
+
+    <mat-form-field>
+
+      <textarea matInput placeholder="Description" formControlName="descripition">
+
+    </textarea>
+
+    </mat-form-field>
+
+    <mat-form-field>
+
+      <mat-select placeholder="Tags  ()#bodyRecomposiotion" formControlName="tags" multiple>
+
+        <mat-option value="bodyBuilding">Bodybuilding</mat-option>
+        <mat-option value="bycicling">Bycicling</mat-option>
+        <mat-option value="calisthenics">Calisthenics</mat-option>
+        <mat-option value="crossfit">Crossfit</mat-option>
+        <mat-option value="functionalTraining">Functional training</mat-option>
+        <mat-option value="hiit">HIIT</mat-option>
+        <mat-option value="liis">LIIS</mat-option>
+        <mat-option value="nutrition">Nutrition</mat-option>
+        <mat-option value="pilates">Pilates</mat-option>
+        <mat-option value="powerlifting">Powrlifting</mat-option>
+        <mat-option value="running">Running</mat-option>
+        <mat-option value="stretching">Stretching</mat-option>
+        <mat-option value="swimming">Swimming</mat-option>
+        <mat-option value="yoga">Yoga</mat-option>
+        <mat-option value="bodyRecomposiotion">Body recomposiotion
+        </mat-option>
+      </mat-select>
+
+    </mat-form-field>
+
+    <mat-form-field>
+
+      <input type="number" matInput placeholder="Price" formControlName="price">
+
+    </mat-form-field>
+
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+
+  <button class="mat-raised-button" (click)="close()">
+    Close
+  </button>
+
+  <button class="mat-raised-button mat-primary" (click)="save()">
+    Save
+  </button>
+
+</mat-dialog-actions>

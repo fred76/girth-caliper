@@ -16,5 +16,10 @@
       "es2018",
       "dom"
     ]
-  }
+  },
+  // "angularCompilerOptions": {
+  //   "preserveWhitespaces": true,
+  //   "fullTemplateTypeCheck": true,
+  //   "strictTemplates": true,
+  // }
 }

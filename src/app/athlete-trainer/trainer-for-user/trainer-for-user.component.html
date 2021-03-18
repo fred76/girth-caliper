@@ -1,0 +1,56 @@
+<div class="mainDiv">
+
+  <!-- <div class="parallaxFirstDiv" fxLayout="column" [style.backgroundImage]="'url(' + url + ')'"
+    fxLayoutAlign="start start"> -->
+  <div class="parallaxFirstDiv" fxLayout="column"
+    [style.backgroundImage]="'linear-gradient(to right,rgba(0,0,0,1), rgba(0,0,0,0.9), rgba(0,0,0,0), rgba(0,0,0,0)),  url(' + url + ')'"
+    fxLayoutAlign="start start">
+    <div class="intro">
+
+      <h1 class="introTitle">Certified fitness professional </h1>
+      <h1 class="introTitleBig">Take control of your health</h1>
+      <img class="introWave" src="/assets//accessory/wave.png">
+      <h1 class="introText ">Curabitur non nulla sit amet nisl tempus convallis quis ac lectus dolor sit amet.</h1>
+      <button mat-raised-button color="primary">Join my team today</button>
+    </div>
+  </div>
+
+  <div class="divBio" fxLayout="column" fxLayoutAlign="center center">
+    <p class="bioTitle">About Me</p>
+    <p class="bioSubitle">Personal trainer</p>
+
+    <mat-divider>
+    </mat-divider>
+    <div class="divText" fxFlex="90%">
+      <span class="bioText">{{text}}</span>
+    </div>
+  </div>
+
+  <div class="divBio" fxLayout="column" fxLayoutAlign="center center">
+    <p class="bioTitle">My training program</p>
+    <p class="bioSubitle">taylored on you</p>
+
+    <mat-divider>
+    </mat-divider>
+
+    <div class="divCatalogue" fxLayoutGap="40px grid" fxLayoutAlign="center center" fxLayout="row wrap">
+      <div fxFlex="33%" *ngFor="let pippo of cataloguTemplateArray">
+        <div fxLayoutAlign="start end" class="parent">
+          <img class="image" src={{pippo.imgURL}}>
+          <div class="img__description">
+            <p class="txt">This image looks super neat.</p>
+          </div>
+          <div class="divTitleCard" fxLayoutAlign="space-between start" fxLayoutGap="24px" fxLayout="column">
+            <div class="imageWave">
+              <img src="/assets//accessory/wave.png">
+            </div>
+            <p class="titleCard">{{pippo.titleCard}}</p>
+            <p class="subTitleCard">{{pippo.subTitleCard}}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div>

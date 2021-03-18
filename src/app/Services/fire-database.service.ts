@@ -35,6 +35,13 @@ export class FireDatabaseService {
 
 
   addPhoto2(photoSet: PhotoSession): Observable<any> {
+
+    return from(this.afs.collection(`users/${this.authService.userID}/bodyPhotos`).add(photoSet))
+  }
+
+  addImageCataloguURL(photoSet: string): Observable<any> {
+    console.log(photoSet, "KSKKSmmmmcmcmcmmcmcmcmc");
+
     return from(this.afs.collection(`users/${this.authService.userID}/bodyPhotos`).add(photoSet))
   }
 

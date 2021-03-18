@@ -8,11 +8,11 @@ export interface Trainer {
 }
 export interface TrainerPage {
   backgroundImageURL?: string,
-  introTitle?: string,
-  introTitleBig?: string,
-  introText?: string,
+  titleHeading?: string,
+  title?: string,
+  leitmotif?: string,
   bioTitle?: string,
-  bioSubitle?: string,
+  bioSubtitle?: string,
   bioText?: string,
   TrainerProducts?: TrainerProduct[]
   cratedON?: Date | any
@@ -33,6 +33,25 @@ export interface TrainerProduct {
   subTitleCard?: string,
   textCard?: string,
   price?: number,
-  currency?: string
+  currency?: string,
+  trainingType: TrainingType[]
+}
+
+export interface TrainingType {
+  bodyBuilding?: "Bodybuilding",
+  bycicling?: "Bycicling",
+  calisthenics?: "Calisthenics",
+  crossfit?: "Crossfit",
+  functionalTraining?: "Functional training",
+  hiit?: "HIIT",
+  liis?: "LIIS",
+  nutrition?: "Nutrition",
+  pilates?: "Pilates",
+  powerlifting?: "Powerlifting",
+  running?: "Running",
+  stretching?: "Stretching",
+  swimming?: "Swimming",
+  yoga?: "Yoga",
+  bodyRecomposiotion?: "Body recomposiotion"
 }
 

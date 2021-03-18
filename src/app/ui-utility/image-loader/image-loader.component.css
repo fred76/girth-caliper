@@ -1,0 +1,13 @@
+.bar {
+  margin: 16px;
+}
+
+image-cropper {
+  height: 300px;
+  --cropper-outline-color: rgba(66, 66, 66, 0.349);
+  --cropper-overlay-color: rgb(66, 66, 66);
+}
+
+.imgSet {
+  height: 300px;
+}

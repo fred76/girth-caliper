@@ -6,7 +6,7 @@ import { AuthGuard } from './auth/auth.guard';
 
 const routes: Routes = [
   { path: '', component: WelcomeComponent },
-  { path: '', loadChildren: () => import('./bodyMeasurements/body-measuremnts.module').then(m => m.BodyMeasuremntsModule) }
+  { path: '', loadChildren: () => import('./athlete-trainer/athlete-trainer.module').then(m => m.BodyMeasuremntsModule) }
 ];
 
 @NgModule({

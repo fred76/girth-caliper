@@ -1,0 +1,25 @@
+<div class="ppp" fxLayout="column" fxLayoutGap="16px" fxLayoutAlign="start center">
+
+     <img *ngIf="!showCropper" class="imgSet" src="/assets//accessory/box1.jpg">
+    <image-cropper [imageChangedEvent]="imageChangedEvent" [maintainAspectRatio]="true" [aspectRatio]="3 / 4"
+      format="png" (imageCropped)="frontImageCropped($event)" (imageLoaded)="frontImageLoaded()"
+      (cropperReady)="frontCropperReady()" (loadImageFailed)="frontLoadImageFailed()"
+      [style.display]="showCropper ? null : 'none'"></image-cropper>
+
+</div>
+<div fxLayout="row" fxLayoutGap="16px" fxLayoutAlign="center center">
+  <button (click)="fileInput1.click()" mat-mini-fab color="primary" aria-label="Example icon button with a menu icon">
+
+    <input #fileInput1 hidden type="file" multiple (change)="loadFrontImage($event)">
+    <mat-icon>add_a_photo</mat-icon>
+  </button>
+  <button (click)="uploadPhoto(index)" [disabled]=!showCropper mat-mini-fab color="primary" aria-label="Example icon button with a menu icon">
+    <mat-icon>check</mat-icon>
+  </button>
+
+
+</div>
+<div class="bar" *ngIf="(uploadPercentage$ | async) as percentage">
+  <mat-progress-bar mode="determinate" [value]="percentage"></mat-progress-bar>
+  <span>{{percentage / 100 | percent}}</span>
+</div>
