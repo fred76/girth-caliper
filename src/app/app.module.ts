@@ -1,6 +1,6 @@
+import { environment } from '../environments/environment.prod';
 import { AnimateModule } from './animation-utility/animate.module';
 import { AppComponent } from './app.component';
-import { environment } from './../environments/environment.prod';
 
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
