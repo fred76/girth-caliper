@@ -26,7 +26,6 @@ const routes: Routes = [
       { path: 'skinfoldTab', component: SkinfoldComponent, canActivate: [AuthGuard] },
       { path: 'girthTab', component: GirthsComponent, canActivate: [AuthGuard] },
       { path: 'trainerForUser', component: TrainerForUserComponent, canActivate: [AuthGuard] },
-
       {
         path: 'trainer', component: TrainerContainerComponent, children: [
           { path: 'trainerBio', component: TrainerBioComponent },
