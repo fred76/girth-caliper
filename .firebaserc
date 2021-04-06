@@ -1,14 +1,6 @@
 {
-  "targets": {
-    "girthcaliperweb": {
-      "hosting": {
-        "girths-caliper": [
-          "girthcaliperweb"
-        ]
-      }
-    }
-  },
   "projects": {
-    "default": "girthcaliperweb"
+    "gctest": "girthcalipertest",
+    "default": "girthcalipertest"
   }
 }

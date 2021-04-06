@@ -1,7 +1,7 @@
 import { Trainer } from '../../../interface-model/trainer';
 import { AuthService } from '../../../auth/auth.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { finalize, map, filter, find, tap } from 'rxjs/operators';
+import { finalize, map } from 'rxjs/operators';
 import { StrpieService } from '../../../auth/strpie.service';
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { User } from 'src/app/interface-model/user.model';
@@ -109,9 +109,7 @@ export class TrainerBioComponent implements OnInit {
         },
       )
   }
-  redir(trainerStripeConnected) {
 
-  }
 
   paga() {
     this.strpieService.startCheckoutConnectedAccount('acct_1IHyj0K4NHDpWWQY', 'DDDD', 'DCCCC').pipe(finalize(() => console.log("completed")))

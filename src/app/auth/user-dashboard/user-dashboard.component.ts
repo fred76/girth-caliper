@@ -1,4 +1,4 @@
-import { AddressContact } from './../../interface-model/athlete';
+
 import { Utility } from 'src/app/Utility/utility';
 import { User } from './../../interface-model/user.model';
 import { StrpieService } from './../strpie.service';
@@ -11,7 +11,7 @@ import { FormGroup, Validators, FormControl } from '@angular/forms';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { MatStepper } from '@angular/material/stepper';
-import { finalize, switchMapTo, map } from 'rxjs/operators';
+import { finalize , map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-user-dashboard',
@@ -92,8 +92,6 @@ export class UserDashboardComponent implements OnInit, OnDestroy, AfterViewInit 
   })
 
   initUserDataFormGroup(u: User) {
-    console.log("eeeeeee");
-    console.log(u);
 
     this.userDataFormGroup.patchValue({
       displayName: u.displayName,
@@ -128,7 +126,6 @@ export class UserDashboardComponent implements OnInit, OnDestroy, AfterViewInit 
         this.user = p
         this.isLoggedIn = true
         this.seletctSubscriptionPlaneForUserCategory(p)
-        console.log(this.subscriptionPlaneForUserCategories[0]);
 
         if (p.stripeInfoGC !== undefined && p.stripeInfoGC.current_period_end) {
           this.dueDate = this.utility.isSubscripitionOutOfDate(p.stripeInfoGC.current_period_end)
@@ -177,8 +174,6 @@ export class UserDashboardComponent implements OnInit, OnDestroy, AfterViewInit 
   }
 
   monthlySubscription(event) {
-    console.log("event");
-    console.log(event);
 
     let userCategory = ""
     this.selectUserTypeId == 1 ? userCategory = "athlete" : userCategory = "trainer"

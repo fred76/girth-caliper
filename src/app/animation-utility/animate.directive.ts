@@ -38,7 +38,7 @@ export class AnimateDirective extends AnimateService implements OnChanges {
   @Input() right: number;
 
   // Updates the AnimateService options on changes
-  ngOnChanges(changes: SimpleChanges) {
+  ngOnChanges( ) {
 
     super.setup({
       // Uses the host element as the container, when requested

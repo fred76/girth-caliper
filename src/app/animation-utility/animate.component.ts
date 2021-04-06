@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, HostBinding, HostListener, ElementRef, Renderer2 } from '@angular/core';
 import { startWith, map, takeWhile, delay, distinctUntilChanged } from 'rxjs/operators';
 import { coerceBooleanProperty, coerceNumberProperty } from '@angular/cdk/coercion';
-import { of, Subject, Subscription } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
 import { trigger } from '@angular/animations';
 import { AnimateService } from './animate.service';
 // Animations

@@ -1,5 +1,4 @@
 import { Subscription } from 'rxjs';
-import { Utility } from 'src/app/Utility/utility';
 import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 @Component({
@@ -10,7 +9,7 @@ import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 export class BtnSidenavAnimatedComponent implements OnInit, OnDestroy {
 
 
-  constructor(private router: Router, private route: ActivatedRoute, private utility: Utility) { }
+  constructor(private router: Router, private route: ActivatedRoute ) { }
 
   @Input() text: string
   @Input() btnStatus: string

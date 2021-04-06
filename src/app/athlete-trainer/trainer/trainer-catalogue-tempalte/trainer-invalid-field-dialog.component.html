@@ -1,0 +1,12 @@
+<p class="mat-subheading-2">Following fields are mandatory</p>
+<mat-dialog-content>
+  <li *ngFor="let d of passedData.invalidFields">{{d}}</li>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button class="mat-raised-button" (click)="close()">
+    Close
+  </button>
+  <button class="mat-raised-button" (click)="later()">
+    Continue Later
+  </button>
+</mat-dialog-actions>

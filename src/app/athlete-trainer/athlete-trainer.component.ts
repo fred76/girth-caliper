@@ -77,7 +77,7 @@ export class AthleteTrainerComponent implements OnInit, OnDestroy {
       }
     })
 
-    this.routerUnsubscribe1 = this.router.events.subscribe((res) => {
+    this.routerUnsubscribe1 = this.router.events.subscribe(() => {
       this.activeLink = this.navLinks.indexOf(
         this.navLinks.find(tab => tab.link === '.' + this.router.url))
     })

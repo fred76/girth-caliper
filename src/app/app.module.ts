@@ -1,4 +1,4 @@
-import { environment } from '../environments/environment.prod';
+import { environment } from '../enviroments/environment.prod';
 import { AnimateModule } from './animation-utility/animate.module';
 import { AppComponent } from './app.component';
 

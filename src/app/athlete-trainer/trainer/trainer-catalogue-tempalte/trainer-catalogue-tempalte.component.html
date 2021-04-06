@@ -1,0 +1,116 @@
+<div class="mainDiv" fxLayout="column" fxLayoutAlign="start stretch">
+  <span fxLayoutAlign="end">
+    <button class="buttonSticky" (click)="editPage()" mat-raised-button color="primary">{{editButtonText}}</button>
+  </span>
+
+
+  <form [formGroup]="trainerPageFormGroup" >
+    <div class="parallaxFirstDiv" fxLayout="column"
+    [style.backgroundImage]="'linear-gradient(to right,rgba(0,0,0,0.9), rgba(0,0,0,0.7), rgba(0,0,0,0), rgba(0,0,0,0)),  url(' + url + ')'"
+
+    fxLayoutAlign="start start">
+      <div class="intro" fxFill fxLayout="column" fxLayoutAlign="start start">
+        <mat-form-field floatLabel="never" class="introTitle" appearance="none">
+          <input matInput placeholder="Certified fitness professional"  formControlName="titleHeading" required>
+          <mat-icon *ngIf="isPageEditMode" class="editIcon" matPrefix>edit</mat-icon>
+          <mat-hint *ngIf="isPageEditMode" >Add heading title </mat-hint>
+        </mat-form-field>
+
+        <mat-form-field floatLabel="never" class="introTitleBig" appearance="none">
+          <input matInput placeholder="Take control of your health" formControlName="title" required>
+          <mat-icon *ngIf="isPageEditMode"  class="editIcon" matPrefix>edit</mat-icon>
+          <mat-hint *ngIf="isPageEditMode" >Add title</mat-hint>
+        </mat-form-field>
+        <img class="introWave" src="/assets//accessory/wave.png">
+        <mat-form-field floatLabel="never" class="introText" appearance="none">
+          <input matInput
+            placeholder="Curabitur non nulla sit amet nisl tempus convallis quis ac lectus dolor sit amet."
+            formControlName="leitmotif" required>
+          <mat-icon *ngIf="isPageEditMode"  class="editIcon" matPrefix>edit</mat-icon>
+          <mat-hint *ngIf="isPageEditMode" >Add leitmotif</mat-hint>
+        </mat-form-field>
+          <button mat-raised-button [disabled]="true" color="primary">Join my team today</button>
+
+      </div>
+    </div>
+
+    <div class="divBio" fxLayout="column" fxLayoutAlign="center center">
+      <mat-form-field floatLabel="never" class="bioTitle" appearance="none">
+        <input matInput placeholder="About Me" formControlName="bioTitle" required>
+        <mat-icon *ngIf="isPageEditMode"  class="editIcon" matPrefix>edit</mat-icon>
+        <mat-hint *ngIf="isPageEditMode" >Add Bio title</mat-hint>
+      </mat-form-field>
+      <mat-form-field floatLabel="never" class="bioSubitle" appearance="none">
+        <input matInput placeholder="Personal trainer" formControlName="bioSubtitle" required>
+        <mat-icon *ngIf="isPageEditMode" class="editIcon" matPrefix>edit</mat-icon>
+        <mat-hint *ngIf="isPageEditMode" >Add Bio subtitle</mat-hint>
+      </mat-form-field>
+
+      <mat-divider class="mat-dividers">
+      </mat-divider>
+
+      <div class="divText" fxFlex="90%">
+        <span *ngIf="trainerPageFormGroup.value.bioText == ''" class="bioText">{{text}}</span>
+        <span *ngIf="trainerPageFormGroup.value.bioText !== ''"
+          class="bioText">{{trainerPageFormGroup.value.bioText}}</span>
+      </div>
+
+      <textarea *ngIf="isPageEditMode" class="textArea" placeholder={{text}} formControlName="bioText" required></textarea>
+
+
+      <mat-divider class="mat-dividers">
+      </mat-divider>
+
+  </div>
+
+  </form>
+
+ <div fxLayoutGap="8px" fxLayoutAlign="center center" fxLayout="row" *ngIf="cataloguTemplateArray$ | async as data">
+  <p class="progButtHint">Add up to six different training programs</p>
+  <button *ngIf="(data.length + 1) <= 6" class="progButt" mat-raised-button color="primary" (click)="openDialogCreateTrainerProduct( data.length + 1 )" >
+   {{data.length + 1 }} of 6
+  </button></div>
+  <div class="divCatalogue" fxLayoutGap="60px grid" fxLayoutAlign="center center" fxLayout="row wrap">
+
+
+    <div fxFlex="33%" fxFlex.xs="100%" fxFlex.sm="50%" *ngFor="let cattemp of cataloguTemplateArray$  | async" let
+      i=index>
+      <div fxLayoutAlign="start end" class="parent">
+
+         <!-- <img class="image"  [style.backgroundImage]="'linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0),rgba(0,0,0,0.6), rgba(0,0,0,0.7)),  url(' + cattemp.imgURL + ') '"
+        >  -->
+        <img class="image"  src={{cattemp.imgURL}}>
+
+        <div class="divTitleCard" fxLayoutAlign="space-between start" fxLayoutGap="24px" fxLayout="column">
+          <div class="imageWave">
+            <img src="/assets//accessory/wave.png">
+          </div>
+          <p class="titleCard">{{cattemp.titleCard}}</p>
+          <p class="subTitleCard">{{cattemp.subTitleCard}}</p>
+        </div>
+        <div class="img__description" fxLayout="column" fxLayoutAlign="space-between center">
+          <p class="txt" fxFlexAlign="stretch" >{{cattemp.descripition}}</p>
+          <div fxLayout="row wrap" fxLayoutGap="4px grid">
+            <div *ngFor="let tag of cattemp.tags">
+              <p class="tag">{{tag}}</p>
+            </div>
+          </div>
+          <p class="txtPrice">{{cattemp.price  | currency:'EUR':'symbol'  }} </p>
+
+          <div class="btn" fxLayoutGap="8px" fxLayoutAlign="center center" fxLayout="row" >
+          <button mat-mini-fab color="primary" aria-label="Example icon button with a menu icon" (click)="openDialogEditTrainerProduct(cattemp.idField, cattemp)">
+            <mat-icon>mode_edit
+            </mat-icon>
+          </button>
+          {{cattemp}}
+          <button mat-mini-fab color="primary" aria-label="Example icon button with a menu icon" (click)="deleteTrainerProduct(cattemp.idField, cattemp)">
+            <mat-icon>delete_outline</mat-icon>
+          </button>
+        </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--  fine main div-->
+
+</div>

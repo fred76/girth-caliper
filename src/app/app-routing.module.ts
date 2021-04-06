@@ -1,7 +1,6 @@
 import { WelcomeComponent } from './welcome/welcome.component';
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule, Router } from '@angular/router';
-import { AuthGuard } from './auth/auth.guard';
+import { Routes, RouterModule } from '@angular/router';
 
 
 const routes: Routes = [
@@ -12,7 +11,6 @@ const routes: Routes = [
 @NgModule({
   imports: [RouterModule.forRoot(routes, { relativeLinkResolution: 'legacy' })],
   exports: [RouterModule],
-  providers: [AuthGuard]
 })
 export class AppRoutingModule {
 

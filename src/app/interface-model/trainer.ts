@@ -14,8 +14,8 @@ export interface TrainerPage {
   bioTitle?: string,
   bioSubtitle?: string,
   bioText?: string,
-  TrainerProducts?: TrainerProduct[]
   cratedON?: Date | any
+  idField?: string
 }
 
 export interface Blog {
@@ -31,10 +31,12 @@ export interface TrainerProduct {
   imgURL?: string,
   titleCard?: string,
   subTitleCard?: string,
-  textCard?: string,
+  descripition?: string,
   price?: number,
-  currency?: string,
-  trainingType: TrainingType[]
+  tags?: string[]
+  cratedON?: Date | any
+
+
 }
 
 export interface TrainingType {

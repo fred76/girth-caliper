@@ -12,7 +12,7 @@ export class TrainerForUserComponent implements OnInit {
 
   user$: Observable<User>
 
-  constructor(private authService: AuthService) { }
+  constructor( ) { }
 
   cataloguTemplateArray
 
@@ -23,10 +23,6 @@ export class TrainerForUserComponent implements OnInit {
         Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex.`
 
   ngOnInit() {
-    console.log("yyy");
-
-    this.authService.user$.subscribe(p => console.log(p))
-
     this.cataloguTemplateArray = [this.cataloguTemplate1, this.cataloguTemplate2, this.cataloguTemplate3, this.cataloguTemplate4, this.cataloguTemplate5, this.cataloguTemplate6]
   }
 

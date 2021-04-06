@@ -1,3 +1,7 @@
+import { TrainerInvalidFieldDialogComponent } from './trainer/trainer-catalogue-tempalte/trainer-invalid-field-dialog.component';
+import { TrainerPageDialogComponent } from './trainer/trainer-catalogue-tempalte/trainer-page-dialog.component';
+import { TrainerCatalogueTempalteComponent } from './trainer/trainer-catalogue-tempalte/trainer-catalogue-tempalte.component';
+import { TrainerCatalogueDialogComponent } from './trainer/trainer-catalogue-tempalte/trainer-catalogue-dialog';
 import { GirthsComponent } from './athlete/girths/girths.component';
 import { ConfirmGirthsComponent } from './athlete/girths/confirmGirths';
 import { SkinfoldComponent } from './athlete/skinfold/skinfold.component';
@@ -7,7 +11,6 @@ import { UserPhotoComponent } from './athlete/history/user-photo/user-photo/user
 import { PhotoSessionComponent } from './athlete/history/photo-session/photo-session/photo-session.component';
 import { ConfirmSkinfoldComponent } from './athlete/skinfold/confirmSkinfolds';
 import { ImageLoaderComponent } from '../ui-utility/image-loader/image-loader.component';
-import { TrainerCatalogueTempalteComponent } from './trainer/trainer-catalogue-tempalte/trainer-catalogue-tempalte/trainer-catalogue-tempalte.component';
 import { TrainerContainerComponent } from './trainer/trainerContainer.component';
 import { TrainerForUserComponent } from './trainer-for-user/trainer-for-user.component';
 import { GirthsService } from './athlete/girths.service';
@@ -16,11 +19,10 @@ import { SharedModule } from '../Shared/shared.module';
 import { NgxMatStepLazyLoadModule } from 'ngx-mat-step-lazy-load';
 import { RouterModule } from '@angular/router';
 import { AthleteTrainerComponent } from './athlete-trainer.component';
-import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { BodyMeasurementsChartsModule } from './athlete/charts/body-measurements-charts.module';
 import { ImageCropperModule } from 'ngx-image-cropper';
 import { TrainerBioComponent } from './trainer/trainer-bio/trainer-bio.component';
-import { trainerCatalogueDialogComponent } from './trainer/trainer-catalogue-tempalte/trainer-catalogue-tempalte/trainer-catalogue-dialog';
 
 @NgModule({
   declarations: [
@@ -36,8 +38,10 @@ import { trainerCatalogueDialogComponent } from './trainer/trainer-catalogue-tem
     TrainerContainerComponent,
     TrainerBioComponent,
     TrainerCatalogueTempalteComponent,
-    trainerCatalogueDialogComponent,
-    ImageLoaderComponent
+    TrainerCatalogueDialogComponent,
+    ImageLoaderComponent,
+    TrainerPageDialogComponent,
+    TrainerInvalidFieldDialogComponent
   ],
   imports: [
     SharedModule,

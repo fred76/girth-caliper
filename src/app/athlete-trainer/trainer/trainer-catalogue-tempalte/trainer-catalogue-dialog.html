@@ -1,9 +1,9 @@
-<h2 mat-dialog-title>Program {{index}} of 6</h2>
+<!-- <h2 mat-dialog-title>Program {{index}} of 6</h2> -->
 
 
 <mat-dialog-content [formGroup]="form">
-  <app-image-loader #imageLoader [index]=index (imgURL)=imgURLAssigned($event)></app-image-loader>
-  <div *ngIf="imgURL">
+  <app-image-loader #imageLoader [isEditMode]=isEditMode  [imgURLDefault] =  imgURLDefault [resizeToHeight]='400' [imageRatio]= '3 / 4' (imgSelected)=imgSelected($event)  ></app-image-loader>
+  <div *ngIf="isImgSelected || isEditMode">
     <mat-form-field>
 
       <input matInput placeholder="Title card (Crossfit workout)" formControlName="titleCard">
@@ -58,13 +58,19 @@
 </mat-dialog-content>
 
 <mat-dialog-actions>
+  <div fxLayoutGap="8px" fxLayoutAlign="center center" fxLayout="row" >
+    <button class="mat-raised-button" (click)="close()">
+      Close
+    </button>
 
-  <button class="mat-raised-button" (click)="close()">
-    Close
-  </button>
+    <button *ngIf="isEditMode"   class="mat-raised-button mat-primary" (click)="save()">
+      Save
+    </button>
+    <button *ngIf="!isEditMode"  [disabled]="!form.dirty || form.invalid"  class="mat-raised-button mat-primary" (click)="save()">
+      Save
+    </button>
+    </div>
 
-  <button class="mat-raised-button mat-primary" (click)="save()">
-    Save
-  </button>
+
 
 </mat-dialog-actions>

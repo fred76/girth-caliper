@@ -59,9 +59,9 @@ export class SkinfoldComponent implements OnInit, OnDestroy {
   }
 
   // events
-  public chartClicked({ event, active }: { event: MouseEvent, active: {}[] }): void { }
+  public chartClicked({ }: { event: MouseEvent, active: {}[] }): void { }
 
-  public chartHovered({ event, active }: { event: MouseEvent, active: {}[] }): void { }
+  public chartHovered({  }: { event: MouseEvent, active: {}[] }): void { }
 
   eventCaliperMethodChange(s, event) {
     this.skinfoldsService.updateSelectedSkinfoldsrMethod(this.selectedSkinfoldsMethod)
@@ -83,7 +83,7 @@ export class SkinfoldComponent implements OnInit, OnDestroy {
     })
     if (!isAllSet) {
       listOfZeroFolds = zeroMeasure.join("; ")
-      const dialogRef = this.dialog.open(ConfirmSkinfoldComponent, {
+      this.dialog.open(ConfirmSkinfoldComponent, {
         data: {
           isAllSet: isAllSet,
           list: listOfZeroFolds,

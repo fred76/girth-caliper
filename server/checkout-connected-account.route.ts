@@ -13,8 +13,6 @@ interface RequestInfo {
 export async function createCheckoutConnectedAccount(req: Request, res: Response) {
 
   try {
-    console.log("suca");
-
     const info: RequestInfo = {
       callbackUrl: req.body.callbackUrl,
       userId: req['uid'],
@@ -22,9 +20,6 @@ export async function createCheckoutConnectedAccount(req: Request, res: Response
       productName: req.body.productName,
       productPrice: req.body.productPrice
     }
-
-    console.log(info);
-
     if (!info.userId) {
       const message = 'User must be authenticated'
       res.status(403).json({ message })
@@ -54,11 +49,6 @@ export async function createCheckoutConnectedAccount(req: Request, res: Response
     }, {
       stripeAccount: info.stripeAccountTrainer,
     });
-
-    console.log("stripeCheckoutSessionId");
-    console.log(session.id);
-
-
     res.status(200).json({
       stripeCheckoutSessionId: session.id,
       stripePublicKey: process.env.STRIPE_PUBLIC_KEY,

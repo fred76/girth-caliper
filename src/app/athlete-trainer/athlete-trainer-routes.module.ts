@@ -1,9 +1,9 @@
+import { TrainerCatalogueTempalteComponent } from './trainer/trainer-catalogue-tempalte/trainer-catalogue-tempalte.component';
 import { SkinfoldComponent } from './athlete/skinfold/skinfold.component';
 import { GirthsComponent } from './athlete/girths/girths.component';
 import { HistoryComponent } from './athlete/history/history.component';
 import { PhotoSessionComponent } from './athlete/history/photo-session/photo-session/photo-session.component';
 import { UserPhotoComponent } from './athlete/history/user-photo/user-photo/user-photo.component';
-import { TrainerCatalogueTempalteComponent } from './trainer/trainer-catalogue-tempalte/trainer-catalogue-tempalte/trainer-catalogue-tempalte.component';
 import { TrainingCreationComponent } from './trainer/training-creation/training-creation.component';
 import { AthletesOverviewComponent } from './trainer/athletes-overview/athletes-overview.component';
 import { TrainerBioComponent } from './trainer/trainer-bio/trainer-bio.component';

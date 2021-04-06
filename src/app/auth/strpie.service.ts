@@ -1,6 +1,6 @@
 import { stripeInfoGC } from './../interface-model/stripeInfoG_C';
 import { CheckoutSessionConnectedAccount } from './../interface-model/checkout-Session.model';
-import { environment } from './../../environments/environment.prod';
+// import { environment } from '../../enviroments/environment.prod';
 import { filter, first } from 'rxjs/operators';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { AuthService } from './auth.service';

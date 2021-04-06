@@ -5,7 +5,7 @@ import { ChartContainerComponent } from '../chart-container.component';
 
 import { MatDialog } from '@angular/material/dialog';
 import { ImportExportService } from '../../../../Services/import-export.service';
-import { Subject, Subscription, Observable } from 'rxjs';
+import { Subject, Subscription  } from 'rxjs';
 import { MatTableDataSource } from '@angular/material/table';
 import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 @Component({
@@ -16,7 +16,6 @@ import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 export class SkinfoldsChartComponent implements OnInit, OnDestroy {
 
   constructor(
-    private dialog: MatDialog,
     public chartFeederService: ChartFeederService,
     private importExportService: ImportExportService,
     private chartContainerComponent: ChartContainerComponent) { }
@@ -107,12 +106,12 @@ export class SkinfoldsChartComponent implements OnInit, OnDestroy {
     }
   }
 
-  previousBodyCompChartButton(event: Event) {
+  previousBodyCompChartButton() {
     this.selectorBodyCompDate += 1
     this.shiftMiniChartData()
   }
 
-  nextBodyCompChartButton(event: Event) {
+  nextBodyCompChartButton( ) {
     this.selectorBodyCompDate -= 1
     this.shiftMiniChartData()
   }
@@ -124,9 +123,9 @@ export class SkinfoldsChartComponent implements OnInit, OnDestroy {
   }
 
   // events
-  public chartClicked({ event, active }: { event: MouseEvent, active: {}[] }): void { }
+  public chartClicked({ }: { event: MouseEvent, active: {}[] }): void { }
 
-  public chartHovered({ event, active }: { event: MouseEvent, active: {}[] }): void { }
+  public chartHovered({ }: { event: MouseEvent, active: {}[] }): void { }
 
 
   ngOnDestroy(): void {

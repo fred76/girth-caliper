@@ -1,10 +1,11 @@
 import { last, concatMap } from 'rxjs/operators';
-import { FireDatabaseService } from './../../Services/fire-database.service';
 import { AuthService } from './../../auth/auth.service';
 import { AngularFireStorage } from '@angular/fire/storage';
 import { Observable } from 'rxjs';
 import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { ImageCroppedEvent, base64ToFile } from 'ngx-image-cropper';
+import { v4 as uuidv4 } from 'uuid';
+
 @Component({
   selector: 'app-image-loader',
   templateUrl: './image-loader.component.html',
@@ -13,8 +14,7 @@ import { ImageCroppedEvent, base64ToFile } from 'ngx-image-cropper';
 export class ImageLoaderComponent implements OnInit {
 
   constructor(private storage: AngularFireStorage,
-    private authService: AuthService,
-    private fireDatabaseService: FireDatabaseService) { }
+    private authService: AuthService ) { }
 
   imageChangedEvent: any = '';
   croppedImage: any = '';
@@ -24,12 +24,23 @@ export class ImageLoaderComponent implements OnInit {
   downloadURL$: Observable<string>
 
 
+
+
   @Output() imgURL = new EventEmitter<string>();
 
-  @Input() index: number
+  @Output() imgSelected = new EventEmitter<boolean>();
+
+  @Output() blobImage = new EventEmitter<any>()
+
+  @Input() isEditMode: boolean
+
+  @Input() imgURLDefault: string
+
+  @Input() imageRatio: number
+
+  @Input() resizeToHeight: number
 
   ngOnInit() {
-console.log("index", this.index);
 
 
   }
@@ -39,12 +50,16 @@ console.log("index", this.index);
 
   frontImageCropped(event: ImageCroppedEvent) {
     this.croppedImage = base64ToFile(event.base64);
-
-
+    this.blobImage.emit(event.base64)
   }
 
   frontImageLoaded() {
     this.showCropper = true;
+    console.log("showCropper");
+    console.log(this.showCropper);
+    console.log("showCropper");
+
+    this.imgSelected.emit(true)
   }
 
   frontCropperReady() {
@@ -56,12 +71,15 @@ console.log("index", this.index);
   }
 
 
-  preparePhotoSession(index: number): Observable<any> {
-    const date = Date()
+  preparePhotoSession(): Observable<any> {
 
+    if (this.isEditMode) {
+      this.storage.storage.refFromURL(this.imgURLDefault).delete();
+    }
 
+    const imgID = uuidv4()
     const fileCroppedImage: File = this.croppedImage
-    const filePath = `${this.authService.userID}/trainerCatalogue/${index}`
+    const filePath = `${this.authService.userID}/trainerCatalogue/${imgID}`
     const task = this.storage.upload(filePath, fileCroppedImage)
     this.uploadPercentage$ = task.percentageChanges()
     this.downloadURL$ = task.snapshotChanges()
@@ -70,17 +88,10 @@ console.log("index", this.index);
         concatMap(() => this.storage.ref(filePath).getDownloadURL())
       )
 
-   return this.downloadURL$
+    return this.downloadURL$
   }
 
 
 
-  async uploadPhoto(index:number) {
-
-    (await this.preparePhotoSession(index)).subscribe(p => {
-      this.imgURL.emit(p)
-    })
-
-  }
 
 }

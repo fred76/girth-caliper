@@ -29,6 +29,7 @@
     "@angular/platform-browser": "^11.1.0",
     "@angular/platform-browser-dynamic": "^11.1.0",
     "@angular/router": "^11.1.0",
+    "@google-cloud/storage": "^5.8.3",
     "@ngx-formly/schematics": "^5.10.12",
     "@schematics/angular": "^9.1.0",
     "@stripe/stripe-js": "^1.11.0",
@@ -50,6 +51,7 @@
     "roboto-fontface": "^0.10.0",
     "rxjs": "^6.6.3",
     "tslib": "^2.1.0",
+    "uuid": "^8.3.2",
     "xlsx": "^0.16.9",
     "zone.js": "^0.11.3"
   },

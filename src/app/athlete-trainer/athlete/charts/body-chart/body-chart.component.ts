@@ -20,8 +20,8 @@ export class BodyChartComponent implements OnInit, OnDestroy {
   private exchangeSubscriptionGirth: Subscription
   private exchangeSubscriptionSkinfold: Subscription
 
-  public chartClicked({ event, active }: { event: MouseEvent, active: {}[] }): void { }
-  public chartHovered({ event, active }: { event: MouseEvent, active: {}[] }): void { }
+  public chartClicked({  }: { event: MouseEvent, active: {}[] }): void { }
+  public chartHovered({   }: { event: MouseEvent, active: {}[] }): void { }
 
   data: any
   lineChartGirthsOverSkinfolds: Chart
@@ -51,8 +51,6 @@ export class BodyChartComponent implements OnInit, OnDestroy {
 
   selectChart(girth_skinfold) {
     this.selected_girth_skinfold_id = girth_skinfold.id;
-    let a = []
-    let max: number
     this.lineChartGirthsOverSkinfolds.destroy()
     this.lineChartGirthsOverSkinfolds = this.chartsFeederService.lineChartSkinfoldsOverGirths(this.skinfolds, this.girths, this.selected_girth_skinfold_id)
 

@@ -1,5 +1,4 @@
 import { FireDatabaseService } from '../../Services/fire-database.service';
-import { Utility } from 'src/app/Utility/utility';
 import { Girths } from '../../interface-model/girths.model';
 
 import { GirthTile } from '../../interface-model/girths.model';
@@ -9,7 +8,7 @@ import { Injectable } from '@angular/core';
 @Injectable()
 export class GirthsService {
 
-  constructor(private utility: Utility, private fireDatabaseService: FireDatabaseService) { }
+  constructor(private fireDatabaseService: FireDatabaseService) { }
 
   girthTiles: GirthTile[] = [
     { shortName: "weight", title: "Body weight", value: null },

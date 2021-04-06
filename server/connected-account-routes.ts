@@ -15,10 +15,6 @@ export async function trainerCreateStripeAccount(req: Request, res: Response) {
     userId: req['uid'],
     athleteAdmission: req.body.athleteAdmission
   }
-  console.log(info.userId);
-
-
-
   const account = await stripe.accounts.create({ type: "standard" });
   const userRef = db.doc(`users/${info.userId}`);
   await userRef.set({ trainerStripeConnected: account.id }, { merge: true })
@@ -50,7 +46,6 @@ export async function trainerUdateStripeAccount(req: Request, res: Response) {
   await stripe.accountLinks.create(sessionConfig).
     then((link) => {
       link.url
-      console.log(link.url);
       res.status(200).json({
         url: link.url
       })

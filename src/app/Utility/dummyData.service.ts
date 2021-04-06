@@ -1,4 +1,4 @@
-import { FireDatabaseService } from './../Services/fire-database.service';
+
 import { SkinfoldsForDB as SkinfoldsForDB } from '../interface-model/skinfold.model';
 import { Girths } from './../interface-model/girths.model';
 import { Utility } from 'src/app/Utility/utility';

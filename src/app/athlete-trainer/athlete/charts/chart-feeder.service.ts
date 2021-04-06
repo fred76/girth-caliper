@@ -3,10 +3,9 @@ import { Girths } from '../../../interface-model/girths.model';
 import { Utility } from '../../../Utility/utility';
 import { Injectable } from '@angular/core';
 
-import { ChartDataSets, ChartOptions, ChartType, ChartPluginsOptions, Chart, ChartData } from 'chart.js';
+import { ChartDataSets, ChartOptions, ChartType, ChartPluginsOptions, Chart } from 'chart.js';
 import { Label } from 'ng2-charts';
 import * as pluginDataLabels from 'chartjs-plugin-datalabels';
-import { Options } from 'chartjs-plugin-datalabels/types/options';
 import 'chartjs-plugin-colorschemes';
 import * as moment from 'moment';
 
@@ -749,7 +748,7 @@ export class ChartFeederService {
             ticks: {
               autoSkip: false,
               source: 'labels',
-              callback: function (value, index, values) {
+              callback: function (value ) {
                 return moment(value).format('DD/MMM')
               }
             },
@@ -828,7 +827,7 @@ export class ChartFeederService {
             ticks: {
               autoSkip: false,
               source: 'labels',
-              callback: function (value, index, values) {
+              callback: function (value) {
                 return moment(value).format('DD/MMM')
               }
             },
@@ -847,7 +846,7 @@ export class ChartFeederService {
             ticks: {
               autoSkip: false,
               source: 'labels',
-              callback: function (value, index, values) {
+              callback: function (value ) {
                 return moment(value).format('DD/MMM')
               }
             },
@@ -929,13 +928,13 @@ export class ChartFeederService {
     elements: { point: { pointStyle: 'circle' } },
     tooltips: {
       backgroundColor: 'white', borderWidth: 0,
-      callbacks: { labelTextColor: function (tooltipItem, chart) { return "black" } }
+      callbacks: { labelTextColor: function () { return "black" } }
     },
     plugins: {
 
       datalabels: {
         color: 'white',
-        formatter: (value, ctx) => {
+        formatter: (ctx) => {
           const label = ctx.chart.data.labels[ctx.dataIndex];
           return label;
         },
@@ -1037,7 +1036,7 @@ export class ChartFeederService {
     elements: { point: { pointStyle: 'circle' } },
     tooltips: {
       backgroundColor: 'white', borderWidth: 0,
-      callbacks: { labelTextColor: function (tooltipItem, chart) { return "black" } }
+      callbacks: { labelTextColor: function ( ) { return "black" } }
     },
     plugins: {
       datalabels: {

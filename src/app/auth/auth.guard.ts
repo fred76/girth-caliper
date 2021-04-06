@@ -1,7 +1,6 @@
-import { Utility } from './../Utility/utility';
-import { AuthService } from './auth.service';
+ import { AuthService } from './auth.service';
 import { Injectable } from '@angular/core';
-import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router, CanActivateChild } from '@angular/router';
+import { CanActivate, Router, CanActivateChild } from '@angular/router';
 import { Observable } from 'rxjs';
 import { map, take, tap } from 'rxjs/operators';
 
@@ -12,11 +11,10 @@ import { map, take, tap } from 'rxjs/operators';
 export class AuthGuard implements CanActivate, CanActivateChild {
 
   constructor(private authService: AuthService,
-    private router: Router,
-    private utility: Utility) { }
+    private router: Router ) { }
 
 
-  canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
+  canActivate(): Observable<boolean> {
 
 
 
@@ -31,7 +29,7 @@ export class AuthGuard implements CanActivate, CanActivateChild {
     )
   }
 
-  canActivateChild(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
+  canActivateChild(): Observable<boolean> {
 
 
     return this.authService.user$.pipe(

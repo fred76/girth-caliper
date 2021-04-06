@@ -9,7 +9,7 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { Router } from '@angular/router';
 
 import { Observable, of } from 'rxjs';
-import { switchMap, map } from 'rxjs/operators';
+import { switchMap} from 'rxjs/operators';
 
 import firebase from 'firebase/app'
 
@@ -66,6 +66,9 @@ export class AuthService {
     const _ = (await firebase.auth().fetchSignInMethodsForEmail(userEmail)).map(async methods => {
       this.arraOfLogin.push(methods)
     })
+
+    console.log(_);
+
   }
 
   isUserExtendedData(userId: string) {
@@ -127,7 +130,7 @@ export class AuthService {
     const t = credential.user.uid
     this.isUserExtendedData(t)
     const providerData = credential.user.providerData
-    let uid: string = ""
+
     let userName = ""
     let userPhoto = ""
     for (var i = 0; i < providerData.length; i++) {

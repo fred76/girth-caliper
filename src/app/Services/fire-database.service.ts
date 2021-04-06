@@ -1,3 +1,4 @@
+import { TrainerPage, TrainerProduct } from './../interface-model/trainer';
 
 import { PhotoSession } from './../interface-model/photo-user';
 import { DummyDataService } from './../Utility/dummyData.service';
@@ -6,7 +7,7 @@ import { Subject, Subscription, Observable, from } from 'rxjs';
 import { Girths } from './../interface-model/girths.model';
 import { SkinfoldsForDB } from './../interface-model/skinfold.model';
 import { Injectable } from '@angular/core';
-import { map, first } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { AngularFirestore } from '@angular/fire/firestore';
 
 @Injectable({
@@ -22,6 +23,7 @@ export class FireDatabaseService {
   private fbSubs: Subscription[] = []
 
   girthsSubj = new Subject<Girths[]>();
+  trainerProductSubj = new Subject<TrainerProduct[]>();
   skinfoldsSubj = new Subject<SkinfoldsForDB[]>()
   userSubscripiton: Subscription
 
@@ -33,15 +35,12 @@ export class FireDatabaseService {
     this.afs.collection(`users/${this.authService.userID}/girthsData`).add(girths)
   }
 
-
   addPhoto2(photoSet: PhotoSession): Observable<any> {
 
     return from(this.afs.collection(`users/${this.authService.userID}/bodyPhotos`).add(photoSet))
   }
 
   addImageCataloguURL(photoSet: string): Observable<any> {
-    console.log(photoSet, "KSKKSmmmmcmcmcmmcmcmcmc");
-
     return from(this.afs.collection(`users/${this.authService.userID}/bodyPhotos`).add(photoSet))
   }
 
@@ -54,7 +53,7 @@ export class FireDatabaseService {
     this.fbSubs.push(this.afs.collection<Girths>(`users/${this.authService.userID}/girthsData`, ref => ref.orderBy("date", "desc").limit(5 + n))
       .valueChanges({ idField: 'idField' })
       .pipe(
-        map((girths, ref) => girths.map(girth => {
+        map((girths ) => girths.map(girth => {
           return <Girths>{
             ...girth,
             date: new Date(girth.date.seconds * 1000)
@@ -63,6 +62,8 @@ export class FireDatabaseService {
       ).subscribe((girths: Girths[]) => {
         this.girthsSubj.next(girths)
       }, error => {
+        console.log(error);
+
       }))
   }
 
@@ -70,7 +71,7 @@ export class FireDatabaseService {
     this.fbSubs.push(this.afs.collection<SkinfoldsForDB>(`users/${this.authService.userID}/skinfoldsData`, ref => ref.orderBy("metadata.date", "desc").limit(5 + n))//
       .valueChanges({ idField: 'idField' })
       .pipe(
-        map((skinfolds, ref) => skinfolds.map(skinfold => {
+        map((skinfolds ) => skinfolds.map(skinfold => {
           skinfold.metadata.date = new Date(skinfold.metadata.date.seconds * 1000)
           return <SkinfoldsForDB>{
             ...skinfold,
@@ -79,6 +80,8 @@ export class FireDatabaseService {
       ).subscribe((skinfolds: SkinfoldsForDB[]) => {
         this.skinfoldsSubj.next(skinfolds)
       }, error => {
+        console.log(error);
+
       }))
   }
 
@@ -128,6 +131,54 @@ export class FireDatabaseService {
           }
         }
       });
+  }
+
+  createTrainerPage(trainerPage: TrainerPage): Observable<any> {
+    return from(this.afs.collection(`users/${this.authService.userID}/trainerPage`).add(trainerPage))
+  }
+
+  fetchTrainerPage(): Observable<TrainerPage> {
+    const collection = this.afs.collection<TrainerPage>(`users/${this.authService.userID}/trainerPage`)
+    const trainerPage$ = collection
+      .valueChanges({ idField: 'idField' })
+      .pipe(
+        map(trainerPage => {
+          const trainerPage2 = trainerPage[0];
+          return trainerPage2;
+        })
+      );
+
+    return trainerPage$;
+  }
+
+  editTrainerPage(trainerPage: TrainerPage, id): Observable<any> {
+    return from(this.afs.doc(`users/${this.authService.userID}/trainerPage/${id}`).update(trainerPage))
+  }
+
+  createTrainerProduct(trainerProduct: TrainerProduct): Observable<any> {
+    return from(this.afs.collection(`users/${this.authService.userID}/trainerProduct`).add(trainerProduct))
+  }
+
+
+
+  fetchAvailableTrainerProduct(): Observable<TrainerProduct[]> {
+    return from(this.afs.collection<TrainerProduct>(`users/${this.authService.userID}/trainerProduct`)
+      .valueChanges({ idField: 'idField' })
+      .pipe(
+        map((trainerProducts ) => trainerProducts.map(trainerProduct => {
+          return <TrainerProduct>{
+            ...trainerProduct,
+            date: new Date(trainerProduct.cratedON.seconds * 1000)
+          }
+        }))
+      ))
+  }
+  editTrainerProduct(trainerProduct: TrainerProduct, id): Observable<any> {
+    return from(this.afs.doc(`users/${this.authService.userID}/trainerProduct/${id}`).update(trainerProduct))
+  }
+
+  deleteTrainerProduct(id: string) {
+    this.afs.collection<TrainerProduct>(`users/${this.authService.userID}/trainerProduct`).doc(id).delete()
   }
 
 }

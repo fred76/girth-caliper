@@ -1,10 +1,8 @@
-import { FireDatabaseService } from 'src/app/Services/fire-database.service';
-import { AuthService } from '../auth.service';
+ import { AuthService } from '../auth.service';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { DomSanitizer } from "@angular/platform-browser";
 import { MatIconRegistry } from '@angular/material/icon';
-import { trigger, state, style, transition, animate } from '@angular/animations';
 
 
 import { Router } from '@angular/router';

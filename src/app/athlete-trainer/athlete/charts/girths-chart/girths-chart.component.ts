@@ -148,8 +148,8 @@ export class GirthsChartComponent implements OnInit, OnDestroy {
   private toggleSkinfoldChartListEvent = new Subject<Event>();
   private exchangeSubscription: Subscription
 
-  public chartClicked({ event, active }: { event: MouseEvent, active: {}[] }): void { }
-  public chartHovered({ event, active }: { event: MouseEvent, active: {}[] }): void { }
+  public chartClicked({ }: { event: MouseEvent, active: {}[] }): void { }
+  public chartHovered({ }: { event: MouseEvent, active: {}[] }): void { }
 
   @Input() isToggleSkinfoldChartList: boolean = false
 
