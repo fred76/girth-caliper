@@ -5,11 +5,11 @@ import { TrainerPageDialogComponent } from './trainer-page-dialog.component';
 import { TrainerPage, TrainerProduct } from './../../../interface-model/trainer';
 import { AuthService } from './../../../auth/auth.service';
 import { AngularFireStorage } from '@angular/fire/storage';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { FireDatabaseService } from 'src/app/Services/fire-database.service';
 import { TrainerCatalogueDialogComponent } from './trainer-catalogue-dialog';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, OnDestroy } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 
 import { v4 as uuidv4 } from 'uuid';
@@ -20,7 +20,7 @@ import { v4 as uuidv4 } from 'uuid';
   styleUrls: ['./trainer-catalogue-tempalte.component.css'],
   encapsulation: ViewEncapsulation.None,
 })
-export class TrainerCatalogueTempalteComponent implements OnInit {
+export class TrainerCatalogueTempalteComponent implements OnInit, OnDestroy {
 
   constructor(
     private authService: AuthService,
@@ -35,18 +35,14 @@ export class TrainerCatalogueTempalteComponent implements OnInit {
   isCoverImageAllreadySet: boolean = false
   pageID: string
   url: any = "assets/accessory/crossfit.jpg"
-
   downloadURL$: Observable<string>
-
   isPageEditMode: boolean = false
   isPageExist: boolean = false
-
   isOldImageToBeDeleted: boolean = false
   oldURL: string
-
   editButtonText: string = "Edit intro"
+  private fetchTrainerPageSubscription: Subscription
 
-  pppp: string
 
   img64: any
 
@@ -67,7 +63,7 @@ export class TrainerCatalogueTempalteComponent implements OnInit {
     this.trainerPageFormGroup.disable()
     this.cataloguTemplateArray$ = this.fireDatabaseService.fetchAvailableTrainerProduct()
     this.trainerPageData$ = this.fireDatabaseService.fetchTrainerPage()
-    this.fireDatabaseService.fetchTrainerPage()
+    this.fetchTrainerPageSubscription = this.fireDatabaseService.fetchTrainerPage()
       .subscribe((p) => {
         if (p) {
           this.isPageExist = true
@@ -80,6 +76,11 @@ export class TrainerCatalogueTempalteComponent implements OnInit {
         }
       })
   }
+
+ ngOnDestroy(): void {
+  this.fetchTrainerPageSubscription.unsubscribe()
+
+ }
 
   editPage() {
     this.editButtonText = "Save intro"
@@ -125,8 +126,6 @@ export class TrainerCatalogueTempalteComponent implements OnInit {
   }
 
   async onSubmittrainerPageFormGroup() {
-    console.log("PPPPPPPSPPP  PSPSPPS");
-
     if (this.img64) {
       const img = base64ToFile(this.img64)
       await this.preparePhotoSession(img, this.isOldImageToBeDeleted).subscribe(p => {
