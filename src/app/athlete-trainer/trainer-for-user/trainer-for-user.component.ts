@@ -1,3 +1,5 @@
+import { FireDatabaseService } from './../../Services/fire-database.service';
+import { TrainerProduct, TrainerPage } from './../../interface-model/trainer';
 import { AuthService } from '../../auth/auth.service';
 import { User } from '../../interface-model/user.model';
 import { Component, OnInit } from '@angular/core';
@@ -12,9 +14,11 @@ export class TrainerForUserComponent implements OnInit {
 
   user$: Observable<User>
 
-  constructor( ) { }
+  constructor(
+    private fireDatabaseService: FireDatabaseService,) { }
 
-  cataloguTemplateArray
+  cataloguTemplateArray$: Observable<TrainerProduct[]>
+  trainerPageData$: Observable<TrainerPage>
 
   url = "assets/abs.jpg"
 
@@ -23,57 +27,11 @@ export class TrainerForUserComponent implements OnInit {
         Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex.`
 
   ngOnInit() {
-    this.cataloguTemplateArray = [this.cataloguTemplate1, this.cataloguTemplate2, this.cataloguTemplate3, this.cataloguTemplate4, this.cataloguTemplate5, this.cataloguTemplate6]
-  }
-
-  cataloguTemplate1 = {
-    imgURL: "/assets//accessory/box1.jpg",
-    titleCard: "Crossfit workout",
-    subTitleCard: "Push your limit",
-    textCard: "Crossfit workout",
-    price: "99.00",
-    currency: "Euro"
-  }
-  cataloguTemplate2 = {
-    imgURL: "/assets//accessory/box2.jpg",
-    titleCard: "Functional training",
-    subTitleCard: "Push your limit",
-    textCard: "Crossfit workout",
-    price: "99.00",
-    currency: "Euro"
-  }
-  cataloguTemplate3 = {
-    imgURL: "/assets//accessory/box3.jpg",
-    titleCard: "Crossfit workout",
-    subTitleCard: "Push your limit",
-    textCard: "Crossfit workout",
-    price: "99.00",
-    currency: "Euro"
-  }
-  cataloguTemplate4 = {
-    imgURL: "/assets//accessory/box4.jpg",
-    titleCard: "Body recomposition",
-    subTitleCard: "Push your limit",
-    textCard: "Crossfit workout",
-    price: "99.00",
-    currency: "Euro"
-  }
-  cataloguTemplate5 = {
-    imgURL: "/assets//accessory/box5.jpg",
-    titleCard: "Body recomposition",
-    subTitleCard: "Push your limit",
-    textCard: "Crossfit workout",
-    price: "99.00",
-    currency: "Euro"
-  }
-  cataloguTemplate6 = {
-    imgURL: "/assets//accessory/box6.jpg",
-    titleCard: "Nutrition",
-    subTitleCard: "Push your limit",
-    textCard: "Crossfit workout",
-    price: "99.00",
-    currency: "Euro"
-  }
+    this.cataloguTemplateArray$ = this.fireDatabaseService.fetchAvailableTrainerProductFromAthlete("ha2DZj09QwbLQi2Xf43UZMEz6hG3")
+    this.trainerPageData$ = this.fireDatabaseService.fetchTrainerPageFromAthlete("ha2DZj09QwbLQi2Xf43UZMEz6hG3")
 
 
+
+
+  }
 }

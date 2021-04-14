@@ -1,120 +1,21 @@
-.content {
+.container {
+  margin-top: 117px;
   padding: 8px;
-  margin-top: 70px !important;
-  height: auto !important;
 }
 
+li{
+  padding-right: 8px; float:left;
+}
+
+.www{
+width: 90%;
+}
 .card-address {
   margin-top: 16px;
   padding: 16px;
 }
 
-.headline {
-  color: whitesmoke;
-}
-
-.icon {
-  padding-right: 8px;
-  font-size: 20px;
-}
-
-.font14 {
-  font-size: 3vw;
-  margin-top: 8px;
-  margin-bottom: 8px;
-  font-size: 14px;
-  color: whitesmoke;
-}
-
-.plus_icon {
-  padding-right: 8px;
-  font-size: 24px;
-}
-
-.font14Button {
-  padding-top: 14px;
-  font-size: 14px;
-  color: whitesmoke;
-}
-
-.buttonDiv {
-  margin-top: 24px;
-}
-
-.radioDiv {
-  width: 100%;
-  margin-top: 16px;
-}
-
-.mat-radio-group {
-  padding-bottom: 8px;
-  padding-top: 8px;
-}
-
-.font12 {
-  white-space: normal;
-  font-family: "Open Sans";
-  font-size: 12px;
-  font-style: normal;
-  font-variant: normal;
-  font-weight: 400;
-  line-height: 14px;
-  font-family: Arial, Helvetica, sans-serif;
-  color: whitesmoke;
-}
-
-.font10 {
-  padding-left: 32px;
-  padding-top: 8px;
-  font-family: "Open Sans";
-  font-size: 10px;
-  font-style: normal;
-  font-variant: normal;
-  font-weight: 400;
-  line-height: 14px;
-  font-family: Arial, Helvetica, sans-serif;
-}
-
 .stripe-button {
   width: 160px;
   cursor: pointer;
-}
-
-.outer-frame {
-  padding: 16px;
-  border-color: whitesmoke;
-  border-radius: 10px;
-  border-width: thin;
-  border-style: solid;
-}
-.bottom-frame {
-  width: 100%;
-  padding: 8px;
-}
-
-.xxx {
-  border-radius: 10px;
-  position:relative;
-  z-index: 4;
-  width: 36%;
-  left: 3%;
-  -webkit-filter: drop-shadow(6px 6px 6px #222);
-  filter: drop-shadow(6px 6px 6px #222);
-}
-.qqq {
-
-  border-radius: 10px;
-  z-index: 3;
-  width: 36%;
-  -webkit-filter: drop-shadow(6px 6px 6px #222);
-  filter: drop-shadow(6px 6px 6px #222);
-}
-.eee {
-  border-radius: 10px;
-  position:relative;
-  z-index: 1;
-  width: 36%;
-  right: 3%;
-  -webkit-filter: drop-shadow(6px 6px 6px #222);
-  filter: drop-shadow(6px 6px 6px #222);
 }

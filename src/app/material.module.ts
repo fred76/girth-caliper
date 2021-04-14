@@ -25,7 +25,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatRadioModule } from '@angular/material/radio';
-
+import { MatSlideToggleModule } from '@angular/material/slide-toggle'
 // import { MatSelectModule } from '@angular/material/select';
 // import { MatChipsModule } from '@angular/material/chips';
 // import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -61,7 +61,8 @@ let p: any[] = [
   MatCheckboxModule,
   MatStepperModule,
   MatProgressBarModule,
-  MatRadioModule
+  MatRadioModule,
+  MatSlideToggleModule
   // MatSelectModule,
   // MatChipsModule,
   // MatCheckboxModule,

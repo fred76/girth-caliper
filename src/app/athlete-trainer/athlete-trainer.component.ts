@@ -42,8 +42,17 @@ export class AthleteTrainerComponent implements OnInit, OnDestroy {
     public authService: AuthService,
     private router: Router,
     private utility: Utility
-  ) {
-    this.authService.user$.subscribe(u => {
+  ) { }
+
+  userUnsubscribe: Subscription
+  routerUnsubscribe1: Subscription
+  routerUnsubscribe2: Subscription
+  navLinks: any[]
+  activeLink = 0
+
+  ngOnInit(): void {
+
+      this.authService.user$.subscribe(u => {
       if (u.userCategory == "athlete") {
         this.navLinks = [
           { label: 'Girths', link: './girthTab', index: 0 },
@@ -56,20 +65,11 @@ export class AthleteTrainerComponent implements OnInit, OnDestroy {
         this.navLinks = [
           { label: 'Dashboard', link: './trainer/trainerBio', index: 0 },
           { label: 'Bio & Training plans', link: './trainer/trainerPage', index: 1 },
-          { label: 'Athletes', link: './trainer/athleteList', index: 2 }
+          { label: 'Athletes', link: './trainer/athleteList', index: 2 },
+          { label: 'Blog articles', link: './trainer/athleteList', index: 3 },
         ]
       }
     })
-
-  }
-
-  userUnsubscribe: Subscription
-  routerUnsubscribe1: Subscription
-  routerUnsubscribe2: Subscription
-  navLinks: any[]
-  activeLink = 0
-
-  ngOnInit(): void {
 
     this.userUnsubscribe = this.authService.user$.subscribe(p => {
       if (this.utility.isSubscripitionOutOfDate(p.stripeInfoGC.current_period_end)) {
@@ -82,7 +82,6 @@ export class AthleteTrainerComponent implements OnInit, OnDestroy {
         this.navLinks.find(tab => tab.link === '.' + this.router.url))
     })
 
-    console.log(this.navLinks);
 
 
   }

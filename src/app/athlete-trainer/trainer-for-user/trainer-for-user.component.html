@@ -1,56 +1,81 @@
-<div class="mainDiv">
+<div class="mainDiv" fxLayout="column" fxLayoutAlign="start stretch">
+  <span class="spanButton" fxLayoutAlign="end">
+    <button class="buttonSticky" mat-raised-button color="primary">LIKE</button>
+  </span>
 
-  <!-- <div class="parallaxFirstDiv" fxLayout="column" [style.backgroundImage]="'url(' + url + ')'"
-    fxLayoutAlign="start start"> -->
-  <div class="parallaxFirstDiv" fxLayout="column"
-    [style.backgroundImage]="'linear-gradient(to right,rgba(0,0,0,1), rgba(0,0,0,0.9), rgba(0,0,0,0), rgba(0,0,0,0)),  url(' + url + ')'"
-    fxLayoutAlign="start start">
-    <div class="intro">
+  <div class="ifDiv" *ngIf="trainerPageData$ | async as page">
 
-      <h1 class="introTitle">Certified fitness professional </h1>
-      <h1 class="introTitleBig">Take control of your health</h1>
-      <img class="introWave" src="/assets//accessory/wave.png">
-      <h1 class="introText ">Curabitur non nulla sit amet nisl tempus convallis quis ac lectus dolor sit amet.</h1>
-      <button mat-raised-button color="primary">Join my team today</button>
+    <div  class="parallaxFirstDiv" fxLayout="column"
+      [style.backgroundImage]="'linear-gradient(to right,rgba(0,0,0,0.9), rgba(0,0,0,0.7), rgba(0,0,0,0), rgba(0,0,0,0)),  url(' + page.backgroundImageURL + ')'"
+      fxLayoutAlign="start start">
+      <div class="intro" fxFill fxLayout="column" fxLayoutAlign="space-between start">
+        <p class="introTitle"> {{page.titleHeading}} </p>
+
+        <p class="introTitleBig"> {{page.title}} </p>
+        <img class="introWave" src="/assets//accessory/wave.png">
+        <p class="introText"> {{page.leitmotif}} </p>
+        <button mat-raised-button color="primary">Join my team today</button>
+      </div>
+    </div>
+
+    <div class="divBio" fxLayout="column" fxLayoutAlign="center center">
+      <p class="bioTitle"> {{page.bioTitle}} </p>
+      <p class="bioSubitle"> {{page.bioSubtitle}} </p>
+
+      <mat-divider class="mat-dividers"> </mat-divider>
+
+      <p class="divText" fxFlex="90%"> {{page.bioText}}</p>
+
+
+      <mat-divider class="mat-dividers">
+      </mat-divider>
+
     </div>
   </div>
 
-  <div class="divBio" fxLayout="column" fxLayoutAlign="center center">
-    <p class="bioTitle">About Me</p>
-    <p class="bioSubitle">Personal trainer</p>
+  <div class="divCatalogueCont" fxLayout="column" fxLayoutAlign="start center" >
+    <div class="divCatalogue" fxLayoutGap="60px grid" fxLayoutAlign="center start" fxLayout="row wrap">
 
-    <mat-divider>
-    </mat-divider>
-    <div class="divText" fxFlex="90%">
-      <span class="bioText">{{text}}</span>
-    </div>
-  </div>
-
-  <div class="divBio" fxLayout="column" fxLayoutAlign="center center">
-    <p class="bioTitle">My training program</p>
-    <p class="bioSubitle">taylored on you</p>
-
-    <mat-divider>
-    </mat-divider>
-
-    <div class="divCatalogue" fxLayoutGap="40px grid" fxLayoutAlign="center center" fxLayout="row wrap">
-      <div fxFlex="33%" *ngFor="let pippo of cataloguTemplateArray">
+      <div fxFlex="33%" fxFlex.xs="100%" fxFlex.sm="50%" *ngFor="let cattemp of cataloguTemplateArray$  | async" let
+        i=index>
         <div fxLayoutAlign="start end" class="parent">
-          <img class="image" src={{pippo.imgURL}}>
-          <div class="img__description">
-            <p class="txt">This image looks super neat.</p>
-          </div>
+
+          <img class="image" src={{cattemp.imgURL}}>
+
           <div class="divTitleCard" fxLayoutAlign="space-between start" fxLayoutGap="24px" fxLayout="column">
             <div class="imageWave">
               <img src="/assets//accessory/wave.png">
             </div>
-            <p class="titleCard">{{pippo.titleCard}}</p>
-            <p class="subTitleCard">{{pippo.subTitleCard}}</p>
+            <p class="titleCard">{{cattemp.titleCard}}</p>
+            <p class="subTitleCard">{{cattemp.subTitleCard}}</p>
+          </div>
+          <div class="img__description" fxLayout="column" fxLayoutAlign="space-between center">
+            <p class="txt" fxFlexAlign="stretch">{{cattemp.descripition}}</p>
+            <div fxLayout="row wrap" fxLayoutGap="4px grid">
+              <div *ngFor="let tag of cattemp.tags">
+                <p class="tag">{{tag}}</p>
+              </div>
+            </div>
+            <p class="txtPrice">{{cattemp.price | currency:'EUR':'symbol' }} </p>
+
+            <div class="btn" fxLayoutGap="8px" fxLayoutAlign="center center" fxLayout="row">
+              <button mat-mini-fab color="primary" aria-label="Example icon button with a menu icon"
+                (click)="openDialogEditTrainerProduct(cattemp.idField, cattemp)">
+                <mat-icon>mode_edit
+                </mat-icon>
+              </button>
+              {{cattemp}}
+              <button mat-mini-fab color="primary" aria-label="Example icon button with a menu icon"
+                (click)="deleteTrainerProduct(cattemp.idField, cattemp)">
+                <mat-icon>delete_outline</mat-icon>
+              </button>
+            </div>
           </div>
         </div>
       </div>
     </div>
 
   </div>
+  <!--  fine main div-->
 
 </div>

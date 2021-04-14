@@ -1,3 +1,4 @@
+import { FireDatabaseService } from 'src/app/Services/fire-database.service';
 import { Trainer } from '../../../interface-model/trainer';
 import { AuthService } from '../../../auth/auth.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -21,7 +22,8 @@ export class TrainerBioComponent implements OnInit {
     public strpieService: StrpieService,
     private route: ActivatedRoute,
     private router: Router,
-    public authService: AuthService) { }
+    public authService: AuthService,
+    private fireDatabaseService: FireDatabaseService) { }
 
   message = "Waiting for purchase to complete...";
 
@@ -54,11 +56,15 @@ export class TrainerBioComponent implements OnInit {
         .subscribe(
           () => {
             this.waiting = true
+            console.log("entro");
+
             setTimeout(() => this.router.navigateByUrl("/Body&Measurements/trainer/trainerBio"), 3000);
           }
         )
     } else {
       this.waiting = true
+      console.log("esco");
+
       setTimeout(() => this.router.navigateByUrl("/Body&Measurements/trainer/trainerBio"), 3000)
     }
 
@@ -76,6 +82,18 @@ export class TrainerBioComponent implements OnInit {
     // } else {
     //   this.message = "Purchase Cancelled or Failed, redirecting ..."
     // }
+  }
+
+  publish(){
+console.log("wwwwww");
+
+this.fireDatabaseService.fetchTrainerPage().subscribe(p=> {
+  console.log(p);
+  this.fireDatabaseService.publish(p)
+})
+
+
+
   }
 
 

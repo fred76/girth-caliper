@@ -151,6 +151,28 @@ export class FireDatabaseService {
     return trainerPage$;
   }
 
+  fetchTrainerPageFromAthlete(userID: string): Observable<TrainerPage> {
+    const collection = this.afs.collection<TrainerPage>(`users/${userID}/trainerPage`)
+    const trainerPage$ = collection
+      .valueChanges({ idField: 'idField' })
+      .pipe(
+        map(trainerPage => {
+          const trainerPage2 = trainerPage[0];
+          return trainerPage2;
+        })
+      );
+
+    return trainerPage$;
+  }
+
+  publish(trainerPage2){
+
+      this.afs.collection(`trainerPages`).add(trainerPage2)
+      console.log("dddd");
+
+  }
+
+
   editTrainerPage(trainerPage: TrainerPage, id): Observable<any> {
     return from(this.afs.doc(`users/${this.authService.userID}/trainerPage/${id}`).update(trainerPage))
   }
@@ -163,6 +185,19 @@ export class FireDatabaseService {
 
   fetchAvailableTrainerProduct(): Observable<TrainerProduct[]> {
     return from(this.afs.collection<TrainerProduct>(`users/${this.authService.userID}/trainerProduct`)
+      .valueChanges({ idField: 'idField' })
+      .pipe(
+        map((trainerProducts ) => trainerProducts.map(trainerProduct => {
+          return <TrainerProduct>{
+            ...trainerProduct,
+            date: new Date(trainerProduct.cratedON.seconds * 1000)
+          }
+        }))
+      ))
+  }
+
+  fetchAvailableTrainerProductFromAthlete(userID: string): Observable<TrainerProduct[]> {
+    return from(this.afs.collection<TrainerProduct>(`users/${userID}/trainerProduct`)
       .valueChanges({ idField: 'idField' })
       .pipe(
         map((trainerProducts ) => trainerProducts.map(trainerProduct => {
