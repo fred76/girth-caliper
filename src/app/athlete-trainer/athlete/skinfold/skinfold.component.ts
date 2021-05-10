@@ -61,7 +61,7 @@ export class SkinfoldComponent implements OnInit, OnDestroy {
   // events
   public chartClicked({ }: { event: MouseEvent, active: {}[] }): void { }
 
-  public chartHovered({  }: { event: MouseEvent, active: {}[] }): void { }
+  public chartHovered({ }: { event: MouseEvent, active: {}[] }): void { }
 
   eventCaliperMethodChange(s, event) {
     this.skinfoldsService.updateSelectedSkinfoldsrMethod(this.selectedSkinfoldsMethod)

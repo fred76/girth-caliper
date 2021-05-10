@@ -77,10 +77,10 @@ export class TrainerCatalogueTempalteComponent implements OnInit, OnDestroy {
       })
   }
 
- ngOnDestroy(): void {
-  this.fetchTrainerPageSubscription.unsubscribe()
+  ngOnDestroy(): void {
+    this.fetchTrainerPageSubscription.unsubscribe()
 
- }
+  }
 
   editPage() {
     this.editButtonText = "Save intro"
@@ -90,7 +90,7 @@ export class TrainerCatalogueTempalteComponent implements OnInit, OnDestroy {
     if (this.isPageEditMode) {
       if (this.isPageEditMode) {
 
-        if (this.trainerPageFormGroup.invalid || !this.trainerPageFormGroup.dirty ) {
+        if (this.trainerPageFormGroup.invalid || !this.trainerPageFormGroup.dirty) {
           this.openDialogInvalidFields()
         } else {
           this.onSubmittrainerPageFormGroup()

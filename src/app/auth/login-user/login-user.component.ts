@@ -1,4 +1,4 @@
- import { AuthService } from '../auth.service';
+import { AuthService } from '../auth.service';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { DomSanitizer } from "@angular/platform-browser";

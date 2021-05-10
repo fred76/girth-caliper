@@ -20,8 +20,8 @@ export class BodyChartComponent implements OnInit, OnDestroy {
   private exchangeSubscriptionGirth: Subscription
   private exchangeSubscriptionSkinfold: Subscription
 
-  public chartClicked({  }: { event: MouseEvent, active: {}[] }): void { }
-  public chartHovered({   }: { event: MouseEvent, active: {}[] }): void { }
+  public chartClicked({ }: { event: MouseEvent, active: {}[] }): void { }
+  public chartHovered({ }: { event: MouseEvent, active: {}[] }): void { }
 
   data: any
   lineChartGirthsOverSkinfolds: Chart

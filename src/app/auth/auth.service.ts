@@ -11,7 +11,7 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { Router } from '@angular/router';
 
 import { Observable, of } from 'rxjs';
-import { switchMap} from 'rxjs/operators';
+import { switchMap } from 'rxjs/operators';
 
 import firebase from 'firebase/app'
 import { UserType } from '../interface-model/Interface';
@@ -21,7 +21,7 @@ import { UserType } from '../interface-model/Interface';
 })
 export class AuthService {
 
-  UserType$ : Observable<UserType<any>>
+  UserType$: Observable<UserType<any>>
   // user$: Observable<User>
   userID: string
   gender: string
@@ -137,7 +137,7 @@ export class AuthService {
   addTrainerContacts(uid: string, addressContact: AddressContact) {
 
     const userRef: AngularFirestoreDocument = this.afs.doc(`users/${uid}`)
-    return userRef.set({profile: { address: addressContact }}, { merge: true })
+    return userRef.set({ profile: { address: addressContact } }, { merge: true })
 
   }
 

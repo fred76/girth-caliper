@@ -53,7 +53,7 @@ export class FireDatabaseService {
     this.fbSubs.push(this.afs.collection<Girths>(`users/${this.authService.userID}/girthsData`, ref => ref.orderBy("date", "desc").limit(5 + n))
       .valueChanges({ idField: 'idField' })
       .pipe(
-        map((girths ) => girths.map(girth => {
+        map((girths) => girths.map(girth => {
           return <Girths>{
             ...girth,
             date: new Date(girth.date.seconds * 1000)
@@ -71,7 +71,7 @@ export class FireDatabaseService {
     this.fbSubs.push(this.afs.collection<SkinfoldsForDB>(`users/${this.authService.userID}/skinfoldsData`, ref => ref.orderBy("metadata.date", "desc").limit(5 + n))//
       .valueChanges({ idField: 'idField' })
       .pipe(
-        map((skinfolds ) => skinfolds.map(skinfold => {
+        map((skinfolds) => skinfolds.map(skinfold => {
           skinfold.metadata.date = new Date(skinfold.metadata.date.seconds * 1000)
           return <SkinfoldsForDB>{
             ...skinfold,
@@ -166,8 +166,8 @@ export class FireDatabaseService {
     return trainerPage$;
   }
 
-  publish( id, isPublished: boolean): Observable<any> {
-    return from(this.afs.doc(`users/${this.authService.userID}/trainerPage/${id}`).update({published:isPublished}))
+  publish(id, isPublished: boolean): Observable<any> {
+    return from(this.afs.doc(`users/${this.authService.userID}/trainerPage/${id}`).update({ published: isPublished }))
   }
 
   editTrainerPage(trainerPage: TrainerPage, id): Observable<any> {
@@ -178,7 +178,7 @@ export class FireDatabaseService {
     return from(this.afs.collection(`users/${this.authService.userID}/trainerProduct`).add(trainerProduct))
   }
 
-  updateAthleteAdmission(thleteAdmission: string){
+  updateAthleteAdmission(thleteAdmission: string) {
     const userRef = this.afs.doc(`users/${this.authService.userID}`);
     userRef.set({ profile: { athleteAdmission: thleteAdmission } }, { merge: true })
   }
@@ -187,7 +187,7 @@ export class FireDatabaseService {
     return from(this.afs.collection<TrainerProduct>(`users/${this.authService.userID}/trainerProduct`)
       .valueChanges({ idField: 'idField' })
       .pipe(
-        map((trainerProducts ) => trainerProducts.map(trainerProduct => {
+        map((trainerProducts) => trainerProducts.map(trainerProduct => {
           return <TrainerProduct>{
             ...trainerProduct,
             date: new Date(trainerProduct.cratedON.seconds * 1000)
@@ -200,7 +200,7 @@ export class FireDatabaseService {
     return from(this.afs.collection<TrainerProduct>(`users/${userID}/trainerProduct`)
       .valueChanges({ idField: 'idField' })
       .pipe(
-        map((trainerProducts ) => trainerProducts.map(trainerProduct => {
+        map((trainerProducts) => trainerProducts.map(trainerProduct => {
           return <TrainerProduct>{
             ...trainerProduct,
             date: new Date(trainerProduct.cratedON.seconds * 1000)

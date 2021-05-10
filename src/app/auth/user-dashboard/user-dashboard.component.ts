@@ -104,27 +104,28 @@ export class UserDashboardComponent implements OnInit, OnDestroy, AfterViewInit 
   }
 
   initTrainerDataFormGroup(u: UserType<Trainer>) {
-if (u.profile?.address) {
-    this.trainerDataFormGroup.patchValue({
-      companyName: u.profile.address?.companyName,
-      address1: u.profile.address?.address1,
-      address2: u.profile.address?.address2,
-      country: u.profile.address?.country,
-      state_province_region: u.profile.address?.state_province_region,
-      city: u.profile.address?.city,
-      zip_postalCode: u.profile.address?.zip_postalCode,
-      phone: u.profile.address?.phone,
-      mobile: u.profile.address?.mobile,
-      emailBusiness: u.profile.address?.emailBusiness,
-      web: u.profile.address?.web,
-    })}
+    if (u.profile?.address) {
+      this.trainerDataFormGroup.patchValue({
+        companyName: u.profile.address?.companyName,
+        address1: u.profile.address?.address1,
+        address2: u.profile.address?.address2,
+        country: u.profile.address?.country,
+        state_province_region: u.profile.address?.state_province_region,
+        city: u.profile.address?.city,
+        zip_postalCode: u.profile.address?.zip_postalCode,
+        phone: u.profile.address?.phone,
+        mobile: u.profile.address?.mobile,
+        emailBusiness: u.profile.address?.emailBusiness,
+        web: u.profile.address?.web,
+      })
+    }
   }
   ngOnInit() {
     this.userSub = this.authService.UserType$.pipe(
       map(p => {
         this.initUserDataFormGroup(p),
-        this.initTrainerDataFormGroup(p),
-        this.authService.userProvidersList(p.email)
+          this.initTrainerDataFormGroup(p),
+          this.authService.userProvidersList(p.email)
         this.user = p
         this.isLoggedIn = true
         this.seletctSubscriptionPlaneForUserCategory(p)

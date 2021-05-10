@@ -14,7 +14,7 @@ import { v4 as uuidv4 } from 'uuid';
 export class ImageLoaderComponent implements OnInit {
 
   constructor(private storage: AngularFireStorage,
-    private authService: AuthService ) { }
+    private authService: AuthService) { }
 
   imageChangedEvent: any = '';
   croppedImage: any = '';

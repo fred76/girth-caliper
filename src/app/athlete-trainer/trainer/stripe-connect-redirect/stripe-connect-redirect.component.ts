@@ -8,7 +8,7 @@ import { ActivatedRoute, Router } from '@angular/router';
   templateUrl: './stripe-connect-redirect.component.html',
   styleUrls: ['./stripe-connect-redirect.component.css']
 })
-export class StripeConnectRedirectComponent  implements OnInit, OnDestroy {
+export class StripeConnectRedirectComponent implements OnInit, OnDestroy {
 
   message = "Waiting to be redirect...";
   waiting = true;

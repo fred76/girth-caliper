@@ -5,7 +5,7 @@ import { ChartContainerComponent } from '../chart-container.component';
 
 import { MatDialog } from '@angular/material/dialog';
 import { ImportExportService } from '../../../../Services/import-export.service';
-import { Subject, Subscription  } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
 import { MatTableDataSource } from '@angular/material/table';
 import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 @Component({
@@ -111,7 +111,7 @@ export class SkinfoldsChartComponent implements OnInit, OnDestroy {
     this.shiftMiniChartData()
   }
 
-  nextBodyCompChartButton( ) {
+  nextBodyCompChartButton() {
     this.selectorBodyCompDate -= 1
     this.shiftMiniChartData()
   }

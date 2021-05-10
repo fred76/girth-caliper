@@ -47,7 +47,7 @@ export class TrainerBioComponent implements OnInit {
     this.cataloguTemplateArray$ = this.fireDatabaseService.fetchAvailableTrainerProduct()
     this.trainerPageData$ = this.fireDatabaseService.fetchTrainerPage()
     this.authService.UserType$.pipe(
-      map((user : UserType<Trainer>  ) => {
+      map((user: UserType<Trainer>) => {
 
         this.userType = user
         console.log("this.userType");

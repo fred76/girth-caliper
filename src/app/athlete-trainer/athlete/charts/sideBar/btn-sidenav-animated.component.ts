@@ -9,7 +9,7 @@ import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 export class BtnSidenavAnimatedComponent implements OnInit, OnDestroy {
 
 
-  constructor(private router: Router, private route: ActivatedRoute ) { }
+  constructor(private router: Router, private route: ActivatedRoute) { }
 
   @Input() text: string
   @Input() btnStatus: string

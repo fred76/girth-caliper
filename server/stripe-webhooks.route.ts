@@ -36,8 +36,8 @@ export async function stripeWebhooks(req: Request, res: Response) {
     if (event.type == "invoice.paid") {
       const session = event.data.object
 
-       if (session.billing_reason == "subscription_create") {
-     //  if (session.billing_reason == "subscription_cycle") {
+      if (session.billing_reason == "subscription_create") {
+        //  if (session.billing_reason == "subscription_cycle") {
         const subscription = await stripe.subscriptions.retrieve(
           session.subscription
         )

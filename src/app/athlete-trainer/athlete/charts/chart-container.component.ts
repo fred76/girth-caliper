@@ -1,6 +1,6 @@
 import { SkinfoldsForDB } from '../../../interface-model/skinfold.model';
 import { FireDatabaseService } from 'src/app/Services/fire-database.service';
-import { BehaviorSubject, Subscription  } from 'rxjs';
+import { BehaviorSubject, Subscription } from 'rxjs';
 import { Girths } from '../../../interface-model/girths.model';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 

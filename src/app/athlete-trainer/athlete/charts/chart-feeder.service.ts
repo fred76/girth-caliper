@@ -748,7 +748,7 @@ export class ChartFeederService {
             ticks: {
               autoSkip: false,
               source: 'labels',
-              callback: function (value ) {
+              callback: function (value) {
                 return moment(value).format('DD/MMM')
               }
             },
@@ -846,7 +846,7 @@ export class ChartFeederService {
             ticks: {
               autoSkip: false,
               source: 'labels',
-              callback: function (value ) {
+              callback: function (value) {
                 return moment(value).format('DD/MMM')
               }
             },
@@ -1036,7 +1036,7 @@ export class ChartFeederService {
     elements: { point: { pointStyle: 'circle' } },
     tooltips: {
       backgroundColor: 'white', borderWidth: 0,
-      callbacks: { labelTextColor: function ( ) { return "black" } }
+      callbacks: { labelTextColor: function () { return "black" } }
     },
     plugins: {
       datalabels: {

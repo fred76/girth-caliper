@@ -21,7 +21,7 @@ export async function trainerCreateStripeAccount(req: Request, res: Response) {
   console.log(info.athleteAdmission);
   console.log("info.athleteAdmission");
 
-  await userRef.set({profile: { trainerStripeConnected: account.id,  athleteAdmission: info.athleteAdmission}}, { merge: true })
+  await userRef.set({ profile: { trainerStripeConnected: account.id, athleteAdmission: info.athleteAdmission } }, { merge: true })
   const sessionConfig = await stripeAccountLinksCreate(info, account.id, info.userId)
   await stripe.accountLinks.create(sessionConfig).
     then((link) => {

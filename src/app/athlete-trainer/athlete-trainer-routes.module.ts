@@ -26,14 +26,16 @@ const routes: Routes = [
       { path: 'skinfoldTab', component: SkinfoldComponent, canActivate: [AuthGuard] },
       { path: 'girthTab', component: GirthsComponent, canActivate: [AuthGuard] },
       { path: 'trainerForUser', component: TrainerForUserComponent, canActivate: [AuthGuard] },
-      { path: 'photoTab', component: HistoryComponent, canActivate: [AuthGuard],
+      {
+        path: 'photoTab', component: HistoryComponent, canActivate: [AuthGuard],
         children:
           [
             { path: 'userPhoto', component: UserPhotoComponent },
             { path: 'photoSession', component: PhotoSessionComponent },
           ],
       },
-      { path: 'insightTab', component: ChartContainerComponent,
+      {
+        path: 'insightTab', component: ChartContainerComponent,
         children: [
           { path: '', component: GirthsChartComponent },
           { path: 'ghirthsChart', component: GirthsChartComponent },
@@ -41,7 +43,8 @@ const routes: Routes = [
           { path: 'bodyChart', component: BodyChartComponent }
         ]
       },
-      { path: 'trainer', component: TrainerContainerComponent,
+      {
+        path: 'trainer', component: TrainerContainerComponent,
         children: [
           { path: '', component: TrainerBioComponent },
           { path: 'trainerBio', component: TrainerBioComponent },
