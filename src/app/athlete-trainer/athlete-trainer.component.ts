@@ -18,7 +18,7 @@ import { Router } from '@angular/router';
 {{link.label}}</a>
 </nav>
 <div class="router-content">
-<div *ngIf='authService.user$ | async; then authenticated else notAuthenticated'></div>
+<div *ngIf='authService.UserType$ | async; then authenticated else notAuthenticated'></div>
 <ng-template   #notAuthenticated>
  <div fxLayoutAlign="center center" style="margin-top: 200px !important;">
      <mat-card class="mat-elevation-z8 content"  >
@@ -52,26 +52,32 @@ export class AthleteTrainerComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
 
-      this.authService.user$.subscribe(u => {
-      if (u.userCategory == "athlete") {
-        this.navLinks = [
-          { label: 'Girths', link: './girthTab', index: 0 },
-          { label: 'Skinfolds', link: './skinfoldTab', index: 1 },
-          { label: 'Photo', link: './photoTab/userPhoto', index: 2 },
-          { label: 'Insight', link: './insightTab/ghirthsChart', index: 3 },
-          { label: 'Personal trainer', link: './trainerForUser', index: 4 }
-        ]
-      } else {
-        this.navLinks = [
-          { label: 'Dashboard', link: './trainer/trainerBio', index: 0 },
-          { label: 'Bio & Training plans', link: './trainer/trainerPage', index: 1 },
-          { label: 'Athletes', link: './trainer/athleteList', index: 2 },
-          { label: 'Blog articles', link: './trainer/athleteList', index: 3 },
-        ]
-      }
-    })
 
-    this.userUnsubscribe = this.authService.user$.subscribe(p => {
+
+
+    this.authService.UserType$.subscribe(u => {
+      console.log(u.userCategory);
+
+    if (u.userCategory == "athlete") {
+      this.navLinks = [
+        { label: 'Girths', link: './girthTab', index: 0 },
+        { label: 'Skinfolds', link: './skinfoldTab', index: 1 },
+        { label: 'Photo', link: './photoTab/userPhoto', index: 2 },
+        { label: 'Insight', link: './insightTab/ghirthsChart', index: 3 },
+        { label: 'Personal trainer', link: './trainerForUser', index: 4 }
+      ]
+    } else {
+      this.navLinks = [
+        { label: 'Dashboard', link: './trainer/trainerBio', index: 0 },
+        { label: 'Bio & Training plans', link: './trainer/trainerPage', index: 1 },
+        { label: 'Athletes', link: './trainer/athleteList', index: 2 },
+        { label: 'Blog articles', link: './trainer/athleteList', index: 3 },
+      ]
+    }
+  })
+
+
+    this.userUnsubscribe = this.authService.UserType$.subscribe(p => {
       if (this.utility.isSubscripitionOutOfDate(p.stripeInfoGC.current_period_end)) {
         this.router.navigate(['/UserDashboard']);
       }

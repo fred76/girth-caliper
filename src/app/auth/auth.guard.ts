@@ -18,7 +18,7 @@ export class AuthGuard implements CanActivate, CanActivateChild {
 
 
 
-    return this.authService.user$.pipe(
+    return this.authService.UserType$.pipe(
       take(1),
       map(user => !!user), // <-- map to boolean
       tap(loggedIn => {
@@ -32,7 +32,7 @@ export class AuthGuard implements CanActivate, CanActivateChild {
   canActivateChild(): Observable<boolean> {
 
 
-    return this.authService.user$.pipe(
+    return this.authService.UserType$.pipe(
       take(1),
       map(user => !!user), // <-- map to boolean
       tap(loggedIn => {

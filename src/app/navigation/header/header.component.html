@@ -1,5 +1,5 @@
 <mat-toolbar >
-  <div *ngIf="authService.user$ | async ; then autenticated else login">
+  <div *ngIf="authService.UserType$ | async ; then autenticated else login">
 
   </div>
   <ng-template #autenticated>

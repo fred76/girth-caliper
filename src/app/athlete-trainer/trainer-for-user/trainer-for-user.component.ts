@@ -1,7 +1,5 @@
 import { FireDatabaseService } from './../../Services/fire-database.service';
 import { TrainerProduct, TrainerPage } from './../../interface-model/trainer';
-import { AuthService } from '../../auth/auth.service';
-import { User } from '../../interface-model/user.model';
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 
@@ -12,7 +10,6 @@ import { Observable } from 'rxjs';
 })
 export class TrainerForUserComponent implements OnInit {
 
-  user$: Observable<User>
 
   constructor(
     private fireDatabaseService: FireDatabaseService,) { }

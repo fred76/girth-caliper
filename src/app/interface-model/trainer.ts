@@ -1,11 +1,4 @@
-export interface Trainer {
-  athletesUID?: string[]
-  athleteAdmission?: "fromGC" | "withContact"
-  stripeAccount?: boolean
-  blog?: boolean
-  blogID?: [String]
-  bio?: string
-}
+
 export interface TrainerPage {
   backgroundImageURL?: string,
   titleHeading?: string,
@@ -16,6 +9,7 @@ export interface TrainerPage {
   bioText?: string,
   cratedON?: Date | any
   idField?: string
+  published?: boolean
 }
 
 export interface Blog {

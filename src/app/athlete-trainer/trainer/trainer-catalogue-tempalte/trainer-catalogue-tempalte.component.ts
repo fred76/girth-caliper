@@ -62,7 +62,7 @@ export class TrainerCatalogueTempalteComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.trainerPageFormGroup.disable()
     this.cataloguTemplateArray$ = this.fireDatabaseService.fetchAvailableTrainerProduct()
-    this.trainerPageData$ = this.fireDatabaseService.fetchTrainerPage()
+    // this.trainerPageData$ = this.fireDatabaseService.fetchTrainerPage()
     this.fetchTrainerPageSubscription = this.fireDatabaseService.fetchTrainerPage()
       .subscribe((p) => {
         if (p) {
@@ -137,6 +137,7 @@ export class TrainerCatalogueTempalteComponent implements OnInit, OnDestroy {
           bioTitle: this.trainerPageFormGroup.value.bioTitle,
           bioSubtitle: this.trainerPageFormGroup.value.bioSubtitle,
           bioText: this.trainerPageFormGroup.value.bioText,
+          published: false,
           cratedON: Date()
         }
 

@@ -1,5 +1,5 @@
 <div class="mainDiv">
-  <div fxLayoutAlign="center" *ngIf="authService.user$ | async as user ">
+  <div fxLayoutAlign="center" *ngIf="authService.UserType$ | async as user ">
     <mat-card fxFlex.gt-xs="35%" class="mat-elevation-z8 pad  ">
       <button mat-icon-button routerLink="/Body&Measurements/girthTab">
         <mat-icon class="clear-icon">clear</mat-icon>

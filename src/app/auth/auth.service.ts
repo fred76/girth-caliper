@@ -1,7 +1,9 @@
+import { Trainer, Athlete } from './../interface-model/Interface';
+// import { Trainer } from './../interface-model/trainer';
 import { AddressContact } from './../interface-model/athlete';
 import { Utility } from './../Utility/utility';
-import { User } from './../interface-model/user.model';
-import { Injectable } from '@angular/core';
+// import { User } from './../interface-model/user.model';
+import { Injectable, Type } from '@angular/core';
 
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
 import { AngularFireAuth } from '@angular/fire/auth';
@@ -12,13 +14,15 @@ import { Observable, of } from 'rxjs';
 import { switchMap} from 'rxjs/operators';
 
 import firebase from 'firebase/app'
+import { UserType } from '../interface-model/Interface';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  user$: Observable<User>
+  UserType$ : Observable<UserType<any>>
+  // user$: Observable<User>
   userID: string
   gender: string
   age: number
@@ -30,19 +34,33 @@ export class AuthService {
   userPhoto: string
   providerId: string
 
-
-
   constructor(
     private afAuth: AngularFireAuth,
     private afs: AngularFirestore,
     private router: Router,
     private utility: Utility
   ) {
-
-    this.user$ = this.afAuth.authState.pipe(
+    this.UserType$ = this.afAuth.authState.pipe(
       switchMap(user => {
         if (user) {
-          const userChanges = this.afs.doc<User>(`users/${user.uid}`).valueChanges()
+          const userChanges = this.afs.doc<UserType<any>>(`users/${user.uid}`).valueChanges()
+          this.userID = user.uid
+          console.log(user.uid);
+
+          user.providerData.map(profile => {
+            this.providerId = profile.providerId
+          })
+          return userChanges
+        } else {
+          return of(null)
+        }
+      })
+    )
+
+    this.UserType$ = this.afAuth.authState.pipe(
+      switchMap(user => {
+        if (user) {
+          const userChanges = this.afs.doc<UserType<any>>(`users/${user.uid}`).valueChanges()
           this.userID = user.uid
           console.log(user.uid);
 
@@ -95,17 +113,17 @@ export class AuthService {
   };
 
   addNickname(uid: string, nickname: string) {
-    this.afs.collection<User>(`users`).doc(uid).update({ nickname: nickname })
+    this.afs.collection<UserType<any>>(`users`).doc(uid).update({ nickname: nickname })
   }
   addGiveName(uid: string, givenName: string) {
-    this.afs.collection<User>(`users`).doc(uid).update({ givenName: givenName })
-    this.afs.collection<User>(`users`).doc(uid).update({ displayName: givenName })
+    this.afs.collection<UserType<any>>(`users`).doc(uid).update({ givenName: givenName })
+    this.afs.collection<UserType<any>>(`users`).doc(uid).update({ displayName: givenName })
   }
   addGender(uid: string, gender: string) {
-    this.afs.collection<User>(`users`).doc(uid).update({ gender: gender })
+    this.afs.collection<UserType<any>>(`users`).doc(uid).update({ gender: gender })
   }
   addDateOfBirth(uid: string, dateOfBirth: string) {
-    this.afs.collection<User>(`users`).doc(uid).update({ dateOfBirth: dateOfBirth })
+    this.afs.collection<UserType<any>>(`users`).doc(uid).update({ dateOfBirth: dateOfBirth })
   }
 
 
@@ -119,7 +137,7 @@ export class AuthService {
   addTrainerContacts(uid: string, addressContact: AddressContact) {
 
     const userRef: AngularFirestoreDocument = this.afs.doc(`users/${uid}`)
-    return userRef.set({ address: addressContact }, { merge: true })
+    return userRef.set({profile: { address: addressContact }}, { merge: true })
 
   }
 
@@ -310,16 +328,16 @@ export class AuthService {
     }
   }
 
-  private updateUserData({ uid, email, displayName, photoURL }: User, isNewUser: boolean, isProviderWithPhoto: boolean) {
-    const userRef: AngularFirestoreDocument<User> = this.afs.doc(`users/${uid}`)
+  private updateUserData({ uid, email, displayName, photoURL }: UserType<any>, isNewUser: boolean, isProviderWithPhoto: boolean) {
+    const userRef: AngularFirestoreDocument<UserType<any>> = this.afs.doc(`users/${uid}`)
     const data = { uid, email, displayName, photoURL }
     if (isNewUser || isProviderWithPhoto) {
       return userRef.set(data, { merge: true })
     }
   }
 
-  private updateUserDataFB({ uid, email }: User, displayName, photoURL) {
-    const userRef: AngularFirestoreDocument<User> = this.afs.doc(`users/${uid}`)
+  private updateUserDataFB({ uid, email }: UserType<any>, displayName, photoURL) {
+    const userRef: AngularFirestoreDocument<UserType<any>> = this.afs.doc(`users/${uid}`)
     const data = { uid, email, displayName, photoURL }
     return userRef.set(data, { merge: true })
   }

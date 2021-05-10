@@ -1,12 +1,15 @@
+import { Trainer } from './../../../interface-model/Interface';
+import { TrainerPage, TrainerProduct } from './../../../interface-model/trainer';
 import { FireDatabaseService } from 'src/app/Services/fire-database.service';
-import { Trainer } from '../../../interface-model/trainer';
+// import { Trainer } from '../../../interface-model/trainer';
 import { AuthService } from '../../../auth/auth.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { finalize, map } from 'rxjs/operators';
+import { finalize, map, switchMap, filter } from 'rxjs/operators';
 import { StrpieService } from '../../../auth/strpie.service';
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
-import { User } from 'src/app/interface-model/user.model';
+// import { User } from 'src/app/interface-model/user.model';
 import { Observable, Subscription } from 'rxjs';
+import { UserType } from 'src/app/interface-model/Interface';
 
 @Component({
   selector: 'app-trainer-bio',
@@ -28,45 +31,79 @@ export class TrainerBioComponent implements OnInit {
   message = "Waiting for purchase to complete...";
 
   showStripe = false
-  user: User
+  // user: User
+  userType: UserType<Trainer>
+  isTrainerStripeConnected: boolean = false
   trainer: Trainer
   unsub: Subscription
   accountJson: Observable<any>
-  selectTarinerOption: string = ''
+  selectTarinerOption: string = 'fromGC'
   waiting = false
+  trainerPageData$: Observable<TrainerPage>
+  cataloguTemplateArray$: Observable<TrainerProduct[]>
+  msg = "Admit Athlete to your team by purchasing one of your training";
+
   ngOnInit() {
+    this.cataloguTemplateArray$ = this.fireDatabaseService.fetchAvailableTrainerProduct()
+    this.trainerPageData$ = this.fireDatabaseService.fetchTrainerPage()
+    this.authService.UserType$.pipe(
+      map((user : UserType<Trainer>  ) => {
 
-    this.authService.user$.pipe(
-      map(user => {
-        this.user = user
-        if (user.trainerStripeConnected) {
-          this.accountJson = this.strpieService.trainerRetreiveStripeAccount(user.trainerStripeConnected)
+        this.userType = user
+        console.log("this.userType");
+        console.log(this.userType);
+        console.log("this.userType");
+
+        if (user.profile.trainerStripeConnected) {
+          this.isTrainerStripeConnected = true
+          this.accountJson = this.strpieService.trainerRetreiveStripeAccount(user.profile.trainerStripeConnected)
+          this.accountJson.subscribe(p => console.log(p)
+          )
         }
+        if (user.profile.athleteAdmission) {
+          console.log("user.profile.athleteAdmission");
+          console.log(user.profile.athleteAdmission);
+          console.log("user.profile.athleteAdmission");
 
-        if (user.trainer) {
-          this.selectTarinerOption = user.trainer.athleteAdmission
+          this.selectTarinerOption = user.profile.athleteAdmission
         }
       })
     ).subscribe()
+    // this.authService.user$.pipe(
+    //   map(user => {
+    //     this.user = user
+    //     if (user.trainerStripeConnected) {
+    //       this.isTrainerStripeConnected = true
+    //       this.accountJson = this.strpieService.trainerRetreiveStripeAccount(user.trainerStripeConnected)
+    //       this.accountJson.subscribe(p => console.log(p)
+    //       )
+    //     }
+    //     if (user.trainer) {
+    //       this.selectTarinerOption = user.trainer.athleteAdmission
+    //     }
+    //   })
+    // ).subscribe()
 
-    const result = this.route.snapshot.queryParamMap.get("purchaseResult")
-    if (result == "success") {
-      const ongoingPurchaseSessionId = this.route.snapshot.queryParamMap.get("ongoingPurchaseSessionId")
-      this.unsub = this.strpieService.waitForPurchaseCompleted(ongoingPurchaseSessionId)
-        .subscribe(
-          () => {
-            this.waiting = true
-            console.log("entro");
+    // const result = this.route.snapshot.queryParamMap.get("purchaseResult")
 
-            setTimeout(() => this.router.navigateByUrl("/Body&Measurements/trainer/trainerBio"), 3000);
-          }
-        )
-    } else {
-      this.waiting = true
-      console.log("esco");
 
-      setTimeout(() => this.router.navigateByUrl("/Body&Measurements/trainer/trainerBio"), 3000)
-    }
+    // if (result == "success") {
+    //   const ongoingPurchaseSessionId = this.route.snapshot.queryParamMap.get("ongoingPurchaseSessionId")
+    //   this.unsub = this.strpieService.waitForPurchaseCompleted(ongoingPurchaseSessionId)
+    //     .subscribe(
+    //       () => {
+    //         this.waiting = true
+    //         console.log("entro");
+
+    //         setTimeout(() => this.router.navigateByUrl("/Body&Measurements/trainer/trainerBio"), 3000);
+    //       }
+    //     )
+    // } else {
+    //   this.waiting = true
+    //   console.log("esco");
+
+    //   setTimeout(() => this.router.navigateByUrl("/Body&Measurements/trainer/athleteList"), 3000)
+    // }
 
 
     // da usare athlete checkout
@@ -84,16 +121,24 @@ export class TrainerBioComponent implements OnInit {
     // }
   }
 
-  publish(){
-console.log("wwwwww");
+  publish(isPublished: boolean, id: string) {
+    isPublished = !isPublished
+    console.log(isPublished);
 
-this.fireDatabaseService.fetchTrainerPage().subscribe(p=> {
-  console.log(p);
-  this.fireDatabaseService.publish(p)
-})
-
+    this.fireDatabaseService.publish(id, isPublished)
+  }
 
 
+  onChange(value) {
+    if (value.checked === true) {
+      this.msg = "Admit athlete to your team by purchasing one of your training";
+      this.selectTarinerOption = "fromGC"
+      this.fireDatabaseService.updateAthleteAdmission(this.selectTarinerOption)
+    } else {
+      this.msg = "Athlete can join the team only after your acceptance";
+      this.selectTarinerOption = "withContact"
+      this.fireDatabaseService.updateAthleteAdmission(this.selectTarinerOption)
+    }
   }
 
 
@@ -141,8 +186,5 @@ this.fireDatabaseService.fetchTrainerPage().subscribe(p=> {
         },
       )
   }
-
-
-
 
 }

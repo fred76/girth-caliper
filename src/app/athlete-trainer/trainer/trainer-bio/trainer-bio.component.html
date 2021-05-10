@@ -5,41 +5,82 @@
 
     <mat-card fxFlex="1 0 calc(33.3% - 32px)" fxFlex.lt-md="1 1 calc(50% - 32px)" fxFlex.lt-sm="100%"
       class="mat-elevation-z8 card-address">
+      <ng-container *ngIf="authService.UserType$ | async as user; else elseTemplate">
+        <mat-card-content>
+          <div *ngIf='authService.UserType$ | async as user'>
+            <p *ngIf="!isTrainerStripeConnected" class="caption font14">To enable athlete payments connect or create an
+              account on Stripe platform </p>
+            <p *ngIf="isTrainerStripeConnected" class="caption font14">Payment Enabled with Stripe</p>
+          </div>
+        </mat-card-content>
+        <mat-card-actions>
+          <div fxLayout="row" fxLayoutGap="32px" fxLayoutAlign="space-between start">
+            <p class="mat-caption">Athelete admission</p>
+            <mat-slide-toggle [checked]="true" color="primary" (change)="onChange($event)"></mat-slide-toggle>
+          </div>
+          <p class="mat-caption">{{msg}}</p>
+          <div>
+            <img *ngIf="!isTrainerStripeConnected" class="stripe-button" src="../assets/accessory/stripe-button.png"
+              (click)="trainerCreateStripeAccount()" />
+          </div>
+        </mat-card-actions>
+      </ng-container>
+      <ng-template #elseTemplate>
 
-      <mat-card-content>
-        <p class="caption font14">To enable athlete payments connect or create an account on Stripe platform </p>
-      </mat-card-content>
-      <mat-card-actions>
-        <div>
-          <img class="stripe-button" src="../assets/accessory/stripe-button.png"
-            (click)="trainerCreateStripeAccount()" />
-        </div>
-      </mat-card-actions>
+        <mat-card-content>
+          <mat-spinner *ngIf="waiting"></mat-spinner>
+        </mat-card-content>
+
+      </ng-template>
     </mat-card>
+
     <mat-card fxFlex="1 0 calc(33.3% - 32px)" fxFlex.lt-md="1 1 calc(50% - 32px)" fxFlex.lt-sm="100%"
       class="mat-elevation-z8 card-address">
 
-      <mat-card-title>
-        <p class="mat-body-2">Personal Page</p>
-      </mat-card-title>
-      <mat-card-content>
-        <div fxLayout="row" fxLayoutGap="32px" fxLayoutAlign="space-between center">
-          <p class="mat-caption">Online since</p>
-          <p class="mat-caption">Title 2</p>
-        </div>
-        <div fxLayout="row" fxLayoutGap="32px" fxLayoutAlign="space-between center">
-          <p class="mat-caption">Like</p>
-          <p class="mat-caption">12</p>
-        </div>
-        <div fxLayout="row" fxLayoutGap="32px" fxLayoutAlign="space-between center">
-          <p class="mat-caption">Show when I'm online</p>
-          <mat-slide-toggle color="primary"></mat-slide-toggle>
-        </div>
-      </mat-card-content>
-      <mat-card-actions>
+      <ng-container *ngIf="trainerPageData$ | async as page; else elseTemplatePage">
+        <mat-card-title>
+          <p class="mat-body-2">Personal Page</p>
+        </mat-card-title>
+        <mat-card-content>
+          <div fxLayout="row" fxLayoutGap="32px" fxLayoutAlign="space-between center">
+            <p class="mat-caption">Online since:</p>
+            <p class="mat-caption">{{page.cratedON | date:'d MMM yyyy'}}</p>
+          </div>
+          <div fxLayout="row" fxLayoutGap="32px" fxLayoutAlign="space-between center">
+            <p class="mat-caption">Like received:</p>
+            <p class="mat-caption">12</p>
+          </div>
+          <div fxLayout="row" fxLayoutGap="32px" fxLayoutAlign="space-between center">
+            <p class="mat-caption">Show when I'm online</p>
+            <mat-slide-toggle color="primary"></mat-slide-toggle>
+          </div>
+        </mat-card-content>
+        <mat-card-actions>
 
-    <button  (click)="publish()" mat-raised-button color="primary">Publish</button>
-      </mat-card-actions>
+          <button *ngIf="page.published" (click)="publish(page.published, page.idField)" mat-raised-button
+            color="primary">withhold</button>
+          <button *ngIf="!page.published" (click)="publish(page.published, page.idField)" mat-raised-button
+            color="primary">Publish</button>
+        </mat-card-actions>
+      </ng-container>
+
+      <ng-template #elseTemplatePage>
+        <mat-card-title>
+          <p class="mat-body-2">Personal Page</p>
+        </mat-card-title>
+        <mat-card-content>
+          <div fxLayout="row" fxLayoutGap="32px" fxLayoutAlign="space-between center">
+            <p class="mat-caption">Show when I'm online</p>
+            <mat-slide-toggle color="primary"></mat-slide-toggle>
+          </div>
+          <div fxLayout="row" fxLayoutGap="32px">
+            <p class="mat-caption">Not yet created</p>
+          </div>
+          <div fxLayout="row" fxLayoutGap="32px" fxLayoutAlign="space-between center">
+            <p class="mat-caption"> </p>
+          </div>
+        </mat-card-content>
+      </ng-template>
     </mat-card>
 
     <mat-card fxFlex="0 0 calc(33.3% - 32px)" fxFlex.lt-md="1 1 calc(50% - 32px)" fxFlex.lt-sm="100%"
@@ -57,205 +98,66 @@
     </mat-card>
 
 
+    <mat-card *ngFor="let cattemp of cataloguTemplateArray$  | async" fxFlex="0 0 calc(33.3% - 32px)"
+      fxFlex.lt-md="1 1 calc(50% - 32px)" fxFlex.lt-sm="100%" class="mat-elevation-z8 card-address">
+      <mat-card-title>
+        <div fxLayout="row" fxLayoutGap="32px" fxLayoutAlign="space-between center">
+          <p class="mat-caption">{{cattemp.titleCard}}</p>
+          <img class="circular-square" src="{{cattemp.imgURL}}">
+        </div>
+      </mat-card-title>
+      <mat-card-content>
+        <div fxLayout="row" fxLayoutGap="32px" fxLayoutAlign="space-between center">
+          <p class="mat-caption">Published on</p>
+          <p class="mat-caption">{{cattemp.cratedON | date:'d MMM yyyy'}}</p>
+        </div>
+        <div fxLayout="row" fxLayoutGap="32px" fxLayoutAlign="space-between center">
+          <p class="mat-caption">Price</p>
+          <p class="mat-caption">{{cattemp.price}}</p>
+        </div>
 
-    <mat-card fxFlex="0 0 calc(33.3% - 32px)" fxFlex.lt-md="1 1 calc(50% - 32px)" fxFlex.lt-sm="100%"
-      class="mat-elevation-z8 card-address">
-      <mat-card-title>
-        <p class="mat-body-2">Trainings online</p>
-      </mat-card-title>
-      <mat-card-content>
-        <div fxLayout="row" fxLayoutGap="32px" fxLayoutAlign="space-between center">
-          <p class="mat-caption">Title 1</p>
-          <p class="mat-caption">pippo</p>
-        </div>
-        <div fxLayout="row" fxLayoutGap="32px" fxLayoutAlign="space-between center">
-          <p class="mat-caption">Published on</p>
-          <p class="mat-caption">6 of 6</p>
-        </div>
-        <div fxLayout="row" fxLayoutGap="32px" fxLayoutAlign="space-between center">
-          <p class="mat-caption">Price</p>
-          <p class="mat-caption">99$</p>
-        </div>
         <div fxLayout="row" fxLayoutGap="32px" fxLayoutAlign="space-between center">
           <p class="mat-caption">total sell</p>
           <p class="mat-caption">12</p>
         </div>
+        <p class="mat-caption">Tags:</p>
+        <div>
+          <li class="mat-caption" *ngFor="let tag of cattemp.tags">{{tag}}</li>
+        </div>
+
+
       </mat-card-content>
     </mat-card>
-    <mat-card fxFlex="0 0 calc(33.3% - 32px)" fxFlex.lt-md="1 1 calc(50% - 32px)" fxFlex.lt-sm="100%"
-      class="mat-elevation-z8 card-address">
-      <mat-card-title>
-        <p class="mat-body-2">Trainings online</p>
-      </mat-card-title>
-      <mat-card-content>
-        <div fxLayout="row" fxLayoutGap="32px" fxLayoutAlign="space-between center">
-          <p class="mat-caption">Title 1</p>
-          <p class="mat-caption">pippo</p>
-        </div>
-        <div fxLayout="row" fxLayoutGap="32px" fxLayoutAlign="space-between center">
-          <p class="mat-caption">Published on</p>
-          <p class="mat-caption">6 of 6</p>
-        </div>
-        <div fxLayout="row" fxLayoutGap="32px" fxLayoutAlign="space-between center">
-          <p class="mat-caption">Price</p>
-          <p class="mat-caption">99$</p>
-        </div>
-        <div fxLayout="row" fxLayoutGap="32px" fxLayoutAlign="space-between center">
-          <p class="mat-caption">total sell</p>
-          <p class="mat-caption">12</p>
-        </div>
-      </mat-card-content>
-    </mat-card>
-    <mat-card fxFlex="0 0 calc(33.3% - 32px)" fxFlex.lt-md="1 1 calc(50% - 32px)" fxFlex.lt-sm="100%"
-      class="mat-elevation-z8 card-address">
-      <mat-card-title>
-        <p class="mat-body-2">Trainings online</p>
-      </mat-card-title>
-      <mat-card-content>
-        <div fxLayout="row" fxLayoutGap="32px" fxLayoutAlign="space-between center">
-          <p class="mat-caption">Title 1</p>
-          <p class="mat-caption">pippo</p>
-        </div>
-        <div fxLayout="row" fxLayoutGap="32px" fxLayoutAlign="space-between center">
-          <p class="mat-caption">Published on</p>
-          <p class="mat-caption">6 of 6</p>
-        </div>
-        <div fxLayout="row" fxLayoutGap="32px" fxLayoutAlign="space-between center">
-          <p class="mat-caption">Price</p>
-          <p class="mat-caption">99$</p>
-        </div>
-        <div fxLayout="row" fxLayoutGap="32px" fxLayoutAlign="space-between center">
-          <p class="mat-caption">total sell</p>
-          <p class="mat-caption">12</p>
-        </div>
-      </mat-card-content>
-    </mat-card>
-    <mat-card fxFlex="0 0 calc(33.3% - 32px)" fxFlex.lt-md="1 1 calc(50% - 32px)" fxFlex.lt-sm="100%"
-      class="mat-elevation-z8 card-address">
-      <mat-card-title>
-        <p class="mat-body-2">Trainings online</p>
-      </mat-card-title>
-      <mat-card-content>
-        <div fxLayout="row" fxLayoutGap="32px" fxLayoutAlign="space-between center">
-          <p class="mat-caption">Title 1</p>
-          <p class="mat-caption">pippo</p>
-        </div>
-        <div fxLayout="row" fxLayoutGap="32px" fxLayoutAlign="space-between center">
-          <p class="mat-caption">Published on</p>
-          <p class="mat-caption">6 of 6</p>
-        </div>
-        <div fxLayout="row" fxLayoutGap="32px" fxLayoutAlign="space-between center">
-          <p class="mat-caption">Price</p>
-          <p class="mat-caption">99$</p>
-        </div>
-        <div fxLayout="row" fxLayoutGap="32px" fxLayoutAlign="space-between center">
-          <p class="mat-caption">total sell</p>
-          <p class="mat-caption">12</p>
-        </div>
-      </mat-card-content>
-    </mat-card>
-    <mat-card fxFlex="0 0 calc(33.3% - 32px)" fxFlex.lt-md="1 1 calc(50% - 32px)" fxFlex.lt-sm="100%"
-      class="mat-elevation-z8 card-address">
-      <mat-card-title>
-        <p class="mat-body-2">Trainings online</p>
-      </mat-card-title>
-      <mat-card-content>
-        <div fxLayout="row" fxLayoutGap="32px" fxLayoutAlign="space-between center">
-          <p class="mat-caption">Title 1</p>
-          <p class="mat-caption">pippo</p>
-        </div>
-        <div fxLayout="row" fxLayoutGap="32px" fxLayoutAlign="space-between center">
-          <p class="mat-caption">Price</p>
-          <p class="mat-caption">99$</p>
-        </div>
-        <div fxLayout="row" fxLayoutGap="32px" fxLayoutAlign="space-between center">
-          <p class="mat-caption">Published on</p>
-          <p class="mat-caption">6 of 6</p>
-        </div>
-        <div fxLayout="row" fxLayoutGap="32px" fxLayoutAlign="space-between center">
-          <p class="mat-caption">total sell</p>
-          <p class="mat-caption">12</p>
-        </div>
-      </mat-card-content>
-    </mat-card>
-    <mat-card fxFlex="0 0 calc(33.3% - 32px)" fxFlex.lt-md="1 1 calc(50% - 32px)" fxFlex.lt-sm="100%"
-      class="mat-elevation-z8 card-address">
-      <mat-card-title>
-        <p class="mat-body-2">Trainings online</p>
-      </mat-card-title>
-      <mat-card-content>
-        <div fxLayout="row" fxLayoutGap="32px" fxLayoutAlign="space-between center">
-          <p class="mat-caption">Title 1</p>
-          <p class="mat-caption">pippo</p>
-        </div>
-        <div fxLayout="row" fxLayoutGap="32px" fxLayoutAlign="space-between center">
-          <p class="mat-caption">Price</p>
-          <p class="mat-caption">99$</p>
-        </div>
-        <div fxLayout="row" fxLayoutGap="32px" fxLayoutAlign="space-between center">
-          <p class="mat-caption">Published on</p>
-          <p class="mat-caption">6 of 6</p>
-        </div>
-        <div fxLayout="row" fxLayoutGap="32px" fxLayoutAlign="space-between center">
-          <p class="mat-caption">total sell</p>
-          <p class="mat-caption">12</p>
-        </div>
-      </mat-card-content>
-    </mat-card>
+
     <mat-card fxFlex="0 1 calc(33.3% - 32px)" fxFlex.lt-md="1 1 calc(50% - 32px)" fxFlex.lt-sm="100%"
-    class="mat-elevation-z8 card-address">
+      class="mat-elevation-z8 card-address">
 
-    <mat-card-title>
-      <p class="mat-body-2">Trainings tags</p>
-    </mat-card-title>
-    <mat-card-content>
-      <li class="mat-caption">Bodybuilding</li>
-      <li class="mat-caption">Bycicling</li>
-      <li class="mat-caption">Calisthenics</li>
-      <li class="mat-caption">Crossfit</li>
-      <li class="mat-caption">Functional training</li>
-      <li class="mat-caption">HIIT</li>
-      <li class="mat-caption">LIIS</li>
-      <li class="mat-caption">Nutrition</li>
-      <li class="mat-caption">Pilates</li>
-      <li class="mat-caption">Powrlifting</li>
-      <li class="mat-caption">Running</li>
-      <li class="mat-caption">Stretching</li>
-      <li class="mat-caption">Swimming</li>
-      <li class="mat-caption">Yoga</li>
-      <li class="mat-caption">Body recomposiotion</li>
-    </mat-card-content>
-  </mat-card>
-
-  <mat-card fxFlex="0 1 calc(33.3% - 32px)" fxFlex.lt-md="1 1 calc(50% - 32px)" fxFlex.lt-sm="100%"
-  class="mat-elevation-z8 card-address">
-
-  <mat-card-title>
-    <p class="mat-body-2">Blog articles</p>
-  </mat-card-title>
-  <mat-card-content>
-    <div fxLayout="row" fxLayoutGap="32px" fxLayoutAlign="space-between center">
-      <p class="mat-caption">Last Published</p>
-      <p class="mat-caption">Title</p>
-    </div>
-    <div fxLayout="row" fxLayoutGap="32px" fxLayoutAlign="space-between center">
-      <p class="mat-caption">On</p>
-      <p class="mat-caption">12/12/2020</p>
-    </div>
-    <div fxLayout="row" fxLayoutGap="32px" fxLayoutAlign="space-between center">
-      <p class="mat-caption">Like</p>
-      <p class="mat-caption">12</p>
-    </div>
-    <div fxLayout="row" fxLayoutGap="32px" fxLayoutAlign="space-between center">
-      <p class="mat-caption">Total articles</p>
-      <p class="mat-caption">999</p>
-    </div>
-    <div fxLayout="row" fxLayoutGap="32px" fxLayoutAlign="space-between center">
-      <p class="mat-caption">Like</p>
-      <p class="mat-caption">122</p>
-    </div>
-  </mat-card-content>
-</mat-card>
+      <mat-card-title>
+        <p class="mat-body-2">Blog articles</p>
+      </mat-card-title>
+      <mat-card-content>
+        <div fxLayout="row" fxLayoutGap="32px" fxLayoutAlign="space-between center">
+          <p class="mat-caption">Last Published</p>
+          <p class="mat-caption">Title</p>
+        </div>
+        <div fxLayout="row" fxLayoutGap="32px" fxLayoutAlign="space-between center">
+          <p class="mat-caption">On</p>
+          <p class="mat-caption">12/12/2020</p>
+        </div>
+        <div fxLayout="row" fxLayoutGap="32px" fxLayoutAlign="space-between center">
+          <p class="mat-caption">Like</p>
+          <p class="mat-caption">12</p>
+        </div>
+        <div fxLayout="row" fxLayoutGap="32px" fxLayoutAlign="space-between center">
+          <p class="mat-caption">Total articles</p>
+          <p class="mat-caption">999</p>
+        </div>
+        <div fxLayout="row" fxLayoutGap="32px" fxLayoutAlign="space-between center">
+          <p class="mat-caption">Like</p>
+          <p class="mat-caption">122</p>
+        </div>
+      </mat-card-content>
+    </mat-card>
 
 
   </div>

@@ -1,6 +1,6 @@
 <div class="mainDiv" fxLayoutAlign="center">
 
-  <div *ngIf='authService.user$ | async; then userLogged else userNotLogged'></div>
+  <div *ngIf='authService.UserType$ | async; then userLogged else userNotLogged'></div>
 
   <ng-template #userNotLogged>
 

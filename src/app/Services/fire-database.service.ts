@@ -92,6 +92,7 @@ export class FireDatabaseService {
   deleteSkinfolds(id: string) {
     this.afs.collection<SkinfoldsForDB>(`users/${this.authService.userID}/skinfoldsData`).doc(id).delete()
   }
+
   deletePhotoSet(id: string) {
     this.afs.collection<SkinfoldsForDB>(`users/${this.authService.userID}/bodyPhotos`).doc(id).delete()
   }
@@ -165,13 +166,9 @@ export class FireDatabaseService {
     return trainerPage$;
   }
 
-  publish(trainerPage2){
-
-      this.afs.collection(`trainerPages`).add(trainerPage2)
-      console.log("dddd");
-
+  publish( id, isPublished: boolean): Observable<any> {
+    return from(this.afs.doc(`users/${this.authService.userID}/trainerPage/${id}`).update({published:isPublished}))
   }
-
 
   editTrainerPage(trainerPage: TrainerPage, id): Observable<any> {
     return from(this.afs.doc(`users/${this.authService.userID}/trainerPage/${id}`).update(trainerPage))
@@ -181,7 +178,10 @@ export class FireDatabaseService {
     return from(this.afs.collection(`users/${this.authService.userID}/trainerProduct`).add(trainerProduct))
   }
 
-
+  updateAthleteAdmission(thleteAdmission: string){
+    const userRef = this.afs.doc(`users/${this.authService.userID}`);
+    userRef.set({ profile: { athleteAdmission: thleteAdmission } }, { merge: true })
+  }
 
   fetchAvailableTrainerProduct(): Observable<TrainerProduct[]> {
     return from(this.afs.collection<TrainerProduct>(`users/${this.authService.userID}/trainerProduct`)
@@ -208,6 +208,7 @@ export class FireDatabaseService {
         }))
       ))
   }
+
   editTrainerProduct(trainerProduct: TrainerProduct, id): Observable<any> {
     return from(this.afs.doc(`users/${this.authService.userID}/trainerProduct/${id}`).update(trainerProduct))
   }

@@ -40,7 +40,7 @@ export class SkinfoldComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
 
     this.skinfoldsService.selectedSkinfoldsMethodSubs()
-    this.userSub = this.authService.user$.subscribe(user => {
+    this.userSub = this.authService.UserType$.subscribe(user => {
       if (user.dateOfBirth) {
         let t = this.datePipe.transform(user.dateOfBirth.seconds * 1000, 'MM/dd/yyyy');
         let d = new Date(t)

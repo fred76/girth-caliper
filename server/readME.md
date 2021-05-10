@@ -20,3 +20,4 @@ STRIPE_CLIENT_ID_CONNECT_TEST="YOUR STRIPE CLIENT ID"
 FOR SERVICE GOOGLE ACCOUNT CREATE A FOLDER service-accounts
 INSIDE service-accounts FOLDER save the json file created from google service account page.
 
+npm run server

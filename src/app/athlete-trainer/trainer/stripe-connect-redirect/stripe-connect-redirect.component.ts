@@ -1,14 +1,14 @@
+import { StrpieService } from './../../../auth/strpie.service';
 import { Subscription } from 'rxjs';
-import { StrpieService } from './../strpie.service';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
-  selector: 'stripe-checkout',
-  templateUrl: './stripe-checkout.component.html',
-  styleUrls: ['./stripe-checkout.component.css']
+  selector: 'app-stripe-connect-redirect',
+  templateUrl: './stripe-connect-redirect.component.html',
+  styleUrls: ['./stripe-connect-redirect.component.css']
 })
-export class StripeCheckoutComponent implements OnInit, OnDestroy {
+export class StripeConnectRedirectComponent  implements OnInit, OnDestroy {
 
   message = "Waiting to be redirect...";
   waiting = true;
@@ -24,22 +24,6 @@ export class StripeCheckoutComponent implements OnInit, OnDestroy {
   ngOnInit() {
 
     const result = this.route.snapshot.queryParamMap.get("purchaseResult")
-    if (result == "success") {
-      const ongoingPurchaseSessionId = this.route.snapshot.queryParamMap.get("ongoingPurchaseSessionId")
-      this.unsub = this.strpieService.waitForPurchaseCompleted(ongoingPurchaseSessionId)
-        .subscribe(
-          () => {
-            this.waiting = true
-            this.message = "Purchase Successful, redirecting ..."
-            setTimeout(() => this.router.navigateByUrl("/Body&Measurements/girthTab"), 3000);
-          }
-        )
-
-    } else {
-      this.waiting = false
-      this.message = "Purchase Cancelled or Failed, redirecting ..."
-      setTimeout(() => this.router.navigateByUrl("/"), 3000)
-    }
 
     if (result == "accountSuccess") {
       const ongoingPurchaseSessionId = this.route.snapshot.queryParamMap.get("ongoingPurchaseSessionId")

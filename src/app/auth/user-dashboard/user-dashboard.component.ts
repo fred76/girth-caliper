@@ -1,6 +1,7 @@
+import { Trainer } from './../../interface-model/Interface';
 
 import { Utility } from 'src/app/Utility/utility';
-import { User } from './../../interface-model/user.model';
+// import { User } from './../../interface-model/user.model';
 import { StrpieService } from './../strpie.service';
 import { Subscription } from 'rxjs';
 import { MatIconRegistry } from '@angular/material/icon';
@@ -11,7 +12,8 @@ import { FormGroup, Validators, FormControl } from '@angular/forms';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { MatStepper } from '@angular/material/stepper';
-import { finalize , map } from 'rxjs/operators';
+import { finalize, map } from 'rxjs/operators';
+import { UserType } from 'src/app/interface-model/Interface';
 
 @Component({
   selector: 'app-user-dashboard',
@@ -54,7 +56,7 @@ export class UserDashboardComponent implements OnInit, OnDestroy, AfterViewInit 
   userSub: Subscription
   isLoggedIn: boolean = true
   isPurchaseStrated: boolean
-  user: User
+  user: UserType<any>
   dueDate: boolean
   selectUserTypeId: any;
 
@@ -91,7 +93,7 @@ export class UserDashboardComponent implements OnInit, OnDestroy, AfterViewInit 
     web: new FormControl('')
   })
 
-  initUserDataFormGroup(u: User) {
+  initUserDataFormGroup(u: UserType<any>) {
 
     this.userDataFormGroup.patchValue({
       displayName: u.displayName,
@@ -101,28 +103,28 @@ export class UserDashboardComponent implements OnInit, OnDestroy, AfterViewInit 
     })
   }
 
-  initTrainerDataFormGroup(u: User) {
-
+  initTrainerDataFormGroup(u: UserType<Trainer>) {
+if (u.profile?.address) {
     this.trainerDataFormGroup.patchValue({
-      companyName: u.address?.companyName,
-      address1: u.address?.address1,
-      address2: u.address?.address2,
-      country: u.address?.country,
-      state_province_region: u.address?.state_province_region,
-      city: u.address?.city,
-      zip_postalCode: u.address?.zip_postalCode,
-      phone: u.address?.phone,
-      mobile: u.address?.mobile,
-      emailBusiness: u.address?.emailBusiness,
-      web: u.address?.web,
-    })
+      companyName: u.profile.address?.companyName,
+      address1: u.profile.address?.address1,
+      address2: u.profile.address?.address2,
+      country: u.profile.address?.country,
+      state_province_region: u.profile.address?.state_province_region,
+      city: u.profile.address?.city,
+      zip_postalCode: u.profile.address?.zip_postalCode,
+      phone: u.profile.address?.phone,
+      mobile: u.profile.address?.mobile,
+      emailBusiness: u.profile.address?.emailBusiness,
+      web: u.profile.address?.web,
+    })}
   }
   ngOnInit() {
-    this.userSub = this.authService.user$.pipe(
+    this.userSub = this.authService.UserType$.pipe(
       map(p => {
         this.initUserDataFormGroup(p),
-          this.initTrainerDataFormGroup(p),
-          this.authService.userProvidersList(p.email)
+        this.initTrainerDataFormGroup(p),
+        this.authService.userProvidersList(p.email)
         this.user = p
         this.isLoggedIn = true
         this.seletctSubscriptionPlaneForUserCategory(p)
@@ -135,11 +137,11 @@ export class UserDashboardComponent implements OnInit, OnDestroy, AfterViewInit 
     ).subscribe()
   }
 
-  seletctSubscriptionPlaneForUserCategory(u: User) {
+  seletctSubscriptionPlaneForUserCategory(u: UserType<any>) {
     if (u.userCategory == "trainer") {
-      this.subscriptionPlaneForUserCategories = [{ pricePlan: "price_1IHNLhBFHWy6VCCKf3wFDojY", price: "112,22$", cadence: "Monthly" }, { pricePlan: "price_1IHNLhBFHWy6VCCKf3wFDojY", price: "115,22$", cadence: "Quartely" }, { pricePlan: "price_1IHNLhBFHWy6VCCKf3wFDojY", price: "118,22$", cadence: "Yearly" }]
+      this.subscriptionPlaneForUserCategories = [{ pricePlan: "price_1IgN2cBFHWy6VCCKhRjIPp6X", price: "112,22$", cadence: "Monthly" }, { pricePlan: "price_1IgN2cBFHWy6VCCKhRjIPp6X", price: "115,22$", cadence: "Quartely" }, { pricePlan: "price_1IgN2cBFHWy6VCCKhRjIPp6X", price: "118,22$", cadence: "Yearly" }]
     } else {
-      this.subscriptionPlaneForUserCategories = [{ pricePlan: "price_1IHNLhBFHWy6VCCKf3wFDojY", price: "2,22$", cadence: "Monthly" }, { pricePlan: "price_1IHNLhBFHWy6VCCKf3wFDojY", price: "5,22$", cadence: "Quartely" }, { pricePlan: "price_1IHNLhBFHWy6VCCKf3wFDojY", price: "8,22$", cadence: "Yearly" }]
+      this.subscriptionPlaneForUserCategories = [{ pricePlan: "price_1IgN2cBFHWy6VCCKhRjIPp6X", price: "2,22$", cadence: "Monthly" }, { pricePlan: "price_1IgN2cBFHWy6VCCKhRjIPp6X", price: "5,22$", cadence: "Quartely" }, { pricePlan: "price_1IgN2cBFHWy6VCCKhRjIPp6X", price: "8,22$", cadence: "Yearly" }]
     }
   }
 
@@ -154,7 +156,7 @@ export class UserDashboardComponent implements OnInit, OnDestroy, AfterViewInit 
   }
 
   ngAfterViewInit(): void {
-    this.userSub = this.authService.user$.subscribe(u => {
+    this.userSub = this.authService.UserType$.subscribe(u => {
       if (u.dateOfBirth && u.gender) {
         this.stepper.selectedIndex = 1
       } else {

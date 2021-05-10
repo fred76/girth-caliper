@@ -14,16 +14,3 @@ export interface Athlete {
 
 }
 
-export interface AddressContact {
-  companyName?: string
-  address1?: string,
-  address2?: string,
-  country?: string,
-  state_province_region?: string
-  city?: string
-  zip_postalCode?: string
-  phone?: number
-  mobile?: number
-  emailBusiness?: string
-  web?: string
-}
