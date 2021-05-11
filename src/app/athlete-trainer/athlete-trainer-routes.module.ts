@@ -46,7 +46,6 @@ const routes: Routes = [
       {
         path: 'trainer', component: TrainerContainerComponent,
         children: [
-          { path: '', component: TrainerBioComponent },
           { path: 'trainerBio', component: TrainerBioComponent },
           { path: 'trainerPage', component: TrainerCatalogueTempalteComponent },
           { path: 'athleteList', component: AthletesOverviewComponent },

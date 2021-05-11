@@ -56,9 +56,11 @@ export class AthleteTrainerComponent implements OnInit, OnDestroy {
 
 
     this.authService.UserType$.subscribe(u => {
-      console.log(u.userCategory);
+console.log("u.profile?.userCategory");
+console.log(u.profile?.userCategory);
+console.log("u.profile?.userCategory");
 
-      if (u.userCategory == "athlete") {
+      if (u.profile?.userCategory == "athlete") {
         this.navLinks = [
           { label: 'Girths', link: './girthTab', index: 0 },
           { label: 'Skinfolds', link: './skinfoldTab', index: 1 },
@@ -86,6 +88,7 @@ export class AthleteTrainerComponent implements OnInit, OnDestroy {
     this.routerUnsubscribe1 = this.router.events.subscribe(() => {
       this.activeLink = this.navLinks.indexOf(
         this.navLinks.find(tab => tab.link === '.' + this.router.url))
+
     })
 
 

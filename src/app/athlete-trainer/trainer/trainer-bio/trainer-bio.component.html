@@ -7,11 +7,7 @@
       class="mat-elevation-z8 card-address">
       <ng-container *ngIf="authService.UserType$ | async as user; else elseTemplate">
         <mat-card-content>
-          <div *ngIf='authService.UserType$ | async as user'>
-            <p *ngIf="!isTrainerStripeConnected" class="caption font14">To enable athlete payments connect or create an
-              account on Stripe platform </p>
-            <p *ngIf="isTrainerStripeConnected" class="caption font14">Payment Enabled with Stripe</p>
-          </div>
+          <p class="mat-body-2">Stripe account</p>
         </mat-card-content>
         <mat-card-actions>
           <div fxLayout="row" fxLayoutGap="32px" fxLayoutAlign="space-between start">
@@ -20,9 +16,25 @@
           </div>
           <p class="mat-caption">{{msg}}</p>
           <div>
-            <img *ngIf="!isTrainerStripeConnected" class="stripe-button" src="../assets/accessory/stripe-button.png"
-              (click)="trainerCreateStripeAccount()" />
+            <img *ngIf="!user.profile.trainerStripeConnected" class="stripe-button"
+              src="../assets/accessory/stripe-button.png" (click)="trainerCreateStripeAccount()" />
           </div>
+          <div *ngIf="accountJson | async; let accJson">
+            <div fxLayout="column"
+              *ngIf="!accJson.account.details_submitted || !accJson.account.payouts_enabled ;else account_completed"
+              fxLayoutAlign="space-between start">
+              <p class="mat-caption">Complete registration</p>
+              <img class="stripe-button" src="../assets/accessory/stripe-button.png"
+              (click)="updateAccount(user.profile.trainerStripeConnected)" />
+              <li class="mat-caption" *ngFor="let item of accJson.account.requirements.currently_due">{{item}}</li>
+              <li class="mat-caption" *ngFor="let item of accJson.account.requirements.pending_verification">{{item}}
+              </li>
+            </div>
+            <ng-template #account_completed>
+              <img class="stripe-button" src="../assets/accessory/powered_stripe.png" (click)="updateAccount(user.profile.trainerStripeConnected)"/>
+            </ng-template>
+          </div>
+
         </mat-card-actions>
       </ng-container>
       <ng-template #elseTemplate>
@@ -158,8 +170,6 @@
         </div>
       </mat-card-content>
     </mat-card>
-
-
   </div>
 
 

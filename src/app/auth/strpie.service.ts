@@ -23,12 +23,11 @@ export class StrpieService {
     authService.returnUserIdToken().subscribe(jwt => this.jwtAuth = jwt);
   }
 
-  startSubscriptionCheckoutSession(pricingPlanId: string, userCategory): Observable<CheckoutSession> {
+  startSubscriptionCheckoutSession(pricingPlanId: string ): Observable<CheckoutSession> {
     const headers = new HttpHeaders().set("Authorization", this.jwtAuth)
     return this.http.post<CheckoutSession>("/api/checkout", {
       //  return this.http.post<CheckoutSession> (environment.api.baseUrl + "/api/checkout", {
       pricingPlanId,
-      userCategory,
       end: true,
       callbackUrl: this.buildCallcackURL("/stripe-checkout")
     }, { headers })

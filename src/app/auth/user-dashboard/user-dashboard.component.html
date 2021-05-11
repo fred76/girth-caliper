@@ -1,7 +1,7 @@
 <div class="mainDiv">
   <div fxLayoutAlign="center" *ngIf="authService.UserType$ | async as user ">
     <mat-card fxFlex.gt-xs="35%" class="mat-elevation-z8 pad  ">
-      <button mat-icon-button routerLink="/Body&Measurements/girthTab">
+      <button mat-icon-button routerLink={{routeLinkCustom}}>
         <mat-icon class="clear-icon">clear</mat-icon>
       </button>
       <!-- USER DATA FROM LOGIN  -->
@@ -28,7 +28,8 @@
 
             <mat-form-field class="inputlabel">
               <mat-label>Display name</mat-label>
-              <input class="inputlabel" matInput="text" placeholder="Last name, First name" formControlName="displayName" required>
+              <input class="inputlabel" matInput="text" placeholder="Last name, First name"
+                formControlName="displayName" required>
               <span class="inputlabel"></span>
             </mat-form-field>
 
@@ -62,7 +63,7 @@
 
         <!-- USER DATA FORM FOR TRAINER -->
 
-        <mat-step *ngIf="user.userCategory == 'trainer' " [stepControl]="trainerDataFormGroup" state="public"
+        <mat-step *ngIf="user.profile?.userCategory == 'trainer' " [stepControl]="trainerDataFormGroup" state="public"
           errorMessage="All * fields are required.">
           <form [formGroup]="trainerDataFormGroup" (ngSubmit)="onSubmitTrainerContacts()">
             <ng-template matStepLabel>Company details</ng-template>
@@ -133,24 +134,26 @@
         <!--  USER  SUBSCRIPTIONS -->
         <mat-step state="monetization_on">
           <ng-template matStepLabel>Subscription</ng-template>
-          <div >
-            <div *ngIf="!user.userCategory" class="user-type-div" fxLayout="row" fxLayoutGap="16px" fxLayoutAlign="space-evenly start">
-              <mat-chip *ngFor="let item of userTypes" [selected]="item.id === selectUserTypeId"
-                (click)="selectUserTypes(item)">
-                {{item.name}}
-              </mat-chip>
+            <div>
+              <p class="caption font">You are: </p>
+              <mat-button-toggle-group [disabled]="user.stripeInfoGC" [value]="userCategorySelected" color="primary" name="fontStyle" aria-label="Font Style">
+                <mat-button-toggle value="athlete" (change)="onValChange($event.value)">I'm an athlete
+                </mat-button-toggle>
+                <mat-button-toggle value="trainer" (change)="onValChange($event.value)">I'm a trainer
+                </mat-button-toggle>
+              </mat-button-toggle-group>
             </div>
             <div *ngIf="dueDate || dueDate == undefined" #login fxLayout="column" fxLayoutGap="24px">
-            <div *ngFor="let subsCat of subscriptionPlaneForUserCategories, let i = index" let i=index>
-            <div #login fxLayout="column" fxLayoutGap="24px">
-              <p class="caption font">{{subsCat.cadence}} subscription</p>
-              <button mat-raised-button class="field" color="primary" type="submit"
-                (click)="monthlySubscription(subsCat.pricePlan)">Subscribe now for {{subsCat.price}}</button>
+              <div *ngIf="user.profile?.userCategory">
+                <div *ngFor="let subsCat of subscriptionPlaneForUserCategories, let i = index" let i=index>
+                  <div #login fxLayout="column" fxLayoutGap="24px">
+                    <p class="caption font">{{subsCat.cadence}} subscription</p>
+                    <button mat-raised-button class="field" color="primary" type="submit"
+                      (click)="monthlySubscription(subsCat.pricePlan)">Subscribe now for {{subsCat.price}}</button>
+                  </div>
+                </div>
+              </div>
             </div>
-            </div>
-            </div>
-
-          </div>
           <div *ngIf="dueDate ==  false ">
             <div fxLayout="row" fxLayoutAlign="space-between">
               <p class="caption font">Subscription plan:</p>
@@ -164,12 +167,12 @@
               <p class="caption font">Next invoice:</p>
               <p class="caption font">{{user.stripeInfoGC.current_period_end.toMillis() | date:'MMM/dd/yyyy'}}</p>
             </div>
-              <div class="menuDivLessPad" fxLayout="row" fxLayoutAlign="space-between">
-                <p class="caption font">Uncheck to cancel recurring subscription:</p>
-                <mat-checkbox [disabled]="user.stripeInfoGC.subscriptionId=='cancelled'" class="example-margin" [checked]="!user.stripeInfoGC.cancel_at_period_end"
-                  (change)="subscripitonUnsubscription($event)">
-                </mat-checkbox>
-              </div>
+            <div class="menuDivLessPad" fxLayout="row" fxLayoutAlign="space-between">
+              <p class="caption font">Uncheck to cancel recurring subscription:</p>
+              <mat-checkbox [disabled]="user.stripeInfoGC.subscriptionId=='cancelled'" class="example-margin"
+                [checked]="!user.stripeInfoGC.cancel_at_period_end" (change)="subscripitonUnsubscription($event)">
+              </mat-checkbox>
+            </div>
             <a class="DividerMargin caption font click" (click)="deleteSubscripiton()">Unsubscribe from G&C</a>
           </div>
 

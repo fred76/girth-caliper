@@ -22,9 +22,7 @@ import { UserType } from 'src/app/interface-model/Interface';
 export class TrainerBioComponent implements OnInit {
 
   constructor(
-    public strpieService: StrpieService,
-    private route: ActivatedRoute,
-    private router: Router,
+    private strpieService: StrpieService,
     public authService: AuthService,
     private fireDatabaseService: FireDatabaseService) { }
 
@@ -42,29 +40,25 @@ export class TrainerBioComponent implements OnInit {
   trainerPageData$: Observable<TrainerPage>
   cataloguTemplateArray$: Observable<TrainerProduct[]>
   msg = "Admit Athlete to your team by purchasing one of your training";
-
+pppp : any
   ngOnInit() {
     this.cataloguTemplateArray$ = this.fireDatabaseService.fetchAvailableTrainerProduct()
     this.trainerPageData$ = this.fireDatabaseService.fetchTrainerPage()
+
     this.authService.UserType$.pipe(
       map((user: UserType<Trainer>) => {
 
         this.userType = user
-        console.log("this.userType");
-        console.log(this.userType);
-        console.log("this.userType");
 
         if (user.profile.trainerStripeConnected) {
           this.isTrainerStripeConnected = true
           this.accountJson = this.strpieService.trainerRetreiveStripeAccount(user.profile.trainerStripeConnected)
-          this.accountJson.subscribe(p => console.log(p)
+          this.accountJson.subscribe(p => (console.log(p.account.charges_enabled),
+          console.log(p), this.pppp = p)
+
           )
         }
         if (user.profile.athleteAdmission) {
-          console.log("user.profile.athleteAdmission");
-          console.log(user.profile.athleteAdmission);
-          console.log("user.profile.athleteAdmission");
-
           this.selectTarinerOption = user.profile.athleteAdmission
         }
       })

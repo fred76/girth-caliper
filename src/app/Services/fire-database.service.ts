@@ -134,6 +134,11 @@ export class FireDatabaseService {
       });
   }
 
+  setUserCategory(userCategory: string) {
+    const userRef = this.afs.doc(`users/${this.authService.userID}`);
+    userRef.set({ profile: { userCategory: userCategory } }, { merge: true })
+  }
+
   createTrainerPage(trainerPage: TrainerPage): Observable<any> {
     return from(this.afs.collection(`users/${this.authService.userID}/trainerPage`).add(trainerPage))
   }

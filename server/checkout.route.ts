@@ -42,7 +42,6 @@ export async function createCheckoutSession(req: Request, res: Response) {
     const userRef = db.doc(`users/${info.userId}`);
 
     await userRef.set({ stripeInfoGC: checkoutSessionData }, { merge: true })
-    await userRef.set({ userCategory: req.body.userCategory }, { merge: true })
 
     let sessionConfig, stripeCustomerId = user ? user.stripeCustomerId : undefined;
 

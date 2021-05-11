@@ -1,3 +1,4 @@
+import { FireDatabaseService } from 'src/app/Services/fire-database.service';
 import { Trainer } from './../../interface-model/Interface';
 
 import { Utility } from 'src/app/Utility/utility';
@@ -29,7 +30,8 @@ export class UserDashboardComponent implements OnInit, OnDestroy, AfterViewInit 
     private matIconRegistry: MatIconRegistry,
     private domSanitizer: DomSanitizer,
     private strpieService: StrpieService,
-    private utility: Utility) {
+    private utility: Utility,
+    private fireDatabaseService: FireDatabaseService) {
     this.matIconRegistry.addSvgIcon(
       "appleL",
       this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/accessory/appleL.svg")
@@ -51,26 +53,19 @@ export class UserDashboardComponent implements OnInit, OnDestroy, AfterViewInit 
   @ViewChild('stepper') stepper: MatStepper
 
   isLinear = false;
-
   genders: string[] = ["Male", "Female"]
   userSub: Subscription
   isLoggedIn: boolean = true
   isPurchaseStrated: boolean
   user: UserType<any>
   dueDate: boolean
-  selectUserTypeId: any;
+  userCategorySelected: string
+  routeLinkCustom: string = ""
 
-
-  userTypes: any[] = [
-    { name: "I'm an Athlete", id: 1 },
-    { name: "I'm a Trainer", id: 2 }
-  ];
+  stripePrice="price_1IpdmQBFHWy6VCCK19aaFXRj"
 
   subscriptionPlaneForUserCategories: { pricePlan: string, price: string, cadence: string }[]
 
-  selectUserTypes(userTypes) {
-    this.selectUserTypeId = userTypes.id
-  }
 
   userDataFormGroup: FormGroup = new FormGroup({
     displayName: new FormControl('', Validators.required),
@@ -128,6 +123,14 @@ export class UserDashboardComponent implements OnInit, OnDestroy, AfterViewInit 
           this.authService.userProvidersList(p.email)
         this.user = p
         this.isLoggedIn = true
+        this.userCategorySelected = p.profile?.userCategory
+
+        if (this.userCategorySelected === "trainer") {
+
+          this.routeLinkCustom="/Body&Measurements/trainer/trainerBio"
+        } else {
+          this.routeLinkCustom="/Body&Measurements/girthTab"
+        }
         this.seletctSubscriptionPlaneForUserCategory(p)
 
         if (p.stripeInfoGC !== undefined && p.stripeInfoGC.current_period_end) {
@@ -139,10 +142,11 @@ export class UserDashboardComponent implements OnInit, OnDestroy, AfterViewInit 
   }
 
   seletctSubscriptionPlaneForUserCategory(u: UserType<any>) {
-    if (u.userCategory == "trainer") {
-      this.subscriptionPlaneForUserCategories = [{ pricePlan: "price_1IgN2cBFHWy6VCCKhRjIPp6X", price: "112,22$", cadence: "Monthly" }, { pricePlan: "price_1IgN2cBFHWy6VCCKhRjIPp6X", price: "115,22$", cadence: "Quartely" }, { pricePlan: "price_1IgN2cBFHWy6VCCKhRjIPp6X", price: "118,22$", cadence: "Yearly" }]
+
+    if (u.profile?.userCategory == "trainer") {
+      this.subscriptionPlaneForUserCategories = [{ pricePlan: this.stripePrice, price: "112,22$", cadence: "Monthly" }, { pricePlan: this.stripePrice, price: "115,22$", cadence: "Quartely" }, { pricePlan: this.stripePrice, price: "118,22$", cadence: "Yearly" }]
     } else {
-      this.subscriptionPlaneForUserCategories = [{ pricePlan: "price_1IgN2cBFHWy6VCCKhRjIPp6X", price: "2,22$", cadence: "Monthly" }, { pricePlan: "price_1IgN2cBFHWy6VCCKhRjIPp6X", price: "5,22$", cadence: "Quartely" }, { pricePlan: "price_1IgN2cBFHWy6VCCKhRjIPp6X", price: "8,22$", cadence: "Yearly" }]
+      this.subscriptionPlaneForUserCategories = [{ pricePlan: this.stripePrice, price: "2,22$", cadence: "Monthly" }, { pricePlan: this.stripePrice, price: "5,22$", cadence: "Quartely" }, { pricePlan: this.stripePrice, price: "8,22$", cadence: "Yearly" }]
     }
   }
 
@@ -178,9 +182,7 @@ export class UserDashboardComponent implements OnInit, OnDestroy, AfterViewInit 
 
   monthlySubscription(event) {
 
-    let userCategory = ""
-    this.selectUserTypeId == 1 ? userCategory = "athlete" : userCategory = "trainer"
-    this.strpieService.startSubscriptionCheckoutSession(event, userCategory)
+    this.strpieService.startSubscriptionCheckoutSession(event)
       .pipe(finalize(() => console.log("completed")))
       .subscribe(
         session => {
@@ -194,9 +196,7 @@ export class UserDashboardComponent implements OnInit, OnDestroy, AfterViewInit 
   }
 
   quarterlySubscription() {
-    let userCategory = ""
-    this.selectUserTypeId == 1 ? userCategory = "athlete" : userCategory = "trainer"
-    this.strpieService.startSubscriptionCheckoutSession(this.subscriptionPlaneForUserCategories[1].pricePlan, userCategory)
+    this.strpieService.startSubscriptionCheckoutSession(this.subscriptionPlaneForUserCategories[1].pricePlan)
       .subscribe(
         session => this.strpieService.redirectToCheckout(session),
         err => {
@@ -207,9 +207,7 @@ export class UserDashboardComponent implements OnInit, OnDestroy, AfterViewInit 
   }
 
   yearlySubscription() {
-    let userCategory = ""
-    this.selectUserTypeId == 1 ? userCategory = "athlete" : userCategory = "trainer"
-    this.strpieService.startSubscriptionCheckoutSession(this.subscriptionPlaneForUserCategories[2].pricePlan, userCategory)
+    this.strpieService.startSubscriptionCheckoutSession(this.subscriptionPlaneForUserCategories[2].pricePlan)
       .subscribe(
         session => this.strpieService.redirectToCheckout(session),
         err => {
@@ -236,7 +234,10 @@ export class UserDashboardComponent implements OnInit, OnDestroy, AfterViewInit 
     this.authService.addUserInfo(this.authService.userID, userInfo)
   }
 
-
+  onValChange(value){
+    this.fireDatabaseService.setUserCategory(value)
+    console.log(value)
+}
   getDirtyValues(form: any) {
     let dirtyValues = {};
     Object.keys(form.controls)

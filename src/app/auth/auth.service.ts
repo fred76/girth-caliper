@@ -1,18 +1,11 @@
-import { Trainer, Athlete } from './../interface-model/Interface';
-// import { Trainer } from './../interface-model/trainer';
-import { AddressContact } from './../interface-model/athlete';
+import { AddressContact } from './../interface-model/Interface';
 import { Utility } from './../Utility/utility';
-// import { User } from './../interface-model/user.model';
 import { Injectable, Type } from '@angular/core';
-
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
 import { AngularFireAuth } from '@angular/fire/auth';
-
 import { Router } from '@angular/router';
-
 import { Observable, of } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
-
 import firebase from 'firebase/app'
 import { UserType } from '../interface-model/Interface';
 

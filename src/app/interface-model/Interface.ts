@@ -23,6 +23,7 @@ export interface Trainer {
   blog?: boolean
   blogID?: [String]
   bio?: string
+  userCategory?: string
 }
 
 export interface Athlete {
@@ -36,6 +37,7 @@ export interface Athlete {
   pastTraining?: Training[]
   athleteBio?: string
   productPurchased: {}
+  userCategory?: string
 }
 
 export interface stripeInfoGC {
