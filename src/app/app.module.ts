@@ -46,9 +46,7 @@ import { WelcomeComponent } from './welcome/welcome.component';
   ],
 
   providers: [
-    Utility,
-
-
+    Utility
   ],
   bootstrap: [AppComponent]
 })

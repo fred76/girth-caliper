@@ -23,9 +23,6 @@ export class ImageLoaderComponent implements OnInit {
   uploadPercentage$: Observable<number>
   downloadURL$: Observable<string>
 
-
-
-
   @Output() imgURL = new EventEmitter<string>();
 
   @Output() imgSelected = new EventEmitter<boolean>();
@@ -40,10 +37,10 @@ export class ImageLoaderComponent implements OnInit {
 
   @Input() resizeToHeight: number
 
-  ngOnInit() {
+  @Input() heightDefault: number = 300
 
+  ngOnInit() { }
 
-  }
   loadFrontImage(event: any): void {
     this.imageChangedEvent = event;
   }
@@ -55,21 +52,13 @@ export class ImageLoaderComponent implements OnInit {
 
   frontImageLoaded() {
     this.showCropper = true;
-    console.log("showCropper");
     console.log(this.showCropper);
-    console.log("showCropper");
-
     this.imgSelected.emit(true)
   }
 
-  frontCropperReady() {
+  frontCropperReady() { }
 
-  }
-
-  frontLoadImageFailed() {
-    // show message
-  }
-
+  frontLoadImageFailed() { }
 
   preparePhotoSession(): Observable<any> {
 
@@ -90,7 +79,25 @@ export class ImageLoaderComponent implements OnInit {
 
     return this.downloadURL$
   }
+  prepareUserAvatarPhotoSession(): Observable<any> {
 
+    if (this.isEditMode) {
+      this.storage.storage.refFromURL(this.imgURLDefault).delete();
+    }
+
+    const imgID = "userAvatar"
+    const fileCroppedImage: File = this.croppedImage
+    const filePath = `${this.authService.userID}/${imgID}`
+    const task = this.storage.upload(filePath, fileCroppedImage)
+    this.uploadPercentage$ = task.percentageChanges()
+    this.downloadURL$ = task.snapshotChanges()
+      .pipe(
+        last(),
+        concatMap(() => this.storage.ref(filePath).getDownloadURL())
+      )
+
+    return this.downloadURL$
+  }
 
 
 

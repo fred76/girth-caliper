@@ -34,3 +34,19 @@ width: 90%;
   height: 100px;
   border-radius: 8px;
 }
+.margin{
+  margin-top: 24px;
+}
+.divider{
+  width: 50px;
+}
+
+
+.circular-square-small {
+  width: 75px;
+  border-radius: 50%;
+}
+
+.divPhoto{
+  margin-top: -20px;
+}

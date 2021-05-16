@@ -155,6 +155,7 @@ export class TrainerCatalogueTempalteComponent implements OnInit, OnDestroy {
         bioTitle: this.trainerPageFormGroup.value.bioTitle,
         bioSubtitle: this.trainerPageFormGroup.value.bioSubtitle,
         bioText: this.trainerPageFormGroup.value.bioText,
+        published: false,
         cratedON: Date()
       }
 

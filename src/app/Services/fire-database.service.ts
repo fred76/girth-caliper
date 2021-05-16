@@ -1,3 +1,5 @@
+import { Trainer, PublicInfo } from './../interface-model/Interface';
+import { UserType } from 'src/app/interface-model/Interface';
 import { TrainerPage, TrainerProduct } from './../interface-model/trainer';
 
 import { PhotoSession } from './../interface-model/photo-user';
@@ -8,7 +10,7 @@ import { Girths } from './../interface-model/girths.model';
 import { SkinfoldsForDB } from './../interface-model/skinfold.model';
 import { Injectable } from '@angular/core';
 import { map } from 'rxjs/operators';
-import { AngularFirestore } from '@angular/fire/firestore';
+import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
 
 @Injectable({
   providedIn: 'root'
@@ -26,6 +28,8 @@ export class FireDatabaseService {
   trainerProductSubj = new Subject<TrainerProduct[]>();
   skinfoldsSubj = new Subject<SkinfoldsForDB[]>()
   userSubscripiton: Subscription
+
+  // ATHLETE
 
   addSkinfoldsToDB(skinfolds: SkinfoldsForDB) {
     this.afs.collection(`users/${this.authService.userID}/skinfoldsData`).add(skinfolds)
@@ -134,13 +138,33 @@ export class FireDatabaseService {
       });
   }
 
+  // ATHLETE / TRAINER
+
+  updateUserPhoto(data) {
+    const userRef = this.afs.doc(`users/${this.authService.userID}`);
+    userRef.set(data, { merge: true })
+  }
+
   setUserCategory(userCategory: string) {
     const userRef = this.afs.doc(`users/${this.authService.userID}`);
     userRef.set({ profile: { userCategory: userCategory } }, { merge: true })
   }
 
-  createTrainerPage(trainerPage: TrainerPage): Observable<any> {
-    return from(this.afs.collection(`users/${this.authService.userID}/trainerPage`).add(trainerPage))
+  // TRAINER
+
+  // TRAINER PAGE
+
+  createTrainerPage(trainerPage: TrainerPage) {
+    this.afs.collection(`users/${this.authService.userID}/trainerPage`).add(trainerPage)
+  }
+
+  editTrainerPage(trainerPage: TrainerPage, id) {
+    this.deletePublishedTrainerPage()
+    this.afs.doc(`users/${this.authService.userID}/trainerPage/${id}`).update(trainerPage)
+  }
+
+  deleteTrainerProduct(id: string) {
+    this.afs.collection<TrainerProduct>(`users/${this.authService.userID}/trainerProduct`).doc(id).delete()
   }
 
   fetchTrainerPage(): Observable<TrainerPage> {
@@ -157,35 +181,18 @@ export class FireDatabaseService {
     return trainerPage$;
   }
 
-  fetchTrainerPageFromAthlete(userID: string): Observable<TrainerPage> {
-    const collection = this.afs.collection<TrainerPage>(`users/${userID}/trainerPage`)
-    const trainerPage$ = collection
-      .valueChanges({ idField: 'idField' })
-      .pipe(
-        map(trainerPage => {
-          const trainerPage2 = trainerPage[0];
-          return trainerPage2;
-        })
-      );
-
-    return trainerPage$;
+  setTrainerPageAsPublished(id, isPublished: boolean) {
+    this.afs.doc(`users/${this.authService.userID}/trainerPage/${id}`).update({ published: isPublished })
   }
 
-  publish(id, isPublished: boolean): Observable<any> {
-    return from(this.afs.doc(`users/${this.authService.userID}/trainerPage/${id}`).update({ published: isPublished }))
+  // TRAINER PRODUCT
+
+  createTrainerProduct(trainerProduct: TrainerProduct) {
+    this.afs.collection(`users/${this.authService.userID}/trainerProduct`).add(trainerProduct)
   }
 
-  editTrainerPage(trainerPage: TrainerPage, id): Observable<any> {
-    return from(this.afs.doc(`users/${this.authService.userID}/trainerPage/${id}`).update(trainerPage))
-  }
-
-  createTrainerProduct(trainerProduct: TrainerProduct): Observable<any> {
-    return from(this.afs.collection(`users/${this.authService.userID}/trainerProduct`).add(trainerProduct))
-  }
-
-  updateAthleteAdmission(thleteAdmission: string) {
-    const userRef = this.afs.doc(`users/${this.authService.userID}`);
-    userRef.set({ profile: { athleteAdmission: thleteAdmission } }, { merge: true })
+  editTrainerProduct(trainerProduct: TrainerProduct, id) {
+    this.afs.doc(`users/${this.authService.userID}/trainerProduct/${id}`).update(trainerProduct)
   }
 
   fetchAvailableTrainerProduct(): Observable<TrainerProduct[]> {
@@ -201,6 +208,19 @@ export class FireDatabaseService {
       ))
   }
 
+  // TRAINER CONTACTS
+
+  setTrainerContactsAsPublished(isPublished: boolean) {
+    console.log(isPublished);
+
+    const userRef: AngularFirestoreDocument = this.afs.doc(`users/${this.authService.userID}`)
+    console.log(userRef);
+
+    return userRef.set({ profile: { address: { published: isPublished } } }, { merge: true })
+  }
+
+  // USER FOR TRAINER
+
   fetchAvailableTrainerProductFromAthlete(userID: string): Observable<TrainerProduct[]> {
     return from(this.afs.collection<TrainerProduct>(`users/${userID}/trainerProduct`)
       .valueChanges({ idField: 'idField' })
@@ -214,12 +234,79 @@ export class FireDatabaseService {
       ))
   }
 
-  editTrainerProduct(trainerProduct: TrainerProduct, id): Observable<any> {
-    return from(this.afs.doc(`users/${this.authService.userID}/trainerProduct/${id}`).update(trainerProduct))
+  fetchAvailableUser(): Observable<UserType<Trainer>[]> {
+    return from(this.afs.collection<UserType<Trainer>>(`users`)
+      .valueChanges({ idField: 'idField' })
+      .pipe(
+        map((users) => users.map(users => {
+          return <UserType<Trainer>>{
+            ...users,
+          }
+        }))
+      ))
   }
 
-  deleteTrainerProduct(id: string) {
-    this.afs.collection<TrainerProduct>(`users/${this.authService.userID}/trainerProduct`).doc(id).delete()
+  // TRAINER FOR USER
+
+  updateAthleteAdmission(thleteAdmission: string) {
+    const userRef = this.afs.doc(`users/${this.authService.userID}`);
+    userRef.set({ profile: { athleteAdmission: thleteAdmission } }, { merge: true })
+  }
+
+  fetchAvailableTrainer(): Observable<UserType<Trainer>[]> {
+    return from(this.afs.collection<UserType<Trainer>>(`users`, ref => ref.where("profile.userCategory", "==", "trainer"))
+      .valueChanges({ idField: 'idField' })
+      .pipe(
+        map((trainerProducts) => trainerProducts.map(trainerProduct => {
+          return <UserType<Trainer>>{
+            ...trainerProduct,
+          }
+        }))
+      ))
+  }
+
+  publishTrainerPublicInfo(publicInfo: PublicInfo) {
+    this.afs.collection("trainerInfo").doc(publicInfo.uid).collection("info").doc("publicInfo").set(publicInfo)
+  }
+
+  publishTrainerPage(trainerPage: TrainerPage) {
+    trainerPage.published = true
+    this.afs.collection("trainerInfo").doc(this.authService.userID).collection("info").doc("trainerPage").set(trainerPage)
+  }
+
+  deletePublishedTrainerPage() {
+    this.afs.collection("trainerInfo").doc(this.authService.userID).collection("info").doc("trainerPage").delete()
+  }
+
+  deleteTrainerPublicInfo() {
+    this.afs.collection("trainerInfo").doc(this.authService.userID).collection("info").doc("publicInfo").delete()
+  }
+
+  fetchTrainerPageFromAthlete(userID: string): Observable<TrainerPage> {
+    const collection = this.afs.collection<TrainerPage>(`users/${userID}/trainerPage`)
+    const trainerPage$ = collection
+      .valueChanges({ idField: 'idField' })
+      .pipe(
+        map(trainerPage => {
+          const trainerPage2 = trainerPage[0];
+          return trainerPage2;
+        })
+      );
+
+    return trainerPage$;
+  }
+
+  fetchTrainerPublicInfo(userID: string): Observable<PublicInfo> {
+    const collection = this.afs.collection<PublicInfo>(`users/${userID}/publicInfo`)
+    const PublicInfo$ = collection
+      .valueChanges({ idField: 'idField' })
+      .pipe(
+        map(PublicInfo => {
+          const PublicInfo2 = PublicInfo[0];
+          return PublicInfo2;
+        })
+      );
+    return PublicInfo$;
   }
 
 }

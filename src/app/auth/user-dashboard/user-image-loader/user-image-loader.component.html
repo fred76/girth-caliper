@@ -1,0 +1,16 @@
+<mat-dialog-content>
+  <app-image-loader #imageLoader [imageRatio]='1 / 1' [imgURLDefault]=imgURLDefaultCoverImage [heightDefault]=150
+    [resizeToHeight]='150' (imgSelected)=imgSelected($event) (blobImage)=imgSelected64($event)></app-image-loader>
+
+</mat-dialog-content>
+<mat-dialog-actions fxLayout="row" fxLayoutAlign="center center">
+  <div fxLayoutGap="24px" fxLayoutAlign="center center" fxLayout="row">
+    <button class="mat-raised-button" (click)="close()">
+      Close
+    </button>
+    <button class="mat-raised-button mat-primary" (click)="save()">
+      save
+    </button>
+
+  </div>
+</mat-dialog-actions>

@@ -62,7 +62,8 @@ let p: any[] = [
   MatStepperModule,
   MatProgressBarModule,
   MatRadioModule,
-  MatSlideToggleModule
+  MatSlideToggleModule,
+
   // MatSelectModule,
   // MatChipsModule,
   // MatCheckboxModule,

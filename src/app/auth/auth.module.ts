@@ -1,3 +1,4 @@
+import { UserImageLoaderComponent } from './user-dashboard/user-image-loader/user-image-loader.component';
 import { StripeCheckoutComponent } from './stripe-checkout/stripe-checkout.component';
 import { SharedModule } from './../Shared/shared.module';
 import { UserDashboardComponent } from './user-dashboard/user-dashboard.component';
@@ -10,12 +11,12 @@ import { AuthRoutingModule } from './auth-routing.module';
 import { LoginRedirectComponent } from './login-redirect/login-redirect.component';
 @NgModule({
   declarations: [
-
     SignupUserComponent,
     LoginUserComponent,
     UserDashboardComponent,
     LoginRedirectComponent,
-    StripeCheckoutComponent
+    StripeCheckoutComponent,
+    UserImageLoaderComponent
   ],
   imports: [
     SharedModule,

@@ -56,9 +56,9 @@ export class AthleteTrainerComponent implements OnInit, OnDestroy {
 
 
     this.authService.UserType$.subscribe(u => {
-console.log("u.profile?.userCategory");
-console.log(u.profile?.userCategory);
-console.log("u.profile?.userCategory");
+      console.log("u.profile?.userCategory");
+      console.log(u.profile?.userCategory);
+      console.log("u.profile?.userCategory");
 
       if (u.profile?.userCategory == "athlete") {
         this.navLinks = [

@@ -40,10 +40,6 @@ export class TrainerPageDialogComponent implements OnInit {
 
   ngOnInit() {
 
-    console.log("this.passedData.isEditMode");
-    console.log(this.passedData.isEditMode);
-
-
     if (this.passedData.isEditMode) {
       this.imgURLDefaultCoverImage = this.passedData.coverImageURL
       this.isEditMode = true
@@ -51,8 +47,6 @@ export class TrainerPageDialogComponent implements OnInit {
   }
 
   save() {
-    console.log("PPP");
-
     const data = {
       img64: this.isImgSelected64,
       isOldImageToBeDeleted: this.isEditMode,

@@ -10,7 +10,6 @@ import { SkinfoldsService } from './athlete/skinfolds.service';
 import { UserPhotoComponent } from './athlete/history/user-photo/user-photo/user-photo.component';
 import { PhotoSessionComponent } from './athlete/history/photo-session/photo-session/photo-session.component';
 import { ConfirmSkinfoldComponent } from './athlete/skinfold/confirmSkinfolds';
-import { ImageLoaderComponent } from '../ui-utility/image-loader/image-loader.component';
 import { TrainerContainerComponent } from './trainer/trainerContainer.component';
 import { TrainerForUserComponent } from './trainer-for-user/trainer-for-user.component';
 import { GirthsService } from './athlete/girths.service';
@@ -39,7 +38,6 @@ import { TrainerBioComponent } from './trainer/trainer-bio/trainer-bio.component
     TrainerBioComponent,
     TrainerCatalogueTempalteComponent,
     TrainerCatalogueDialogComponent,
-    ImageLoaderComponent,
     TrainerPageDialogComponent,
     TrainerInvalidFieldDialogComponent
   ],
@@ -48,8 +46,7 @@ import { TrainerBioComponent } from './trainer/trainer-bio/trainer-bio.component
     RouterModule,
     NgxMatStepLazyLoadModule,
     BodyMeasurementRoutesModule,
-    BodyMeasurementsChartsModule,
-    ImageCropperModule,
+    BodyMeasurementsChartsModule
   ],
   exports: [],
   providers: [GirthsService, SkinfoldsService]

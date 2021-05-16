@@ -5,6 +5,55 @@
 
     <mat-card fxFlex="1 0 calc(33.3% - 32px)" fxFlex.lt-md="1 1 calc(50% - 32px)" fxFlex.lt-sm="100%"
       class="mat-elevation-z8 card-address">
+
+      <mat-card-title>
+        <p class="mat-body-2">Public info
+        </p>
+      </mat-card-title>
+      <mat-card-content>
+        <div *ngIf="authService.UserType$ | async as user ">
+          <div fxLayout="row" fxLayoutGap="32px" fxLayoutAlign="space-between center">
+            <div fxLayout="column" fxLayoutGap="8px" fxLayoutAlign="space-between start">
+              <p class="mat-caption">{{user.displayName}}</p>
+              <p class="mat-caption">{{user.profile.address.companyName}}</p>
+            </div>
+            <div class="divPhoto" fxLayoutAlign="center">
+              <img *ngIf="user.photoURL" class="circular-square-small" src="{{user.photoURL}}">
+            </div>
+
+          </div>
+
+          <div fxLayout="row" fxLayoutGap="32px" fxLayoutAlign="space-between center">
+            <div fxLayout="column" fxLayoutGap="8px" fxLayoutAlign="space-between start">
+              <p class="mat-caption">{{user.profile.address.emailBusiness}}</p>
+              <p class="mat-caption">{{user.profile.address.web}}</p>
+              <p class="mat-caption">Street {{user.profile.address.address1}}, {{user.profile.address.zip_postalCode}},
+                {{user.profile.address.city}}, {{user.profile.address.country}} </p>
+            </div>
+            <div class="divPhoto" fxLayoutAlign="center">
+
+              <button *ngIf="user.profile.address.published"
+                (click)="publishPublicInfo(true,user.displayName,user.profile.address.companyName,user.photoURL,user.profile.address.emailBusiness,user.profile.address.web,user.profile.address.address1,user.profile.address.zip_postalCode,user.profile.address.city,user.profile.address.country, user.uid)"
+                mat-raised-button color="primary">withhold</button>
+              <button *ngIf="!user.profile.address.published"
+                (click)="publishPublicInfo(false, user.displayName,user.profile.address.companyName,user.photoURL,user.profile.address.emailBusiness,user.profile.address.web,user.profile.address.address1,user.profile.address.zip_postalCode,user.profile.address.city,user.profile.address.country, user.uid)"
+                mat-raised-button color="primary">Publish</button>
+            </div>
+
+          </div>
+
+          <mat-divider class="divider"></mat-divider>
+          <div class="margin" fxLayout="row" fxLayoutGap="32px" fxLayoutAlign="space-between center">
+            <p class="mat-caption">Show when I'm online</p>
+            <mat-slide-toggle color="primary"></mat-slide-toggle>
+          </div>
+        </div>
+      </mat-card-content>
+
+    </mat-card>
+
+    <mat-card fxFlex="1 0 calc(33.3% - 32px)" fxFlex.lt-md="1 1 calc(50% - 32px)" fxFlex.lt-sm="100%"
+      class="mat-elevation-z8 card-address">
       <ng-container *ngIf="authService.UserType$ | async as user; else elseTemplate">
         <mat-card-content>
           <p class="mat-body-2">Stripe account</p>
@@ -14,24 +63,26 @@
             <p class="mat-caption">Athelete admission</p>
             <mat-slide-toggle [checked]="true" color="primary" (change)="onChange($event)"></mat-slide-toggle>
           </div>
-          <p class="mat-caption">{{msg}}</p>
+          <p class="mat-caption font10">{{msg}}</p>
           <div>
             <img *ngIf="!user.profile.trainerStripeConnected" class="stripe-button"
               src="../assets/accessory/stripe-button.png" (click)="trainerCreateStripeAccount()" />
           </div>
-          <div *ngIf="accountJson | async; let accJson">
+          <mat-divider class="divider"></mat-divider>
+          <div class="margin" *ngIf="accountJson | async; let accJson">
             <div fxLayout="column"
               *ngIf="!accJson.account.details_submitted || !accJson.account.payouts_enabled ;else account_completed"
               fxLayoutAlign="space-between start">
               <p class="mat-caption">Complete registration</p>
               <img class="stripe-button" src="../assets/accessory/stripe-button.png"
-              (click)="updateAccount(user.profile.trainerStripeConnected)" />
+                (click)="updateAccount(user.profile.trainerStripeConnected)" />
               <li class="mat-caption" *ngFor="let item of accJson.account.requirements.currently_due">{{item}}</li>
               <li class="mat-caption" *ngFor="let item of accJson.account.requirements.pending_verification">{{item}}
               </li>
             </div>
             <ng-template #account_completed>
-              <img class="stripe-button" src="../assets/accessory/powered_stripe.png" (click)="updateAccount(user.profile.trainerStripeConnected)"/>
+              <img class="stripe-button" src="../assets/accessory/powered_stripe.png"
+                (click)="updateAccount(user.profile.trainerStripeConnected)" />
             </ng-template>
           </div>
 
@@ -69,9 +120,9 @@
         </mat-card-content>
         <mat-card-actions>
 
-          <button *ngIf="page.published" (click)="publish(page.published, page.idField)" mat-raised-button
+          <button *ngIf="page.published" (click)="publish(page.published, page.idField, page)" mat-raised-button
             color="primary">withhold</button>
-          <button *ngIf="!page.published" (click)="publish(page.published, page.idField)" mat-raised-button
+          <button *ngIf="!page.published" (click)="publish(page.published, page.idField, page)" mat-raised-button
             color="primary">Publish</button>
         </mat-card-actions>
       </ng-container>

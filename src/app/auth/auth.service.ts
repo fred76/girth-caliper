@@ -128,7 +128,7 @@ export class AuthService {
   }
 
   addTrainerContacts(uid: string, addressContact: AddressContact) {
-
+    addressContact.published = false
     const userRef: AngularFirestoreDocument = this.afs.doc(`users/${uid}`)
     return userRef.set({ profile: { address: addressContact } }, { merge: true })
 

@@ -1,8 +1,9 @@
+import { UserImageLoaderComponent } from './user-image-loader/user-image-loader.component';
+import { MatDialog } from '@angular/material/dialog';
 import { FireDatabaseService } from 'src/app/Services/fire-database.service';
 import { Trainer } from './../../interface-model/Interface';
 
 import { Utility } from 'src/app/Utility/utility';
-// import { User } from './../../interface-model/user.model';
 import { StrpieService } from './../strpie.service';
 import { Subscription } from 'rxjs';
 import { MatIconRegistry } from '@angular/material/icon';
@@ -31,7 +32,8 @@ export class UserDashboardComponent implements OnInit, OnDestroy, AfterViewInit 
     private domSanitizer: DomSanitizer,
     private strpieService: StrpieService,
     private utility: Utility,
-    private fireDatabaseService: FireDatabaseService) {
+    private fireDatabaseService: FireDatabaseService,
+    private dialog: MatDialog,) {
     this.matIconRegistry.addSvgIcon(
       "appleL",
       this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/accessory/appleL.svg")
@@ -62,7 +64,7 @@ export class UserDashboardComponent implements OnInit, OnDestroy, AfterViewInit 
   userCategorySelected: string
   routeLinkCustom: string = ""
 
-  stripePrice="price_1IpdmQBFHWy6VCCK19aaFXRj"
+  stripePrice = "price_1IpdmQBFHWy6VCCK19aaFXRj"
 
   subscriptionPlaneForUserCategories: { pricePlan: string, price: string, cadence: string }[]
 
@@ -87,6 +89,21 @@ export class UserDashboardComponent implements OnInit, OnDestroy, AfterViewInit 
     emailBusiness: new FormControl('', [Validators.required, Validators.email]),
     web: new FormControl('')
   })
+
+  openDialogImagePage() {
+    const dialogRef = this.dialog.open(UserImageLoaderComponent, {
+      data: {
+      },
+      panelClass: 'custom-modalbox'
+    });
+    dialogRef.afterClosed().subscribe(
+      (data) => {
+        if (data) {
+          this.fireDatabaseService.updateUserPhoto(data)
+        }
+      }
+    )
+  }
 
   initUserDataFormGroup(u: UserType<any>) {
 
@@ -115,6 +132,7 @@ export class UserDashboardComponent implements OnInit, OnDestroy, AfterViewInit 
       })
     }
   }
+
   ngOnInit() {
     this.userSub = this.authService.UserType$.pipe(
       map(p => {
@@ -127,9 +145,9 @@ export class UserDashboardComponent implements OnInit, OnDestroy, AfterViewInit 
 
         if (this.userCategorySelected === "trainer") {
 
-          this.routeLinkCustom="/Body&Measurements/trainer/trainerBio"
+          this.routeLinkCustom = "/Body&Measurements/trainer/trainerBio"
         } else {
-          this.routeLinkCustom="/Body&Measurements/girthTab"
+          this.routeLinkCustom = "/Body&Measurements/girthTab"
         }
         this.seletctSubscriptionPlaneForUserCategory(p)
 
@@ -181,6 +199,7 @@ export class UserDashboardComponent implements OnInit, OnDestroy, AfterViewInit 
   }
 
   monthlySubscription(event) {
+    console.log(event);
 
     this.strpieService.startSubscriptionCheckoutSession(event)
       .pipe(finalize(() => console.log("completed")))
@@ -232,12 +251,13 @@ export class UserDashboardComponent implements OnInit, OnDestroy, AfterViewInit 
   onSubmit() {
     const userInfo = this.getDirtyValues(this.userDataFormGroup)
     this.authService.addUserInfo(this.authService.userID, userInfo)
+
   }
 
-  onValChange(value){
+  onValChange(value) {
     this.fireDatabaseService.setUserCategory(value)
     console.log(value)
-}
+  }
   getDirtyValues(form: any) {
     let dirtyValues = {};
     Object.keys(form.controls)
@@ -254,10 +274,9 @@ export class UserDashboardComponent implements OnInit, OnDestroy, AfterViewInit 
     return dirtyValues;
   }
   onSubmitTrainerContacts() {
-
     const trainerContat = this.getDirtyValues(this.trainerDataFormGroup)
-    console.log(trainerContat);
     this.authService.addTrainerContacts(this.authService.userID, trainerContat)
+    this.fireDatabaseService.deleteTrainerPublicInfo()
   }
 
   ngOnDestroy() {

@@ -1,3 +1,5 @@
+import { ImageLoaderModule } from './../ui-utility/image-loader/ImageLoader.module';
+import { ImageCropperModule } from 'ngx-image-cropper';
 import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FlexLayoutModule } from '@angular/flex-layout';
@@ -10,7 +12,9 @@ let p: any[] = [
   MaterialModule,
   FlexLayoutModule,
   FormsModule,
-  ReactiveFormsModule
+  ReactiveFormsModule,
+  ImageCropperModule,
+  ImageLoaderModule
 ]
 
 @NgModule({

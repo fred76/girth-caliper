@@ -1,16 +1,17 @@
 <mat-dialog-content>
-  <app-image-loader #imageLoader [isEditMode]=isEditMode  [imgURLDefault] =  imgURLDefaultCoverImage [imageRatio]= '2 / 1' [resizeToHeight]='600' (imgSelected)=imgSelected($event) (blobImage)=imgSelected64($event) ></app-image-loader>
+  <app-image-loader #imageLoader [isEditMode]=isEditMode [imgURLDefault]=imgURLDefaultCoverImage [imageRatio]='2 / 1'
+    [resizeToHeight]='600' (imgSelected)=imgSelected($event) (blobImage)=imgSelected64($event)></app-image-loader>
 </mat-dialog-content>
 <mat-dialog-actions>
-  <div fxLayoutGap="8px" fxLayoutAlign="center center" fxLayout="row" >
+  <div fxLayoutGap="8px" fxLayoutAlign="center center" fxLayout="row">
     <button class="mat-raised-button" (click)="close()">
       Close
     </button>
-    <button *ngIf="!isEditMode"  [disabled]="!isImgSelected"   class="mat-raised-button mat-primary"  (click)="save()">
-      saveg
+    <button *ngIf="!isEditMode" [disabled]="!isImgSelected" class="mat-raised-button mat-primary" (click)="save()">
+      save
     </button>
-    <button *ngIf="isEditMode"  class="mat-raised-button mat-primary"  (click)="save()">
+    <button *ngIf="isEditMode" class="mat-raised-button mat-primary" (click)="save()">
       save edit
     </button>
-    </div>
+  </div>
 </mat-dialog-actions>

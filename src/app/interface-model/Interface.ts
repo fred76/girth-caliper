@@ -64,12 +64,24 @@ export interface AddressContact {
   mobile?: number
   emailBusiness?: string
   web?: string
+  published?: boolean
 }
 
 export interface Training {
   TrainerUID?: string
-
-
 }
 
 
+export interface PublicInfo {
+  displayName: string,
+  companyName: string,
+  photoURL: string,
+  Email: string,
+  web: string,
+  address1: string,
+  zip_postalCode: string,
+  city: string,
+  country: string,
+  uid: string
+  published: boolean
+}

@@ -1,12 +1,16 @@
 <div class="mainDiv">
   <div fxLayoutAlign="center" *ngIf="authService.UserType$ | async as user ">
-    <mat-card fxFlex.gt-xs="35%" class="mat-elevation-z8 pad  ">
+    <mat-card fxFlex.gt-xs="35%" class="mat-elevation-z8 pad">
       <button mat-icon-button routerLink={{routeLinkCustom}}>
         <mat-icon class="clear-icon">clear</mat-icon>
       </button>
       <!-- USER DATA FROM LOGIN  -->
-      <div class="divPhoto" fxLayoutAlign="center ">
-        <img *ngIf="user.photoURL" class="circular-square-small" src="{{user.photoURL}}">
+      <div class="divPhoto" fxLayoutAlign="center end" (click)="openDialogImagePage()">
+        <img *ngIf="user.photoURL" class="circular-square-small" src="{{user.photoURL}}" >
+
+          <mat-icon class="editIcon">mode_edit
+          </mat-icon>
+
       </div>
       <div *ngIf="!user.displayName">
         <p class="div-margin body-2">Almost there complete your profile</p>
@@ -54,6 +58,16 @@
                   </mat-option>
                 </mat-select>
               </mat-form-field>
+              <div>
+                <p class="caption font">You are: </p>
+                <mat-button-toggle-group [disabled]="user.stripeInfoGC" [value]="userCategorySelected" color="primary"
+                  name="fontStyle" aria-label="Font Style">
+                  <mat-button-toggle value="athlete" (change)="onValChange($event.value)">I'm an athlete
+                  </mat-button-toggle>
+                  <mat-button-toggle value="trainer" (change)="onValChange($event.value)">I'm a trainer
+                  </mat-button-toggle>
+                </mat-button-toggle-group>
+              </div>
               <button mat-raised-button class="field" color="primary" type="submit"
                 [disabled]="!userDataFormGroup.dirty">Update
                 info</button>
@@ -134,17 +148,10 @@
         <!--  USER  SUBSCRIPTIONS -->
         <mat-step state="monetization_on">
           <ng-template matStepLabel>Subscription</ng-template>
-            <div>
-              <p class="caption font">You are: </p>
-              <mat-button-toggle-group [disabled]="user.stripeInfoGC" [value]="userCategorySelected" color="primary" name="fontStyle" aria-label="Font Style">
-                <mat-button-toggle value="athlete" (change)="onValChange($event.value)">I'm an athlete
-                </mat-button-toggle>
-                <mat-button-toggle value="trainer" (change)="onValChange($event.value)">I'm a trainer
-                </mat-button-toggle>
-              </mat-button-toggle-group>
-            </div>
-            <div *ngIf="dueDate || dueDate == undefined" #login fxLayout="column" fxLayoutGap="24px">
-              <div *ngIf="user.profile?.userCategory">
+          <div *ngIf="dueDate || dueDate == undefined" #login fxLayout="column" fxLayoutGap="24px">
+            <div *ngIf="user.profile?.userCategory">
+              <div *ngIf="user.profile?.userCategory === 'trainer' && user.profile?.address">
+
                 <div *ngFor="let subsCat of subscriptionPlaneForUserCategories, let i = index" let i=index>
                   <div #login fxLayout="column" fxLayoutGap="24px">
                     <p class="caption font">{{subsCat.cadence}} subscription</p>
@@ -154,6 +161,8 @@
                 </div>
               </div>
             </div>
+            <!--  -->
+          </div>
           <div *ngIf="dueDate ==  false ">
             <div fxLayout="row" fxLayoutAlign="space-between">
               <p class="caption font">Subscription plan:</p>

@@ -1,4 +1,4 @@
-import { Trainer } from './../../../interface-model/Interface';
+import { Trainer, PublicInfo } from './../../../interface-model/Interface';
 import { TrainerPage, TrainerProduct } from './../../../interface-model/trainer';
 import { FireDatabaseService } from 'src/app/Services/fire-database.service';
 // import { Trainer } from '../../../interface-model/trainer';
@@ -29,9 +29,7 @@ export class TrainerBioComponent implements OnInit {
   message = "Waiting for purchase to complete...";
 
   showStripe = false
-  // user: User
   userType: UserType<Trainer>
-  isTrainerStripeConnected: boolean = false
   trainer: Trainer
   unsub: Subscription
   accountJson: Observable<any>
@@ -40,7 +38,6 @@ export class TrainerBioComponent implements OnInit {
   trainerPageData$: Observable<TrainerPage>
   cataloguTemplateArray$: Observable<TrainerProduct[]>
   msg = "Admit Athlete to your team by purchasing one of your training";
-pppp : any
   ngOnInit() {
     this.cataloguTemplateArray$ = this.fireDatabaseService.fetchAvailableTrainerProduct()
     this.trainerPageData$ = this.fireDatabaseService.fetchTrainerPage()
@@ -51,12 +48,7 @@ pppp : any
         this.userType = user
 
         if (user.profile.trainerStripeConnected) {
-          this.isTrainerStripeConnected = true
           this.accountJson = this.strpieService.trainerRetreiveStripeAccount(user.profile.trainerStripeConnected)
-          this.accountJson.subscribe(p => (console.log(p.account.charges_enabled),
-          console.log(p), this.pppp = p)
-
-          )
         }
         if (user.profile.athleteAdmission) {
           this.selectTarinerOption = user.profile.athleteAdmission
@@ -115,21 +107,54 @@ pppp : any
     // }
   }
 
-  publish(isPublished: boolean, id: string) {
+  publish(isPublished: boolean, id: string, page: TrainerPage) {
     isPublished = !isPublished
-    console.log(isPublished);
+    this.fireDatabaseService.setTrainerPageAsPublished(id, isPublished)
+    if (isPublished) {
+      this.fireDatabaseService.publishTrainerPage(page)
+    } else {
+      this.fireDatabaseService.deletePublishedTrainerPage()
+    }
+  }
 
-    this.fireDatabaseService.publish(id, isPublished)
+  publishp(page: TrainerPage) {
+    this.fireDatabaseService.publishTrainerPage(page)
+  }
+  publishPublicInfo(isPublished: boolean, displayName?, companyName?, photoURL?, Email?, web?, address1?, zip_postalCode?, city?, country?, uid?) {
+
+    isPublished = !isPublished
+
+    let publicInfo: PublicInfo = {
+      displayName: displayName,
+      companyName: companyName,
+      photoURL: photoURL,
+      Email: Email,
+      web: web,
+      address1: address1,
+      zip_postalCode: zip_postalCode,
+      city: city,
+      country: country,
+      uid: uid,
+      published: isPublished
+    }
+
+    this.fireDatabaseService.setTrainerContactsAsPublished(isPublished)
+    if (isPublished) {
+      this.fireDatabaseService.publishTrainerPublicInfo(publicInfo)
+    } else {
+      this.fireDatabaseService.deleteTrainerPublicInfo()
+
+    }
   }
 
 
   onChange(value) {
     if (value.checked === true) {
-      this.msg = "Admit athlete to your team by purchasing one of your training";
+      this.msg = "Athlete join your teamby purchasing one of your program";
       this.selectTarinerOption = "fromGC"
       this.fireDatabaseService.updateAthleteAdmission(this.selectTarinerOption)
     } else {
-      this.msg = "Athlete can join the team only after your acceptance";
+      this.msg = "Athlete join your the team only after your acceptance";
       this.selectTarinerOption = "withContact"
       this.fireDatabaseService.updateAthleteAdmission(this.selectTarinerOption)
     }

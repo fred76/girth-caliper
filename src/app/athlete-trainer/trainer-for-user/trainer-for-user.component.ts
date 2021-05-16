@@ -24,8 +24,9 @@ export class TrainerForUserComponent implements OnInit {
         Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex.`
 
   ngOnInit() {
-    this.cataloguTemplateArray$ = this.fireDatabaseService.fetchAvailableTrainerProductFromAthlete("ha2DZj09QwbLQi2Xf43UZMEz6hG3")
-    this.trainerPageData$ = this.fireDatabaseService.fetchTrainerPageFromAthlete("ha2DZj09QwbLQi2Xf43UZMEz6hG3")
+    this.cataloguTemplateArray$ = this.fireDatabaseService.fetchAvailableTrainerProductFromAthlete("QHtNJo5TfJawjn1kGIz5p0LNS1j2")
+    this.trainerPageData$ = this.fireDatabaseService.fetchTrainerPageFromAthlete("QHtNJo5TfJawjn1kGIz5p0LNS1j2")
+
 
 
 
