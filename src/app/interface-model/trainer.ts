@@ -9,7 +9,7 @@ export interface TrainerPage {
   bioText?: string,
   cratedON?: Date | any
   idField?: string
-  published?: boolean
+  isPagePublished?: boolean
 }
 
 export interface Blog {

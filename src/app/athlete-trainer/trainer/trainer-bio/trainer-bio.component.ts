@@ -40,6 +40,20 @@ export class TrainerBioComponent implements OnInit {
   msg = "Admit Athlete to your team by purchasing one of your training";
   ngOnInit() {
     this.cataloguTemplateArray$ = this.fireDatabaseService.fetchAvailableTrainerProduct()
+
+    this.cataloguTemplateArray$.subscribe(p=>{
+     let a = p
+      let b : any[] = this.fireDatabaseService.pippo()
+
+console.log(a);
+console.log(b);
+
+
+      console.log(a.filter(n => !b.includes(n)))
+
+    })
+
+
     this.trainerPageData$ = this.fireDatabaseService.fetchTrainerPage()
 
     this.authService.UserType$.pipe(
@@ -107,20 +121,23 @@ export class TrainerBioComponent implements OnInit {
     // }
   }
 
-  publish(isPublished: boolean, id: string, page: TrainerPage) {
+  publish(isPublished: boolean) {
     isPublished = !isPublished
-    this.fireDatabaseService.setTrainerPageAsPublished(id, isPublished)
-    if (isPublished) {
-      this.fireDatabaseService.publishTrainerPage(page)
-    } else {
-      this.fireDatabaseService.deletePublishedTrainerPage()
-    }
+    this.fireDatabaseService.PublishTrainerPage(isPublished)
   }
 
-  publishp(page: TrainerPage) {
-    this.fireDatabaseService.publishTrainerPage(page)
-  }
-  publishPublicInfo(isPublished: boolean, displayName?, companyName?, photoURL?, Email?, web?, address1?, zip_postalCode?, city?, country?, uid?) {
+  publishPublicInfo(
+    isPublished: boolean,
+    displayName?: string,
+    companyName?: string,
+    photoURL?: string,
+    Email?: string,
+    web?: string,
+    address1?: string,
+    zip_postalCode?: string,
+    city?: string,
+    country?: string,
+    uid?: string) {
 
     isPublished = !isPublished
 
@@ -135,16 +152,10 @@ export class TrainerBioComponent implements OnInit {
       city: city,
       country: country,
       uid: uid,
-      published: isPublished
+      isInfopublished: isPublished
     }
 
-    this.fireDatabaseService.setTrainerContactsAsPublished(isPublished)
-    if (isPublished) {
-      this.fireDatabaseService.publishTrainerPublicInfo(publicInfo)
-    } else {
-      this.fireDatabaseService.deleteTrainerPublicInfo()
-
-    }
+    this.fireDatabaseService.PublishTrainerInfo(isPublished,publicInfo)
   }
 
 

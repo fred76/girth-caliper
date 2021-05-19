@@ -1,7 +1,7 @@
 import { UserImageLoaderComponent } from './user-image-loader/user-image-loader.component';
 import { MatDialog } from '@angular/material/dialog';
 import { FireDatabaseService } from 'src/app/Services/fire-database.service';
-import { Trainer } from './../../interface-model/Interface';
+import { Trainer, PublicInfo } from './../../interface-model/Interface';
 
 import { Utility } from 'src/app/Utility/utility';
 import { StrpieService } from './../strpie.service';
@@ -275,8 +275,7 @@ export class UserDashboardComponent implements OnInit, OnDestroy, AfterViewInit 
   }
   onSubmitTrainerContacts() {
     const trainerContat = this.getDirtyValues(this.trainerDataFormGroup)
-    this.authService.addTrainerContacts(this.authService.userID, trainerContat)
-    this.fireDatabaseService.deleteTrainerPublicInfo()
+    this.fireDatabaseService.addEditTrainerContacts(trainerContat)
   }
 
   ngOnDestroy() {

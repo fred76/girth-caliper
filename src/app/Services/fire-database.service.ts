@@ -1,11 +1,11 @@
-import { Trainer, PublicInfo } from './../interface-model/Interface';
+import { Trainer, PublicInfo, AddressContact } from './../interface-model/Interface';
 import { UserType } from 'src/app/interface-model/Interface';
 import { TrainerPage, TrainerProduct } from './../interface-model/trainer';
 
 import { PhotoSession } from './../interface-model/photo-user';
 import { DummyDataService } from './../Utility/dummyData.service';
 import { AuthService } from '../auth/auth.service';
-import { Subject, Subscription, Observable, from } from 'rxjs';
+import { Subject, Subscription, Observable, from, combineLatest } from 'rxjs';
 import { Girths } from './../interface-model/girths.model';
 import { SkinfoldsForDB } from './../interface-model/skinfold.model';
 import { Injectable } from '@angular/core';
@@ -159,7 +159,9 @@ export class FireDatabaseService {
   }
 
   editTrainerPage(trainerPage: TrainerPage, id) {
-    this.deletePublishedTrainerPage()
+    let publicInfo: PublicInfo
+    publicInfo.isInfopublished = false
+    this.publishTrainerPublicInfoOnPublic(publicInfo)
     this.afs.doc(`users/${this.authService.userID}/trainerPage/${id}`).update(trainerPage)
   }
 
@@ -179,10 +181,6 @@ export class FireDatabaseService {
       );
 
     return trainerPage$;
-  }
-
-  setTrainerPageAsPublished(id, isPublished: boolean) {
-    this.afs.doc(`users/${this.authService.userID}/trainerPage/${id}`).update({ published: isPublished })
   }
 
   // TRAINER PRODUCT
@@ -208,16 +206,90 @@ export class FireDatabaseService {
       ))
   }
 
+  pippo() : any[] {
+    const publicRef: AngularFirestoreDocument = this.afs.doc(`trainerInfo/${this.authService.userID}`)
+let c = []
+    publicRef.get().subscribe(p => {
+      console.log(p.data().publicInfo.poppo)
+c = p.data().publicInfo.poppo
+
+    }
+    )
+
+    return c
+  }
+
+
+
   // TRAINER CONTACTS
 
-  setTrainerContactsAsPublished(isPublished: boolean) {
-    console.log(isPublished);
+  addEditTrainerContacts(addressContact: AddressContact) {
+    var batch = this.afs.firestore.batch()
+    const userRef = this.afs.firestore.doc(`users/${this.authService.userID}`)
+    const publicRef: AngularFirestoreDocument = this.afs.doc(`trainerInfo/${this.authService.userID}`)
+    console.log(this.authService.userID);
 
-    const userRef: AngularFirestoreDocument = this.afs.doc(`users/${this.authService.userID}`)
-    console.log(userRef);
+    let isInfopublished: boolean = false
+    publicRef.get().subscribe(p => {
+      if (p.exists) {
+        const pRef = p.ref
+        if (p.data().publicInfo.isInfopublished) {
+          isInfopublished = p.data().publicInfo.isInfopublished
+          batch.set(pRef, { isInfopublished: p.data().publicInfo.isInfopublished }, { merge: true })
+        }
+        if (p.data().publicInfo.isPagePublished) {
+          batch.set(pRef, { isPagePublished: p.data().publicInfo.isPagePublished }, { merge: true })
+        }
+        if (p.data().isCatalogPublished) {
+          batch.set(pRef, { isCatalogPublished: p.data().publicInfo.isCatalogPublished }, { merge: true })
+        }
+      }
 
-    return userRef.set({ profile: { address: { published: isPublished } } }, { merge: true })
+      batch.set(userRef, { profile: { isInfopublished: isInfopublished } }, { merge: true })
+      batch.set(userRef, { profile: { address: addressContact } }, { merge: true })
+      batch.commit()
+    }
+    )
   }
+
+  PublishTrainerInfo(isInfopublished: boolean, publicInfo: PublicInfo) {
+
+    var batch = this.afs.firestore.batch()
+
+    const trainerInfoRef = this.afs.firestore.collection("trainerInfo").doc(publicInfo.uid)
+    const userRef = this.afs.firestore.doc(`users/${this.authService.userID}`)
+
+    if (isInfopublished) {
+
+      batch.set(userRef, { profile: { isInfopublished: isInfopublished } }, { merge: true })
+      batch.set(trainerInfoRef, { publicInfo }, { merge: true })
+    } else {
+      batch.set(userRef, { profile: { isInfopublished: isInfopublished } }, { merge: true })
+      batch.set(userRef, { profile: { isPagePublished: isInfopublished } }, { merge: true })
+      batch.set(userRef, { profile: { isCatalogPublished: isInfopublished } }, { merge: true })
+      batch.delete(trainerInfoRef)
+    }
+    batch.commit()
+
+  }
+
+  PublishTrainerPage(isInfopublished: boolean) {
+
+    var batch = this.afs.firestore.batch()
+
+    const trainerInfoRef = this.afs.firestore.collection("trainerInfo").doc(this.authService.userID)
+    const userRef = this.afs.firestore.doc(`users/${this.authService.userID}`)
+
+    batch.set(userRef, { profile: { isPagePublished: isInfopublished } }, { merge: true })
+    batch.set(trainerInfoRef, { publicInfo: { isPagePublished: isInfopublished } }, { merge: true })
+
+    batch.commit()
+
+  }
+
+
+
+
 
   // USER FOR TRAINER
 
@@ -265,22 +337,18 @@ export class FireDatabaseService {
       ))
   }
 
-  publishTrainerPublicInfo(publicInfo: PublicInfo) {
-    this.afs.collection("trainerInfo").doc(publicInfo.uid).collection("info").doc("publicInfo").set(publicInfo)
+  publishTrainerPublicInfoOnPublic(publicInfo: PublicInfo) {
+    this.afs.collection("trainerInfo").doc(publicInfo.uid).set(publicInfo)
   }
 
-  publishTrainerPage(trainerPage: TrainerPage) {
-    trainerPage.published = true
-    this.afs.collection("trainerInfo").doc(this.authService.userID).collection("info").doc("trainerPage").set(trainerPage)
+  setTrainerPublicInfoOnPublic(isPublished: boolean) {
+    const userRef: AngularFirestoreDocument = this.afs.doc(`trainerInfo/${this.authService.userID}`)
+    return userRef.set({ isInfopublished: isPublished }, { merge: true })
   }
 
-  deletePublishedTrainerPage() {
-    this.afs.collection("trainerInfo").doc(this.authService.userID).collection("info").doc("trainerPage").delete()
-  }
-
-  deleteTrainerPublicInfo() {
-    this.afs.collection("trainerInfo").doc(this.authService.userID).collection("info").doc("publicInfo").delete()
-  }
+  // deleteTrainerPublicInfoOnPublic() {
+  //   this.afs.collection("trainerInfo").doc(this.authService.userID).delete()
+  // }
 
   fetchTrainerPageFromAthlete(userID: string): Observable<TrainerPage> {
     const collection = this.afs.collection<TrainerPage>(`users/${userID}/trainerPage`)

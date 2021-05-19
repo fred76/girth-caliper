@@ -32,11 +32,31 @@
             </div>
             <div class="divPhoto" fxLayoutAlign="center">
 
-              <button *ngIf="user.profile.address.published"
-                (click)="publishPublicInfo(true,user.displayName,user.profile.address.companyName,user.photoURL,user.profile.address.emailBusiness,user.profile.address.web,user.profile.address.address1,user.profile.address.zip_postalCode,user.profile.address.city,user.profile.address.country, user.uid)"
-                mat-raised-button color="primary">withhold</button>
-              <button *ngIf="!user.profile.address.published"
-                (click)="publishPublicInfo(false, user.displayName,user.profile.address.companyName,user.photoURL,user.profile.address.emailBusiness,user.profile.address.web,user.profile.address.address1,user.profile.address.zip_postalCode,user.profile.address.city,user.profile.address.country, user.uid)"
+              <button *ngIf="user.profile.isInfopublished" (click)="publishPublicInfo(
+                true,
+                user.displayName,
+                user.profile.address.companyName,
+                user.photoURL,
+                user.profile.address.emailBusiness,
+                user.profile.address.web,
+                user.profile.address.address1,
+                user.profile.address.zip_postalCode,
+                user.profile.address.city,
+                user.profile.address.country,
+                user.uid)" mat-raised-button color="primary">withhold</button>
+              <button *ngIf="!user.profile.isInfopublished"
+                (click)="publishPublicInfo(
+                  false,
+                  user.displayName,
+                  user.profile.address.companyName,
+                  user.photoURL,
+                  user.profile.address.emailBusiness,
+                  user.profile.address.web,
+                  user.profile.address.address1,
+                  user.profile.address.zip_postalCode,
+                  user.profile.address.city,
+                  user.profile.address.country,
+                  user.uid)"
                 mat-raised-button color="primary">Publish</button>
             </div>
 
@@ -120,10 +140,13 @@
         </mat-card-content>
         <mat-card-actions>
 
-          <button *ngIf="page.published" (click)="publish(page.published, page.idField, page)" mat-raised-button
+          <div *ngIf="authService.UserType$ | async as user ">
+            <button *ngIf="user.profile.isPagePublished" (click)="publish(user.profile.isPagePublished)" mat-raised-button
             color="primary">withhold</button>
-          <button *ngIf="!page.published" (click)="publish(page.published, page.idField, page)" mat-raised-button
+            <button *ngIf="!user.profile.isPagePublished" (click)="publish(user.profile.isPagePublished)" mat-raised-button
             color="primary">Publish</button>
+          </div>
+
         </mat-card-actions>
       </ng-container>
 

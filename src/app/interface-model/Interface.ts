@@ -24,6 +24,9 @@ export interface Trainer {
   blogID?: [String]
   bio?: string
   userCategory?: string
+  isInfopublished?: boolean
+  isPagelished?: boolean
+  isProductPulished?: boolean
 }
 
 export interface Athlete {
@@ -64,7 +67,6 @@ export interface AddressContact {
   mobile?: number
   emailBusiness?: string
   web?: string
-  published?: boolean
 }
 
 export interface Training {
@@ -73,15 +75,17 @@ export interface Training {
 
 
 export interface PublicInfo {
-  displayName: string,
-  companyName: string,
-  photoURL: string,
-  Email: string,
-  web: string,
-  address1: string,
-  zip_postalCode: string,
-  city: string,
-  country: string,
-  uid: string
-  published: boolean
+  displayName?: string,
+  companyName?: string,
+  photoURL?: string,
+  Email?: string,
+  web?: string,
+  address1?: string,
+  zip_postalCode?: string,
+  city?: string,
+  country?: string,
+  uid?: string
+  isInfopublished?: boolean
+  isPagePublished?: boolean
+  isproductPublished?: boolean
 }
